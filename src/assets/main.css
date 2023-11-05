@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Saira+Stencil+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto:wght@400;500;700&family=Saira+Stencil+One&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 100%;
+  font-family: 'Poppins';
+}
+
+body {
+  background-color: 	#18191A;
+  margin-bottom: 25px;
+}
+
+img,
+picture,
+video {
+  max-width: 100%;
+}
+
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}

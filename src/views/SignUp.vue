@@ -1,18 +1,18 @@
 <script>
+import FormField from '../components/authentication/FormField.vue';
+import PasswordField from '../components/authentication/PasswordField.vue';
+
 export default {
   data() {
     return {
       passwordFieldType: 'password',
       showPasswordIconClass: 'fa-eye',
+      isFieldEmpty: true,
     };
   },
-  methods: {
-    togglePasswordVisibility() {
-      this.passwordFieldType =
-        this.passwordFieldType === 'password' ? 'text' : 'password';
-      this.showPasswordIconClass =
-        this.passwordFieldType === 'password' ? 'fa-eye' : 'fa-eye-slash';
-    },
+  components: {
+    FormField,
+    PasswordField,
   },
 };
 </script>
@@ -28,41 +28,32 @@ export default {
       <p class="log-in-offer">
         Already a member? <span style="margin-left: 1%">Log in</span>
       </p>
-      <div class="names-box">
-        <div class="first-name-box">
-          <input
-            id="first-name"
-            class="field-input"
-            type="text"
-            placeholder="First name"
-          />
-        </div>
-        <div class="last-name-box">
-          <input
-            id="second-name"
-            class="field-input"
-            type="text"
-            placeholder="Last name"
-          />
-        </div>
+      <div>
+        <FormField
+          :validationRule="/^[A-Za-zÀ-ÖØ-öø-ÿ-' ]+$/"
+          label="First name"
+          class="first-name"
+        ></FormField>
+
+        <FormField
+          :validationRule="/^[A-Za-zÀ-ÖØ-öø-ÿ-' ]+$/"
+          label="Last name"
+          class="last-name"
+        ></FormField>
+
+        <FormField
+          :validationRule="/^[a-zA-Z0-9._%+-]+@gmail\.com$/"
+          title='To ensure the validity of your email address, please make sure it matches the following pattern:
+          Your email should end with "@gmail.com"
+          It can contain letters (a-z, A-Z), digits (0-9), and special characters like ".", "_", "%", "+", and "-"'
+          label="Email"
+          class="email"
+        ></FormField>
+
+        <PasswordField class="password"></PasswordField>
       </div>
-      <div class="email-box">
-        <input class="field-input" type="text" placeholder="Email" />
-      </div>
-      <div class="password-box">
-        <input
-          class="field-input"
-          :type="passwordFieldType"
-          placeholder="Password"
-        />
-        <i
-          id="show-password-icon"
-          class="fa-solid"
-          :class="showPasswordIconClass"
-          @click="togglePasswordVisibility"
-        ></i>
-      </div>
-      <button class="create-account-btn">Create account</button>
+
+      <button class="create-account-btn" @click="">Create account</button>
     </div>
     <div class="right-section">
       <div class="background-blur" />
@@ -120,55 +111,20 @@ export default {
   text-decoration: underline;
 }
 
-.first-name-box,
-.last-name-box {
+.first-name,
+.last-name {
+  display: inline-block;
   width: 40%;
-  padding: 3% 3% 3% 5%;
-  background-color: #4e4e4e;
-  border-radius: 45px;
-  margin-right: 5%;
-  display: inline-block;
-  margin-bottom: 5%;
 }
 
-.field-input {
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 0);
-  border-style: none;
-  font-weight: bold;
-  color: whitesmoke;
-  font-size: 14px;
-  width: 100%;
-}
-.field-input::placeholder {
-  color: #9e9e9e;
-}
-.password-box,
-input {
-  padding-right: 10px;
-}
-
-.email-box,
-.password-box {
+.email,
+.password {
   width: 85%;
-  padding: 3% 3% 3% 5%;
-  background-color: #4e4e4e;
-  border-radius: 45px;
-  margin-bottom: 5%;
 }
 
-.password-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 10%;
-}
-
-#show-password-icon {
-  display: inline-block;
-  margin-right: 7.5px;
-  color: #9e9e9e;
-  cursor: pointer;
+.error-msg {
+  font-size: 12px;
+  color: #cc3300;
 }
 
 .create-account-btn {
@@ -184,7 +140,7 @@ input {
 }
 .create-account-btn:hover {
   opacity: 0.8;
-  transform: scale(1.05);
+  transform: scale(1.025);
 }
 .create-account-btn:active {
   opacity: 1;
@@ -216,14 +172,6 @@ input {
   display: none;
 }
 
-.valid-field {
-  box-shadow: inset 0 0 15px green;
-}
-
-.invalid-field {
-  box-shadow: inset 0 0 15px red;
-}
-
 @media only screen and (min-width: 600px) {
   .registration-form {
     width: 100%;
@@ -244,10 +192,6 @@ input {
   }
 
   .log-in-offer {
-    font-size: 20px;
-  }
-
-  .field-input {
     font-size: 20px;
   }
 
@@ -304,7 +248,7 @@ input {
 @media only screen and (min-width: 1366px) {
   .registration-form {
     width: 70%;
-    height: 75vh;
+    height: 60vh;
     border-radius: 25px;
   }
 
@@ -324,10 +268,6 @@ input {
     font-size: 14px;
   }
 
-  .field-input {
-    font-size: 14px;
-  }
-
   .create-account-btn {
     font-size: 14px;
     padding: 2.5% 4.5% 2.5% 4.5%;
@@ -341,7 +281,7 @@ input {
 @media only screen and (min-width: 1920px) {
   .registration-form {
     width: 60%;
-    height: 70%;
+    height: 70vh;
   }
 
   .start-for-free-text {
@@ -356,10 +296,6 @@ input {
     font-size: 18px;
   }
 
-  .field-input {
-    font-size: 18px;
-  }
-
   .create-account-btn {
     font-size: 18px;
   }
@@ -368,7 +304,7 @@ input {
 @media screen and (min-width: 2560px) {
   .registration-form {
     width: 40%;
-    height: 85%;
+    height: 65vh;
   }
 }
 </style>

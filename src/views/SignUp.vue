@@ -14,6 +14,19 @@ export default {
     FormField,
     PasswordField,
   },
+  methods: {
+    authenticateUser(userData) {
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      };
+      fetch('http://jsonplaceholder.typicode.com/posts', requestOptions)
+        .then((response) => response.json())
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));
+    },
+  },
 };
 </script>
 

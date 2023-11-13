@@ -91,6 +91,7 @@ export default {
   align-items: center;
   margin-bottom: 2%;
 }
+
 .form-field,
 input {
   padding-right: 10px;

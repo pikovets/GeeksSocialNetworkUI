@@ -487,7 +487,7 @@ export default {
   .registration-form {
     width: 75%;
     height: 90vh;
-  }
+}
 
   .start-for-free-text {
     font-size: 16px;

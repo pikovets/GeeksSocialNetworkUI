@@ -1,5 +1,3 @@
-<script></script>
-
 <template>
   <div class="add-post-container">
     <div class="add-post-text-container">

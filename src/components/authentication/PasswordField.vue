@@ -1,3 +1,29 @@
+<template>
+  <div class="container">
+    <div class="form-field" :class="fieldClasses">
+      <input
+        :value="modelValue"
+        @input="
+          $emit('update:modelValue', $event.target.value);
+          wasSelected = true;
+        "
+        :type="passwordFieldType"
+        class="field-input"
+        placeholder="Password"
+      />
+      <i
+        class="fa-solid"
+        :class="showPasswordIconClass"
+        @click="togglePasswordVisibility"
+      ></i>
+    </div>
+    <p class="error-msg" v-if="!isEmpty && !isValid" v-html="validationMsg"></p>
+    <p class="error-msg" v-if="isEmpty && wasSelected">
+      This field cannot be empty
+    </p>
+  </div>
+</template>
+
 <script>
 import FormField from './FormField.vue';
 
@@ -5,26 +31,37 @@ export default {
   components: {
     FormField,
   },
+  props: {
+    validationRule: RegExp,
+    validationMsg: String,
+    modelValue: String,
+  },
+  emits: ['update:modelValue'],
   data() {
     return {
+      wasSelected: false,
       passwordFieldType: 'password',
       showPasswordIconClass: 'fa-eye',
-      value: '',
-      validationRule: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
+      validationMsg:
+        'Secure your password by including:<br>' +
+        'One uppercase letter (A-Z)<br>' +
+        'One lowercase letter (a-z)<br>' +
+        'One digit (0-9)<br>' +
+        'Minimum length of 8 characters',
     };
   },
   computed: {
     fieldClasses() {
       return {
-        'valid-field': this.isValid && !this.isEmpty,
-        'invalid-field': !this.isValid && !this.isEmpty,
+        'valid-field': this.isValid && this.wasSelected,
+        'invalid-field': !this.isValid && this.wasSelected,
       };
     },
     isEmpty() {
-      return this.value === '';
+      return this.modelValue === '';
     },
     isValid() {
-      return this.validationRule.test(this.value);
+      return this.validationRule.test(this.modelValue);
     },
   },
   methods: {
@@ -38,41 +75,23 @@ export default {
 };
 </script>
 
-<template>
-  <div class="form-field" :class="fieldClasses">
-    <input
-      v-model="value"
-      class="field-input"
-      :type="passwordFieldType"
-      pattern="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/"
-      title="For your account's security, please enter a valid password that meets these criteria:
-      At least one uppercase letter (A-Z)
-      At least one lowercase letter (a-z)
-      At least one digit (0-9)
-      Must be a minimum of 8 characters in length"
-      required=""
-      placeholder="Password"
-    />
-    <i  
-      class="fa-solid"
-      :class="showPasswordIconClass"
-      @click="togglePasswordVisibility"
-    ></i>
-  </div>
-</template>
-
 <style scoped>
-.form-field {
-  padding: 3% 3% 3% 5%;
-  background-color: #4e4e4e;
-  border-radius: 45px;
+.container {
   margin-right: 5%;
   margin-bottom: 5%;
+}
+
+.form-field {
+  padding: 15px 3% 15px 20px;
+  background-color: #4e4e4e;
+  border-radius: 45px;
+
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 10%;
+  margin-bottom: 2%;
 }
+
 .form-field,
 input {
   padding-right: 10px;
@@ -103,6 +122,12 @@ input {
 
 .invalid-field {
   box-shadow: inset 0 0 15px red;
+}
+
+.error-msg {
+  color: red;
+  font-size: 12px;
+  padding-left: 10px;
 }
 
 @media only screen and (min-width: 600px) {

@@ -2,14 +2,14 @@
   <LoadingScreen v-if="isLoading" />
 
   <div class="registration-form">
-    <div class="left-section">
+    <div class="registration-section">
       <p class="start-for-free-text">Start for free</p>
       <p class="title">
         Create <br />
         your account
       </p>
       <p class="log-in-offer">
-        Already a member? <span style="margin-left: 1%">Log in</span>
+        Already a member? <router-link to="/login" style="margin-left: 1%">Log in</router-link>
       </p>
       <div>
         <div class="inline-fields">
@@ -236,9 +236,10 @@ export default {
   flex-direction: row;
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
-.left-section {
+.registration-section {
   width: 100%;
   height: 100%;
   padding-top: 20vh;
@@ -247,7 +248,7 @@ export default {
 
 .start-for-free-text {
   color: #646464;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 3%;
@@ -255,8 +256,8 @@ export default {
 
 .title {
   color: white;
-  font-size: 40px;
-  width: 80%;
+  font-size: 2.4rem;
+  min-width: 80%;
   margin-bottom: 1.5%;
 }
 
@@ -265,12 +266,13 @@ export default {
   margin-bottom: 11%;
 }
 
-.log-in-offer span {
+.log-in-offer a {
   color: #64b657;
   font-weight: 800;
   cursor: pointer;
+  text-decoration: none;
 }
-.log-in-offer span:hover {
+.log-in-offer a:hover {
   text-decoration: underline;
 }
 
@@ -280,16 +282,16 @@ export default {
 
 .first-name,
 .last-name {
-  width: 41%;
+  width: 43%;
 }
 
 .email,
 .password {
-  width: 85%;
+  width: 90%;
 }
 
 .error-msg {
-  font-size: 12px;
+  font-size: 0.75em;
   color: #cc3300;
 }
 
@@ -299,10 +301,11 @@ export default {
   border-radius: 45px;
   color: white;
   font-weight: bold;
-  font-size: 14px;
-  padding: 10px 15px;
+  font-size: 1em;
+  padding: 0.75em 1em;
   transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
   transform-origin: center;
+  margin-bottom: 10%;
 }
 .create-account-btn:hover {
   opacity: 0.8;
@@ -311,18 +314,6 @@ export default {
 .create-account-btn:active {
   opacity: 1;
   transform: scale(0.95);
-}
-
-.disabled-create-account-btn {
-  background-color: gray;
-  border: none;
-  border-radius: 45px;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  padding: 10px 15px;
-  transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
-  transform-origin: center;
 }
 
 @keyframes shake {
@@ -353,18 +344,18 @@ export default {
 }
 
 .right-section {
-  width: 0%;
-  height: 100%;
+  display: none;
 }
 
 .background-blur {
   background-color: #48883e;
-  width: 60%;
-  height: 60%;
-  filter: blur(100px);
+  width: 50%;
+  height: 50%;
+  filter: blur(6em);
   position: relative;
   top: 25%;
   left: 25%;
+  display: none;
 }
 
 .g-image {
@@ -372,148 +363,78 @@ export default {
   height: auto;
   object-fit: cover;
   position: relative;
-  top: -40%;
+  top: -30%;
   left: 20%;
   display: none;
 }
 
-@media only screen and (min-width: 600px) {
-  .registration-form {
-    width: 100%;
-    height: 100%;
-    border-radius: 0px;
-  }
-
-  .left-section {
-    width: 100%;
-  }
-
+@media screen and (min-width: 48em) {
   .start-for-free-text {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
   .title {
-    font-size: 44px;
+    font-size: 3rem;
   }
 
   .log-in-offer {
-    font-size: 20px;
+    font-size: 1.25em;
+  }
+
+  .log-in-offer span {
+    color: #64b657;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .log-in-offer span:hover {
+    text-decoration: underline;
   }
 
   .create-account-btn {
-    font-size: 24px;
-    padding: 2% 5% 2% 5%;
-  }
-
-  .right-section {
-    width: 0%;
-  }
-
-  .g-image {
-    display: none;
+    font-size: 1.25em;
   }
 }
 
-@media only screen and (min-width: 1024px) {
+@media screen and (min-width: 80em) {
   .registration-form {
-    width: 100%;
-    height: 100%;
-    border-radius: 0px;
+    width: 75%;
+    height: 90vh;
+    border-radius: 25px;
+    overflow: hidden;
   }
 
-  .left-section {
-    width: 45%;
-    padding-left: 5%;
+  .registration-section {
+    padding-top: 10vh;
+    padding-left: 7.5%;
+    font-size: 0.85rem;
+    width: 40%;
   }
 
-  .right-section {
-    width: 55%;
+  .start-for-free-text {
+    font-size: 1.1rem;
   }
 
   .title {
-    font-size: 40px;
-  }
-
-  .create-account-btn {
-    padding: 15px;
+    font-size: 2.5rem;
   }
 
   .right-section {
+    display: block;
     width: 60%;
+    height: 100%;
+  }
+
+  .email,
+  .password {
+    width: 90%;
+  }
+
+  .background-blur {
+    display: block;
   }
 
   .g-image {
     display: block;
-    left: 20%;
-    top: -30%;
-    height: auto;
-  }
-}
-
-@media only screen and (min-width: 1366px) {
-  .registration-form {
-    width: 70%;
-    height: 60vh;
-    border-radius: 25px;
-  }
-
-  .left-section {
-    padding-top: 4vh;
-  }
-
-  .start-for-free-text {
-    font-size: 14px;
-  }
-
-  .title {
-    font-size: 32px;
-  }
-
-  .log-in-offer {
-    font-size: 14px;
-  }
-
-  .create-account-btn {
-    font-size: 14px;
-    padding: 2.5% 4.5% 2.5% 4.5%;
-  }
-
-  .g-image {
-    top: -40%;
-  }
-}
-
-@media only screen and (min-width: 1920px) {
-  .registration-form {
-    width: 75%;
-    height: 90vh;
-}
-
-  .start-for-free-text {
-    font-size: 16px;
-  }
-
-  .title {
-    font-size: 45px;
-  }
-
-  .log-in-offer {
-    font-size: 18px;
-  }
-
-  .create-account-btn {
-    font-size: 18px;
-  }
-
-  .disabled-create-account-btn {
-    font-size: 18px;
-  }
-}
-
-@media screen and (min-width: 2560px) {
-  .registration-form {
-    width: 40%;
-    height: 65vh;
   }
 }
 </style>

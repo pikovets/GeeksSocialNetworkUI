@@ -77,19 +77,19 @@ export default {
 
 <style scoped>
 .container {
-  margin-right: 5%;
-  margin-bottom: 5%;
+  margin-right: 3%;
+  margin-bottom: 7.5%;
 }
 
 .form-field {
-  padding: 15px 3% 15px 20px;
+  padding: 0.75em 0.2em 0.75em 1.2em;
   background-color: #4e4e4e;
   border-radius: 45px;
+  margin-bottom: 2%;
 
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 2%;
 }
 
 .form-field,
@@ -102,7 +102,7 @@ input {
   border-style: none;
   font-weight: bold;
   color: whitesmoke;
-  font-size: 14px;
+  font-size: 1rem;
   width: 100%;
 }
 .field-input::placeholder {
@@ -117,47 +117,53 @@ input {
 }
 
 .valid-field {
-  box-shadow: inset 0 0 15px green;
+  box-shadow: inset 0 0 1rem green;
 }
 
 .invalid-field {
-  box-shadow: inset 0 0 15px red;
+  box-shadow: inset 0 0 1rem red;
 }
 
 .error-msg {
   color: red;
-  font-size: 12px;
-  padding-left: 10px;
+  font-size: 0.75rem;
+  padding-left: 0.5em;
 }
 
-@media only screen and (min-width: 600px) {
+@media screen and (min-width: 48em) {
+  .form-field {
+    padding: 1.5em 1em 1.5em 1.5em;
+  }
+
   .field-input {
-    font-size: 20px;
+    font-size: 1.35rem;
   }
 
   .fa-solid {
-    transform: scale(1.5, 1.5);
-    margin-right: 3.5%;
+    font-size: 1.35rem;
+  }
+
+  .error-msg {
+    font-size: 1rem;
   }
 }
 
-@media only screen and (min-width: 1366px) {
+@media screen and (min-width: 80em) {
+  .form-field {
+    padding: 1em 1em 1em 1.5em;
+  }
+
   .field-input {
-    font-size: 14px;
+    font-size: 1.1rem;
   }
 
   .fa-solid {
-    transform: scale(1, 1);
-  }
-}
-
-@media only screen and (min-width: 1920px) {
-  .field-input {
-    font-size: 18px;
+    display: inline-block;
+    font-size: 1rem;
   }
 
-  .fa-solid {
-    transform: scale(1, 1);
+  .error-msg {
+    font-size: 0.75rem;
   }
 }
 </style>

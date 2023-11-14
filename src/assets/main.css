@@ -10,7 +10,7 @@
 }
 
 body {
-  background-color: 	#18191A;
+  background-color: #18191a;
   margin-bottom: 25px;
 }
 
@@ -33,6 +33,7 @@ button {
   cursor: pointer;
 }
 
-textarea:focus, input:focus{
+textarea:focus,
+input:focus {
   outline: none;
 }

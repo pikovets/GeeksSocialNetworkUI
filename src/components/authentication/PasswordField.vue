@@ -42,12 +42,6 @@ export default {
       wasSelected: false,
       passwordFieldType: 'password',
       showPasswordIconClass: 'fa-eye',
-      validationMsg:
-        'Secure your password by including:<br>' +
-        'One uppercase letter (A-Z)<br>' +
-        'One lowercase letter (a-z)<br>' +
-        'One digit (0-9)<br>' +
-        'Minimum length of 8 characters',
     };
   },
   computed: {

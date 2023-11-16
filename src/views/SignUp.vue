@@ -1,37 +1,36 @@
 <template>
   <div class="registration-form">
     <div class="registration-section">
-      <p class="start-for-free-text">Start for free</p>
-      <p class="title">
-        Create <br />
-        your account
-      </p>
+      <p class="start-for-free-text">{{ $t('startForFree') }}</p>
+      <p class="title" v-html="$t('createAccountTitle')"></p>
       <p class="log-in-offer">
-        Already a member?
-        <router-link to="/login" style="margin-left: 1%">Log in</router-link>
+        {{ $t('alreadyMember') }}
+        <router-link to="/login" style="margin-left: 1%">{{
+          $t('logIn')
+        }}</router-link>
       </p>
       <div>
         <div class="inline-fields">
           <FormField
             :validationRule="validationRules.firstName"
-            validationMsg="Enter only letters (A-Z, a-z), spaces, apostrophes"
+            :validationMsg="$t('firstNameValidationMsg')"
+            :label="$t('firstNameLabel')"
             v-model="userData.firstName"
-            label="First name"
-            class="first-name"
             :class="{
               'apply-shake': shake.firstName,
             }"
+            class="first-name"
           ></FormField>
 
           <FormField
             :validationRule="validationRules.lastName"
-            validationMsg="Enter only letters (A-Z, a-z), spaces, apostrophes"
+            :validationMsg="$t('lastNameValidationMsg')"
+            :label="$t('lastNameLabel')"
             v-model="userData.lastName"
-            label="Last name"
-            class="last-name"
             :class="{
               'apply-shake': shake.lastName,
             }"
+            class="last-name"
           ></FormField>
         </div>
 
@@ -39,28 +38,30 @@
           :backendError="backendErrors.email.backendError"
           :backendErrorMsg="backendErrors.email.backendErrorMsg"
           :validationRule="validationRules.email"
-          validationMsg='Ensure your email is valid by following these criteria:<br>End with "@gmail.com"<br>Include only letters (a-z, A-Z), digits (0-9), and the special characters ".", "_", "%", "+", or "-"'
+          :validationMsg="$t('emailValidationMsg')"
+          :label="$t('emailLabel')"
           v-model="userData.email"
           @clearBackendError="backendErrors.email.backendError = false"
-          label="Email"
-          class="email"
           :class="{
             'apply-shake': shake.email,
           }"
+          class="email"
         ></FormField>
 
         <PasswordField
           :validationRule="validationRules.password"
+          :validationMsg="$t('passwordValidationMsg')"
+          :label="$t('passwordLabel')"
           v-model="userData.password"
-          class="password"
           :class="{
             'apply-shake': shake.password,
           }"
+          class="password"
         ></PasswordField>
       </div>
 
       <button class="create-account-btn" @click="onCreateAccountClick">
-        Create account
+        {{ $t('createAccountBtn') }}
       </button>
     </div>
 
@@ -73,7 +74,7 @@
   <LoadingScreen v-if="isLoading" />
 
   <DialogWindow
-    :message="'Welcome to Geeks Social Network! Your registration is complete. You can now access your account by entering your authentication data on the login page'"
+    :message="$t('registrationSuccessMsg')"
     :show="isRegistered"
     @close="isRegistered = false"
   />
@@ -147,7 +148,7 @@ export default {
 
     authenticateUser() {
       if (!this.isOnline) {
-        alert('Please check your internet connection and try again.');
+        alert(this.$i18n.t('offlineErrorMsg'));
         return;
       }
 
@@ -155,7 +156,7 @@ export default {
 
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => {
-          reject(new Error('The request timed out. Please try again.'));
+          reject(new Error('Timeout Error'));
         }, 5000);
       });
 
@@ -188,12 +189,10 @@ export default {
           this.isLoading = false;
 
           if (error.message === 'Timeout Error') {
-            alert('The request timed out. Please try again.');
+            alert(this.$i18n.t('timeoutErrorMsg'));
             return;
           } else if (error.message === 'Failed to fetch') {
-            alert(
-              'An error occurred while communicating with the server. Please try again later.'
-            );
+            alert(this.$i18n.t('serverErrorMsg'));
             return;
           }
 
@@ -242,216 +241,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.registration-form {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #343534;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-.registration-section {
-  width: 100%;
-  height: 100%;
-  padding-top: 20vh;
-  padding-left: 10%;
-}
-
-.start-for-free-text {
-  color: #646464;
-  font-size: 1rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 3%;
-}
-
-.title {
-  color: white;
-  font-size: 2.4rem;
-  min-width: 80%;
-  margin-bottom: 1.5%;
-}
-
-.log-in-offer {
-  color: #a0a0a0;
-  margin-bottom: 11%;
-}
-
-.log-in-offer a {
-  color: #64b657;
-  font-weight: 800;
-  cursor: pointer;
-  text-decoration: none;
-}
-.log-in-offer a:hover {
-  text-decoration: underline;
-}
-
-.inline-fields {
-  display: flex;
-}
-
-.first-name,
-.last-name {
-  width: 43%;
-}
-
-.email,
-.password {
-  width: 90%;
-}
-
-.error-msg {
-  font-size: 0.75em;
-  color: #cc3300;
-}
-
-.create-account-btn {
-  background-color: #48883e;
-  border: none;
-  border-radius: 45px;
-  color: white;
-  font-weight: bold;
-  font-size: 1em;
-  padding: 0.75em 1em;
-  transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
-  transform-origin: center;
-  margin-bottom: 10%;
-}
-.create-account-btn:hover {
-  opacity: 0.8;
-  transform: scale(1.025);
-}
-.create-account-btn:active {
-  opacity: 1;
-  transform: scale(0.95);
-}
-
-@keyframes shake {
-  10%,
-  90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-
-  20%,
-  80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%,
-  50%,
-  70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%,
-  60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
-
-.apply-shake {
-  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-
-.right-section {
-  display: none;
-}
-
-.background-blur {
-  background-color: #48883e;
-  width: 50%;
-  height: 50%;
-  filter: blur(6em);
-  position: relative;
-  top: 25%;
-  left: 25%;
-  display: none;
-}
-
-.g-image {
-  max-width: 65%;
-  height: auto;
-  object-fit: cover;
-  position: relative;
-  top: -30%;
-  left: 20%;
-  display: none;
-}
-
-@media screen and (min-width: 48em) {
-  .start-for-free-text {
-    font-size: 1.25rem;
-  }
-
-  .title {
-    font-size: 3rem;
-  }
-
-  .log-in-offer {
-    font-size: 1.25em;
-  }
-
-  .log-in-offer span {
-    color: #64b657;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .log-in-offer span:hover {
-    text-decoration: underline;
-  }
-
-  .create-account-btn {
-    font-size: 1.25em;
-  }
-}
-
-@media screen and (min-width: 75em) {
-  .registration-form {
-    width: 75%;
-    height: 90vh;
-    border-radius: 25px;
-    overflow: hidden;
-  }
-
-  .registration-section {
-    padding-top: 10vh;
-    padding-left: 7.5%;
-    font-size: 0.85rem;
-    width: 40%;
-  }
-
-  .start-for-free-text {
-    font-size: 1.1rem;
-  }
-
-  .title {
-    font-size: 2.5rem;
-  }
-
-  .right-section {
-    display: block;
-    width: 60%;
-    height: 100%;
-  }
-
-  .email,
-  .password {
-    width: 90%;
-  }
-
-  .background-blur {
-    display: block;
-  }
-
-  .g-image {
-    display: block;
-  }
-}
-</style>
+<style src="./styles/SignUp.css"></style>

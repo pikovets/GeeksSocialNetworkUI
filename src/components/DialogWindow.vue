@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay">
+  <div class="overlay" v-show="show">
     <div class="dialog-window">
       <div class="header">
         <button @click="$emit('close')" class="close-btn">

@@ -412,7 +412,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 80em) {
+@media screen and (min-width: 75em) {
   .registration-form {
     width: 75%;
     height: 90vh;

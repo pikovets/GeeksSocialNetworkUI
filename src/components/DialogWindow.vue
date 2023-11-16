@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay" v-show="show">
+  <div class="overlay">
     <div class="dialog-window">
       <div class="header">
         <button @click="$emit('close')" class="close-btn">
@@ -53,7 +53,6 @@ export default {
 .dialog-window {
   position: relative;
   width: 30em;
-  height: 12.5em;
   z-index: 10000;
   background-color: #343534;
   border-radius: 5px;
@@ -106,6 +105,7 @@ export default {
   padding: 5px 15px;
   background-color: #48883e;
   color: white;
+  margin-bottom: 1em;
 }
 
 .log-in-btn:hover {

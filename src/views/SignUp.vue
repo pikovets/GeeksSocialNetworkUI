@@ -1,6 +1,4 @@
 <template>
-  <LoadingScreen v-if="isLoading" />
-
   <div class="registration-form">
     <div class="registration-section">
       <p class="start-for-free-text">Start for free</p>
@@ -9,7 +7,8 @@
         your account
       </p>
       <p class="log-in-offer">
-        Already a member? <router-link to="/login" style="margin-left: 1%">Log in</router-link>
+        Already a member?
+        <router-link to="/login" style="margin-left: 1%">Log in</router-link>
       </p>
       <div>
         <div class="inline-fields">
@@ -42,6 +41,7 @@
           :validationRule="validationRules.email"
           validationMsg='Ensure your email is valid by following these criteria:<br>End with "@gmail.com"<br>Include only letters (a-z, A-Z), digits (0-9), and the special characters ".", "_", "%", "+", or "-"'
           v-model="userData.email"
+          @clearBackendError="backendErrors.email.backendError = false"
           label="Email"
           class="email"
           :class="{
@@ -69,22 +69,33 @@
       <img class="g-image" src="../assets/img/G.png" />
     </div>
   </div>
+
+  <LoadingScreen v-if="isLoading" />
+
+  <DialogWindow
+    :message="'Welcome to Geeks Social Network! Your registration is complete. You can now access your account by entering your authentication data on the login page'"
+    :show="isRegistered"
+    @close="isRegistered = false"
+  />
 </template>
 
 <script>
-import LoadingScreen from '../components/LoadingScreen.vue';
 import FormField from '../components/authentication/FormField.vue';
 import PasswordField from '../components/authentication/PasswordField.vue';
+import LoadingScreen from '../components/LoadingScreen.vue';
+import DialogWindow from '../components/DialogWindow.vue';
 
 export default {
   components: {
     FormField,
     PasswordField,
     LoadingScreen,
+    DialogWindow,
   },
   data() {
     return {
       isOnline: window.navigator.onLine,
+      isRegistered: false,
       passwordFieldType: 'password',
       showPasswordIconClass: 'fa-eye',
       isLoading: false,
@@ -159,17 +170,23 @@ export default {
         timeoutPromise,
       ])
         .then((response) => {
+          this.isLoading = false;
+
+          if (response.ok) {
+            this.isRegistered = true;
+            return;
+          }
+
           return response.json();
         })
         .then((data) => {
-          this.isLoading = false;
-
-          if (data.statusCode !== 201) {
+          if (data.statusCode === 400) {
             throw new Error(data.message);
           }
         })
         .catch((error) => {
           this.isLoading = false;
+
           if (error.message === 'Timeout Error') {
             alert('The request timed out. Please try again.');
             return;

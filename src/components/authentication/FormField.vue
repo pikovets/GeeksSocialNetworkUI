@@ -6,7 +6,7 @@
         @input="
           $emit('update:modelValue', $event.target.value);
           wasSelected = true;
-          backendError = false;
+          $emit('clearBackendError');
         "
         class="field-input"
         type="text"
@@ -38,7 +38,7 @@ export default {
     backendError: Boolean,
     backendErrorMsg: String,
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'clearBackendError'],
   data() {
     return {
       wasSelected: false,

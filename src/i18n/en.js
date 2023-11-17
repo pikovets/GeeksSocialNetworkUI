@@ -24,4 +24,10 @@ export default {
   timeoutErrorMsg: 'The request timed out. Please try again',
   serverErrorMsg:
     'An error occurred while communicating with the server. Please try again later',
+  emptyFieldMsg: 'This field cannot be empty',
+  haveFunText: 'Have fun!',
+  logInTitle: 'Log in to your <br> account',
+  noAccountText: "Don't have an account?",
+  signUp: "Sign Up",
+  logInButton: "Log In",
 };

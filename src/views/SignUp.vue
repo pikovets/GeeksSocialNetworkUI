@@ -1,7 +1,7 @@
 <template>
   <div class="registration-form">
     <div class="registration-section">
-      <p class="start-for-free-text">{{ $t('startForFree') }}</p>
+      <p class="subtitle">{{ $t('startForFree') }}</p>
       <p class="title" v-html="$t('createAccountTitle')"></p>
       <p class="log-in-offer">
         {{ $t('alreadyMember') }}
@@ -146,78 +146,77 @@ export default {
       return value !== '' && this.validationRules[fieldName].test(value);
     },
 
-    authenticateUser() {
-      if (!this.isOnline) {
-        alert(this.$i18n.t('offlineErrorMsg'));
-        return;
-      }
+    async authenticateUser() {
+      try {
+        if (!this.isOnline) {
+          alert(this.$i18n.t('offlineErrorMsg'));
+          return;
+        }
 
-      this.isLoading = true;
+        this.isLoading = true;
 
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => {
-          reject(new Error('Timeout Error'));
-        }, 5000);
-      });
+        const response = await Promise.race([
+          fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.userData),
+          }),
+          new Promise((_, reject) => {
+            setTimeout(() => {
+              reject(new Error('Timeout Error'));
+            }, 5000);
+          }),
+        ]);
 
-      Promise.race([
-        fetch('http://localhost:3000/auth/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.userData),
-        }),
-        timeoutPromise,
-      ])
-        .then((response) => {
-          this.isLoading = false;
+        this.isLoading = false;
 
-          if (response.ok) {
-            this.isRegistered = true;
-            return;
-          }
+        if (response.ok) {
+          this.isRegistered = true;
+        } else {
+          const data = await response.json();
 
-          return response.json();
-        })
-        .then((data) => {
           if (data.statusCode === 400) {
             throw new Error(data.message);
           }
-        })
-        .catch((error) => {
-          this.isLoading = false;
+        }
+      } catch (error) {
+        this.handleAuthenticationError(error);
+      }
+    },
+    handleAuthenticationError(error) {
+      this.isLoading = false;
 
-          if (error.message === 'Timeout Error') {
-            alert(this.$i18n.t('timeoutErrorMsg'));
-            return;
-          } else if (error.message === 'Failed to fetch') {
-            alert(this.$i18n.t('serverErrorMsg'));
-            return;
-          }
+      if (error.message === 'Timeout Error') {
+        alert(this.$i18n.t('timeoutErrorMsg'));
+        return;
+      } else if (error.message === 'Failed to fetch') {
+        alert(this.$i18n.t('serverErrorMsg'));
+        return;
+      }
 
-          let errorSplit = error.message.split(';');
+      let errorSplit = error.message.split(';');
 
-          let fieldNames = [];
-          let fieldErrorMessages = [];
+      let fieldNames = [];
+      let fieldErrorMessages = [];
 
-          for (let i = 0; i < errorSplit.length; i++) {
-            let keyValueSplit = errorSplit[i].split(':');
+      for (let i = 0; i < errorSplit.length; i++) {
+        let keyValueSplit = errorSplit[i].split(':');
 
-            let fieldName = keyValueSplit[0];
-            let message = keyValueSplit[1];
+        let fieldName = keyValueSplit[0];
+        let message = keyValueSplit[1];
 
-            fieldNames.push(fieldName);
-            fieldErrorMessages.push(message);
-          }
+        fieldNames.push(fieldName);
+        fieldErrorMessages.push(message);
+      }
 
-          for (let i = 0; i < fieldNames.length; i++) {
-            this.backendErrors[fieldNames[i]].backendErrorMsg =
-              fieldErrorMessages[i];
-            this.backendErrors[fieldNames[i]].backendError = true;
-            this.shakeField(fieldNames[i]);
-          }
-        });
+      for (let i = 0; i < fieldNames.length; i++) {
+        this.backendErrors[fieldNames[i]].backendErrorMsg =
+          fieldErrorMessages[i];
+        this.backendErrors[fieldNames[i]].backendError = true;
+        this.shakeField(fieldNames[i]);
+      }
     },
     onCreateAccountClick() {
       if (this.isFormValid) {
@@ -241,4 +240,4 @@ export default {
 };
 </script>
 
-<style src="./styles/SignUp.css"></style>
+<style src="../assets/styles/SignUp.css"></style>

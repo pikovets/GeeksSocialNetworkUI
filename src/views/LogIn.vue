@@ -1,163 +1,219 @@
 <template>
-  <div class="login-form">
-    <div class="left-section">
-      <p class="start-for-free-text">Start for free</p>
-      <p class="title">
-        Log in<br />
-        to your account
+  <div class="registration-form">
+    <div class="registration-section">
+      <p class="subtitle">{{ $t('haveFunText') }}</p>
+      <p class="title" v-html="$t('logInTitle')"></p>
+      <p class="sign-up-offer">
+        {{ $t('noAccountText') }}
+        <router-link to="/signup" style="margin-left: 1%">{{
+          $t('signUp')
+        }}</router-link>
       </p>
-      <p class="log-in-offer">
-        Not a member yet? <span style="margin-left: 1%">Register</span>
-      </p>
-      <div class="email-box">
-        <input class="field-input" type="text" placeholder="Email"/>
+      <div>
+        <FormField
+          :backendError="backendErrors.email.backendError"
+          :backendErrorMsg="backendErrors.email.backendErrorMsg"
+          :validationRule="validationRules.email"
+          :validationMsg="$t('emailValidationMsg')"
+          :label="$t('emailLabel')"
+          v-model="userData.email"
+          @clearBackendError="backendErrors.email.backendError = false"
+          :class="{
+            'apply-shake': shake.email,
+          }"
+          class="email"
+        ></FormField>
+
+        <PasswordField
+          :validationRule="validationRules.password"
+          :validationMsg="$t('passwordValidationMsg')"
+          :label="$t('passwordLabel')"
+          v-model="userData.password"
+          :class="{
+            'apply-shake': shake.password,
+          }"
+          class="password"
+        ></PasswordField>
       </div>
-      <div class="password-box">
-        <input class="field-input" type="password" placeholder="Password"/>
-      </div>
-      <button class="create-account-btn">Log in</button>
+
+      <button class="log-in-btn" @click="onCreateAccountClick">
+        {{ $t('logInButton') }}
+      </button>
     </div>
+
     <div class="right-section">
       <div class="background-blur" />
       <img class="g-image" src="../assets/img/G.png" />
     </div>
   </div>
+
+  <LoadingScreen v-if="isLoading" />
+
+  <DialogWindow
+    :message="$t('registrationSuccessMsg')"
+    :show="isRegistered"
+    @close="isRegistered = false"
+  />
 </template>
 
-<style scoped>
-body {
-  background-color: #96c291;
-}
+<script>
+import FormField from '../components/authentication/FormField.vue';
+import PasswordField from '../components/authentication/PasswordField.vue';
+import LoadingScreen from '../components/LoadingScreen.vue';
+import DialogWindow from '../components/DialogWindow.vue';
 
-.login-form {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #343534;
-  width: 60%;
-  height: 75%;
-  border-radius: 25px;
-  display: flex;
-  flex-direction: row;
-}
+export default {
+  components: {
+    FormField,
+    PasswordField,
+    LoadingScreen,
+    DialogWindow,
+  },
+  data() {
+    return {
+      isOnline: window.navigator.onLine,
+      isRegistered: false,
+      passwordFieldType: 'password',
+      showPasswordIconClass: 'fa-eye',
+      isLoading: false,
+      shake: false,
+      userData: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+      },
+      validationRules: {
+        firstName: /^[A-Za-z' ]+$/,
+        lastName: /^[A-Za-z' ]+$/,
+        email: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
+        password: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
+      },
+      backendErrors: {
+        email: {
+          backendErrorMsg: '',
+          backendError: false,
+        },
+        password: {
+          backendErrorMsg: '',
+          backendError: false,
+        },
+      },
+      shake: {
+        firstName: false,
+        lastName: false,
+        email: false,
+        password: false,
+      },
+    };
+  },
+  computed: {
+    isFormValid() {
+      return (
+        this.isValidField(this.userData.firstName, 'firstName') &&
+        this.isValidField(this.userData.lastName, 'lastName') &&
+        this.isValidField(this.userData.email, 'email') &&
+        this.isValidField(this.userData.password, 'password')
+      );
+    },
+  },
+  methods: {
+    isValidField(value, fieldName) {
+      return value !== '' && this.validationRules[fieldName].test(value);
+    },
 
-.left-section {
-  width: 40%;
-  height: 100%;
-  padding: 95px 0px 0px 60px;
-}
+    async authenticateUser() {
+      try {
+        if (!this.isOnline) {
+          alert(this.$i18n.t('offlineErrorMsg'));
+          return;
+        }
 
-.start-for-free-text {
-  color: #646464;
-  font-size: 16px;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 3%;
-}
+        this.isLoading = true;
 
-.title {
-  color: white;
-  font-size: 40px;
-  width: 325px;
-  margin-bottom: 10px;
-}
+        const response = await Promise.race([
+          fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.userData),
+          }),
+          new Promise((_, reject) => {
+            setTimeout(() => {
+              reject(new Error('Timeout Error'));
+            }, 5000);
+          }),
+        ]);
 
-.log-in-offer {
-  color: #a0a0a0;
-  margin-bottom: 35px;
-}
+        this.isLoading = false;
 
-.log-in-offer span {
-  color: #64b657;
-  font-weight: 800;
-  cursor: pointer;
-}
-.log-in-offer span:hover {
-  text-decoration: underline;
-}
+        if (response.ok) {
+          this.isRegistered = true;
+        } else {
+          const data = await response.json();
 
-.first-name-box,
-.last-name-box {
-  width: 40%;
-  padding: 3% 3% 3% 5%;
-  background-color: #4e4e4e;
-  border-radius: 45px;
-  margin-right: 5%;
-  display: inline-block;
-  margin-bottom: 5%;
-}
+          if (data.statusCode === 400) {
+            throw new Error(data.message);
+          }
+        }
+      } catch (error) {
+        this.handleAuthenticationError(error);
+      }
+    },
+    handleAuthenticationError(error) {
+      this.isLoading = false;
 
-.field-input {
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 0);
-  border-style: none;
-  font-weight: bold;
-  color: whitesmoke;
-  font-size: 14px;
-  width: 100%;
-}
-.field-input::placeholder {
-  color: #9e9e9e;
+      if (error.message === 'Timeout Error') {
+        alert(this.$i18n.t('timeoutErrorMsg'));
+        return;
+      } else if (error.message === 'Failed to fetch') {
+        alert(this.$i18n.t('serverErrorMsg'));
+        return;
+      }
 
-}
+      let errorSplit = error.message.split(';');
 
-.email-box,
-.password-box {
-  width: 85%;
-  padding: 3% 3% 3% 5%;
-  background-color: #4e4e4e;
-  border-radius: 45px;
-  margin-bottom: 5%;
-}
+      let fieldNames = [];
+      let fieldErrorMessages = [];
 
-.password-box {
-  margin-bottom: 10%;
-}
+      for (let i = 0; i < errorSplit.length; i++) {
+        let keyValueSplit = errorSplit[i].split(':');
 
-.create-account-btn {
-  background-color: #48883e;
-  border: none;
-  border-radius: 45px;
-  width: 35%;
-  height: 7.5%;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  transition: opacity 0.25s;
-}
-.create-account-btn:hover {
-  opacity: 0.8;
-}
+        let fieldName = keyValueSplit[0];
+        let message = keyValueSplit[1];
 
-.create-account-btn:active {
-  opacity: 1;
-  width: 34.5%;
-  height: 7%;
-  font-size: 13px;
-}
+        fieldNames.push(fieldName);
+        fieldErrorMessages.push(message);
+      }
 
-.right-section {
-  width: 60%;
-  height: 100%;
-}
+      for (let i = 0; i < fieldNames.length; i++) {
+        this.backendErrors[fieldNames[i]].backendErrorMsg =
+          fieldErrorMessages[i];
+        this.backendErrors[fieldNames[i]].backendError = true;
+        this.shakeField(fieldNames[i]);
+      }
+    },
+    onCreateAccountClick() {
+      if (this.isFormValid) {
+        this.authenticateUser();
+      } else {
+        const fields = ['firstName', 'lastName', 'email', 'password'];
+        for (const fieldName of fields) {
+          if (!this.isValidField(this.userData[fieldName], fieldName)) {
+            this.shakeField(fieldName);
+          }
+        }
+      }
+    },
+    shakeField(fieldName) {
+      this.shake[fieldName] = true;
+      setTimeout(() => {
+        this.shake[fieldName] = false;
+      }, 820);
+    },
+  },
+};
+</script>
 
-.background-blur {
-  background-color: #48883e;
-  width: 60%;
-  height: 60%;
-  filter: blur(100px);
-  position: relative;
-  top: 25%;
-  left: 25%;
-}
-
-.g-image {
-  width: 65%;
-  height: 65%;
-  object-fit: cover;
-  position: relative;
-  top: -40%;
-  left: 20%;
-}
-</style>
+<style src="../assets/styles/LogIn.css"></style>

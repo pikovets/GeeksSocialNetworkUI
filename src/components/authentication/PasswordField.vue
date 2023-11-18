@@ -6,6 +6,7 @@
         @input="
           $emit('update:modelValue', $event.target.value);
           wasSelected = true;
+          $emit('clearBackendError');
         "
         :type="passwordFieldType"
         class="field-input"
@@ -17,8 +18,9 @@
         class="fa-solid"
       ></i>
     </div>
-    <p class="error-msg" v-if="!isEmpty && !isValid" v-html="validationMsg"></p>
-    <p class="error-msg" v-if="isEmpty && wasSelected">
+    <p class="error-msg" v-show="backendError" v-html="backendErrorMsg"></p>
+    <p class="error-msg" v-show="!isEmpty && !isValid" v-html="validationMsg"></p>
+    <p class="error-msg" v-show="isEmpty && wasSelected">
       {{ $t('emptyFieldMsg') }}
     </p>
   </div>
@@ -35,8 +37,10 @@ export default {
     validationRule: RegExp,
     validationMsg: String,
     modelValue: String,
+    backendError: Boolean,
+    backendErrorMsg: String,
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'clearBackendError'],
   data() {
     return {
       wasSelected: false,
@@ -48,7 +52,8 @@ export default {
     fieldClasses() {
       return {
         'valid-field': this.isValid && this.wasSelected,
-        'invalid-field': !this.isValid && this.wasSelected,
+        'invalid-field':
+          (!this.isValid || this.backendError) && this.wasSelected,
       };
     },
     isEmpty() {

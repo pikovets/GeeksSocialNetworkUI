@@ -11,8 +11,6 @@
         class="field-input"
         type="text"
         :pattern="validationRul"
-        :title="validationMsg"
-        required=""
         :placeholder="label"
       />
     </div>

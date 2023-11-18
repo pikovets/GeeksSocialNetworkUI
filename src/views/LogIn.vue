@@ -25,9 +25,12 @@
         ></FormField>
 
         <PasswordField
+          :backendError="backendErrors.password.backendError"
+          :backendErrorMsg="backendErrors.password.backendErrorMsg"
           :validationRule="validationRules.password"
           :validationMsg="$t('passwordValidationMsg')"
           :label="$t('passwordLabel')"
+          @clearBackendError="backendErrors.password.backendError = false"
           v-model="userData.password"
           :class="{
             'apply-shake': shake.password,
@@ -36,7 +39,7 @@
         ></PasswordField>
       </div>
 
-      <button class="log-in-btn" @click="onCreateAccountClick">
+      <button class="log-in-btn" @click="authenticateUser">
         {{ $t('logInButton') }}
       </button>
     </div>
@@ -48,12 +51,6 @@
   </div>
 
   <LoadingScreen v-if="isLoading" />
-
-  <DialogWindow
-    :message="$t('registrationSuccessMsg')"
-    :show="isRegistered"
-    @close="isRegistered = false"
-  />
 </template>
 
 <script>
@@ -78,8 +75,6 @@ export default {
       isLoading: false,
       shake: false,
       userData: {
-        firstName: '',
-        lastName: '',
         email: '',
         password: '',
       },
@@ -107,11 +102,14 @@ export default {
       },
     };
   },
+  mounted() {
+    if (localStorage.getItem('GeeksJwtToken')) {
+      this.$router.push('/');
+    }
+  },
   computed: {
     isFormValid() {
       return (
-        this.isValidField(this.userData.firstName, 'firstName') &&
-        this.isValidField(this.userData.lastName, 'lastName') &&
         this.isValidField(this.userData.email, 'email') &&
         this.isValidField(this.userData.password, 'password')
       );
@@ -132,7 +130,7 @@ export default {
         this.isLoading = true;
 
         const response = await Promise.race([
-          fetch('http://localhost:3000/auth/register', {
+          fetch('http://localhost:3000/auth/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -149,7 +147,13 @@ export default {
         this.isLoading = false;
 
         if (response.ok) {
-          this.isRegistered = true;
+          const data = await response.json();
+          const jwtToken = data.token;
+
+          localStorage.setItem('GeeksJwtToken', jwtToken);
+          console.log(jwtToken);
+
+          this.isEntered = true;
         } else {
           const data = await response.json();
 
@@ -158,59 +162,12 @@ export default {
           }
         }
       } catch (error) {
-        this.handleAuthenticationError(error);
+        this.backendErrors.email.backendError = true;
+        this.backendErrors.email.backendErrorMsg = error.message;
+
+        this.backendErrors.password.backendError = true;
+        this.backendErrors.password.backendErrorMsg = error.message;
       }
-    },
-    handleAuthenticationError(error) {
-      this.isLoading = false;
-
-      if (error.message === 'Timeout Error') {
-        alert(this.$i18n.t('timeoutErrorMsg'));
-        return;
-      } else if (error.message === 'Failed to fetch') {
-        alert(this.$i18n.t('serverErrorMsg'));
-        return;
-      }
-
-      let errorSplit = error.message.split(';');
-
-      let fieldNames = [];
-      let fieldErrorMessages = [];
-
-      for (let i = 0; i < errorSplit.length; i++) {
-        let keyValueSplit = errorSplit[i].split(':');
-
-        let fieldName = keyValueSplit[0];
-        let message = keyValueSplit[1];
-
-        fieldNames.push(fieldName);
-        fieldErrorMessages.push(message);
-      }
-
-      for (let i = 0; i < fieldNames.length; i++) {
-        this.backendErrors[fieldNames[i]].backendErrorMsg =
-          fieldErrorMessages[i];
-        this.backendErrors[fieldNames[i]].backendError = true;
-        this.shakeField(fieldNames[i]);
-      }
-    },
-    onCreateAccountClick() {
-      if (this.isFormValid) {
-        this.authenticateUser();
-      } else {
-        const fields = ['firstName', 'lastName', 'email', 'password'];
-        for (const fieldName of fields) {
-          if (!this.isValidField(this.userData[fieldName], fieldName)) {
-            this.shakeField(fieldName);
-          }
-        }
-      }
-    },
-    shakeField(fieldName) {
-      this.shake[fieldName] = true;
-      setTimeout(() => {
-        this.shake[fieldName] = false;
-      }, 820);
     },
   },
 };

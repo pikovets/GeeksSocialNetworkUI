@@ -1,136 +1,37 @@
 <template>
   <div class="container">
-    <div class="form-field" :class="fieldClasses">
+    <div :class="['form-field', fieldClasses]">
       <input
         :value="modelValue"
-        @input="
-          $emit('update:modelValue', $event.target.value);
-          wasSelected = true;
-          $emit('clearBackendError');
-        "
-        class="field-input"
-        type="text"
-        :pattern="validationRul"
-        :title="validationMsg"
-        required=""
+        @input="updateModelValue"
+        :pattern="validationRule"
         :placeholder="label"
+        type="text"
+        class="field-input"
       />
     </div>
-    <p class="error-msg" v-show="backendError" v-html="backendErrorMsg"></p>
     <p
+      v-show="backendError !== ''"
+      v-html="backendErrorMsg"
       class="error-msg"
+    ></p>
+    <p
       v-show="!isEmpty && !isValid"
       v-html="validationMsg"
+      class="error-msg"
     ></p>
-    <p class="error-msg" v-show="isEmpty && wasSelected">
-      This field cannot be empty
+    <p v-show="isEmpty && wasSelected" class="error-msg">
+      {{ $t('emptyFieldMsg') }}
     </p>
   </div>
 </template>
 
 <script>
+import { FormFieldMixin } from './FormFieldMixin';
+
 export default {
-  props: {
-    modelValue: String,
-    label: String,
-    validationRule: RegExp,
-    validationMsg: String,
-    backendError: Boolean,
-    backendErrorMsg: String,
-  },
-  emits: ['update:modelValue', 'clearBackendError'],
-  data() {
-    return {
-      wasSelected: false,
-    };
-  },
-  computed: {
-    fieldClasses() {
-      return {
-        'valid-field': this.isValid && this.wasSelected,
-        'invalid-field':
-          (!this.isValid || this.backendError) && this.wasSelected,
-      };
-    },
-    isValid() {
-      return this.validationRule.test(this.modelValue);
-    },
-    isEmpty() {
-      return this.modelValue === '';
-    },
-  },
+  mixins: [FormFieldMixin],
 };
 </script>
 
-<style scoped>
-.container {
-  margin-right: 3%;
-  margin-bottom: 7.5%;
-}
-
-.form-field {
-  padding: 0.75em 0.2em 0.75em 1.2em;
-  background-color: #4e4e4e;
-  border-radius: 45px;
-  margin-bottom: 2%;
-}
-
-.field-input {
-  background-color: rgba(0, 0, 0, 0);
-  border-style: none;
-  font-weight: bold;
-  color: whitesmoke;
-  font-size: 1rem;
-  width: 100%;
-}
-.field-input::placeholder {
-  color: #9e9e9e;
-}
-
-.valid-field {
-  box-shadow: inset 0 0 1rem green;
-}
-
-.invalid-field {
-  box-shadow: inset 0 0 1rem red;
-}
-
-.error-msg {
-  color: red;
-  font-size: 0.75rem;
-  padding-left: 0.5em;
-}
-
-@media screen and (min-width: 48em) {
-  .form-field {
-    padding: 1.5em 1em 1.5em 1.5em;
-  }
-
-  .field-input {
-    font-size: 1.35rem;
-  }
-
-  .error-msg {
-    font-size: 1rem;
-  }
-}
-
-@media screen and (min-width: 80em) {
-  .form-field {
-    padding: 1em 1em 1em 1.5em;
-  }
-
-  .field-input {
-    font-size: 1.1rem;
-  }
-
-  .fa-solid {
-    display: inline-block;
-    font-size: 1rem;
-  }
-
-  .error-msg {
-    font-size: 0.75rem;
-  }
-}
-</style>
+<style src="../../assets/styles/FormField.css"></style>

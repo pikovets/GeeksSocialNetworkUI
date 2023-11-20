@@ -1,163 +1,202 @@
 <template>
-  <div class="login-form">
-    <div class="left-section">
-      <p class="start-for-free-text">Start for free</p>
-      <p class="title">
-        Log in<br />
-        to your account
+  <div class="registration-form">
+    <div class="registration-section">
+      <p class="subtitle">{{ $t('haveFunText') }}</p>
+      <p class="title" v-html="$t('logInTitle')"></p>
+      <p class="sign-up-offer">
+        {{ $t('noAccountText') }}
+        <router-link to="/signup" style="margin-left: 1%">{{
+          $t('signUp')
+        }}</router-link>
       </p>
-      <p class="log-in-offer">
-        Not a member yet? <span style="margin-left: 1%">Register</span>
-      </p>
-      <div class="email-box">
-        <input class="field-input" type="text" placeholder="Email"/>
+      <div>
+        <FormField
+          v-model="userData.email"
+          :label="$t('emailLabel')"
+          :backendErrorMsg="backendErrors.email"
+          :validationRule="validationRules.email"
+          :validationMsg="$t('emailValidationMsg')"
+          @clearBackendError="clearBackendError('email')"
+          :class="{
+            'apply-shake': shake.email,
+          }"
+          class="email"
+        ></FormField>
+
+        <PasswordField
+          v-model="userData.password"
+          :label="$t('passwordLabel')"
+          :backendErrorMsg="backendErrors.password"
+          :validationRule="validationRules.password"
+          :validationMsg="$t('passwordValidationMsg')"
+          @clearBackendError="clearBackendError('password')"
+          :class="{
+            'apply-shake': shake.password,
+          }"
+          class="password"
+        ></PasswordField>
       </div>
-      <div class="password-box">
-        <input class="field-input" type="password" placeholder="Password"/>
-      </div>
-      <button class="create-account-btn">Log in</button>
+
+      <button class="log-in-btn" @click="onLogInClick">
+        {{ $t('logInButton') }}
+      </button>
     </div>
+
     <div class="right-section">
       <div class="background-blur" />
       <img class="g-image" src="../assets/img/G.png" />
     </div>
   </div>
+
+  <LoadingScreen v-if="isLoading" />
 </template>
 
-<style scoped>
-body {
-  background-color: #96c291;
-}
+<script>
+import FormField from '../components/authentication/FormField.vue';
+import PasswordField from '../components/authentication/PasswordField.vue';
+import LoadingScreen from '../components/LoadingScreen.vue';
 
-.login-form {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #343534;
-  width: 60%;
-  height: 75%;
-  border-radius: 25px;
-  display: flex;
-  flex-direction: row;
-}
+import { LOGIN_API_ENDPOINT } from '@/config/apiConfig';
+import { validationRules } from '@/config/validationRules';
 
-.left-section {
-  width: 40%;
-  height: 100%;
-  padding: 95px 0px 0px 60px;
-}
+const ERROR_MESSAGES = {
+  TIMEOUT: 'Timeout Error',
+  FETCH_FAILED: 'Failed to fetch',
+};
 
-.start-for-free-text {
-  color: #646464;
-  font-size: 16px;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 3%;
-}
+export default {
+  components: {
+    FormField,
+    PasswordField,
+    LoadingScreen,
+  },
+  data() {
+    return {
+      isOnline: window.navigator.onLine,
+      isLoading: false,
+      userData: {
+        email: '',
+        password: '',
+      },
+      backendErrors: {
+        email: '',
+        password: '',
+      },
+      shake: {
+        email: false,
+        password: false,
+      },
+      validationRules: validationRules,
+    };
+  },
+  mounted() {
+    if (localStorage.getItem('GeeksJwtToken')) {
+      this.$router.push('/');
+    }
+  },
+  computed: {
+    isFormValid() {
+      return (
+        this.isValidField(this.userData.email, 'email') &&
+        this.isValidField(this.userData.password, 'password')
+      );
+    },
+  },
+  methods: {
+    isValidField(value, fieldName) {
+      return value !== '' && this.validationRules[fieldName].test(value);
+    },
 
-.title {
-  color: white;
-  font-size: 40px;
-  width: 325px;
-  margin-bottom: 10px;
-}
+    clearBackendError(fieldName) {
+      this.backendErrors[fieldName] = '';
+    },
 
-.log-in-offer {
-  color: #a0a0a0;
-  margin-bottom: 35px;
-}
+    async authenticateUser() {
+      if (!this.isFormValid) {
+        this.shake.email = !this.isValidField(this.userData.email, 'email');
+        this.shake.password = !this.isValidField(
+          this.userData.password,
+          'password'
+        );
+        return;
+      }
 
-.log-in-offer span {
-  color: #64b657;
-  font-weight: 800;
-  cursor: pointer;
-}
-.log-in-offer span:hover {
-  text-decoration: underline;
-}
+      try {
+        if (!this.isOnline) {
+          alert(this.$i18n.t('offlineErrorMsg'));
+          return;
+        }
 
-.first-name-box,
-.last-name-box {
-  width: 40%;
-  padding: 3% 3% 3% 5%;
-  background-color: #4e4e4e;
-  border-radius: 45px;
-  margin-right: 5%;
-  display: inline-block;
-  margin-bottom: 5%;
-}
+        this.isLoading = true;
 
-.field-input {
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 0);
-  border-style: none;
-  font-weight: bold;
-  color: whitesmoke;
-  font-size: 14px;
-  width: 100%;
-}
-.field-input::placeholder {
-  color: #9e9e9e;
+        const response = await Promise.race([
+          fetch(LOGIN_API_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.userData),
+          }),
+          new Promise((_, reject) => {
+            setTimeout(() => {
+              reject(new Error(ERROR_MESSAGES.TIMEOUT));
+            }, 5000);
+          }),
+        ]);
 
-}
+        this.isLoading = false;
 
-.email-box,
-.password-box {
-  width: 85%;
-  padding: 3% 3% 3% 5%;
-  background-color: #4e4e4e;
-  border-radius: 45px;
-  margin-bottom: 5%;
-}
+        if (response.ok) {
+          const data = await response.json();
+          const jwtToken = data.token;
 
-.password-box {
-  margin-bottom: 10%;
-}
+          localStorage.setItem('GeeksJwtToken', jwtToken);
+          this.$router.push('/');
+        } else {
+          const data = await response.json();
 
-.create-account-btn {
-  background-color: #48883e;
-  border: none;
-  border-radius: 45px;
-  width: 35%;
-  height: 7.5%;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  transition: opacity 0.25s;
-}
-.create-account-btn:hover {
-  opacity: 0.8;
-}
+          if (data.statusCode === 400) {
+            throw new Error(data.message);
+          }
+        }
+      } catch (error) {
+        this.handleAuthenticationError(error);
+      }
+    },
+    handleAuthenticationError(error) {
+      this.isLoading = false;
+      if (error.message === ERROR_MESSAGES.TIMEOUT) {
+        alert(this.$i18n.t('timeoutErrorMsg'));
+      } else if (error.message === ERROR_MESSAGES.FETCH_FAILED) {
+        alert(this.$i18n.t('serverErrorMsg'));
+      } else if (error.message === 'Incorrect username or password') {
+        this.backendErrors.email = error.message;
+        this.shake.email = true;
 
-.create-account-btn:active {
-  opacity: 1;
-  width: 34.5%;
-  height: 7%;
-  font-size: 13px;
-}
+        this.backendErrors.password = error.message;
+        this.shake.password = true;
+      }
+    },
+    onLogInClick() {
+      if (this.isFormValid) {
+        this.authenticateUser();
+      } else {
+        const fields = ['email', 'password'];
+        for (const fieldName of fields) {
+          if (!this.isValidField(this.userData[fieldName], fieldName)) {
+            this.shakeField(fieldName);
+          }
+        }
+      }
+    },
+    shakeField(fieldName) {
+      this.shake[fieldName] = true;
+      setTimeout(() => {
+        this.shake[fieldName] = false;
+      }, 820);
+    },
+  },
+};
+</script>
 
-.right-section {
-  width: 60%;
-  height: 100%;
-}
-
-.background-blur {
-  background-color: #48883e;
-  width: 60%;
-  height: 60%;
-  filter: blur(100px);
-  position: relative;
-  top: 25%;
-  left: 25%;
-}
-
-.g-image {
-  width: 65%;
-  height: 65%;
-  object-fit: cover;
-  position: relative;
-  top: -40%;
-  left: 20%;
-}
-</style>
+<style src="../assets/styles/LogIn.css"></style>

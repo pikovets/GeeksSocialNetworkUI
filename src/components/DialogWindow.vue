@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay">
+  <div class="overlay" v-show="show">
     <div class="dialog-window">
       <div class="header">
         <button @click="$emit('close')" class="close-btn">
@@ -36,7 +36,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .overlay {
   position: fixed;
   top: 0;
@@ -106,6 +106,7 @@ export default {
   background-color: #48883e;
   color: white;
   margin-bottom: 1em;
+  font-weight: bold;
 }
 
 .log-in-btn:hover {

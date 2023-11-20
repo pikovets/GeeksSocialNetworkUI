@@ -9,7 +9,7 @@ export default {
   lastNameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophesd',
   emailLabel: 'Email',
   emailValidationMsg:
-    'Ensure your email is valid by following these criteria:<br>End with "@gmail.com"<br>Include only letters (a-z, A-Z), digits (0-9), and the special characters ".", "_", "%", "+", or "-"',
+    'Ensure your email is valid by following these criteria:<br>End with gmail.com<br>Include only letters (a-z, A-Z), digits (0-9), and the special characters ".", "_", "%", "+", or "-"',
   passwordLabel: 'Password',
   passwordValidationMsg:
     'Secure your password by including:<br>' +
@@ -28,6 +28,6 @@ export default {
   haveFunText: 'Have fun!',
   logInTitle: 'Log in to your <br> account',
   noAccountText: "Don't have an account?",
-  signUp: "Sign Up",
-  logInButton: "Log In",
+  signUp: 'Sign Up',
+  logInButton: 'Log In',
 };

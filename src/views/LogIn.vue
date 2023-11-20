@@ -11,13 +11,12 @@
       </p>
       <div>
         <FormField
-          :backendError="backendErrors.email.backendError"
-          :backendErrorMsg="backendErrors.email.backendErrorMsg"
+          v-model="userData.email"
+          :label="$t('emailLabel')"
+          :backendErrorMsg="backendErrors.email"
           :validationRule="validationRules.email"
           :validationMsg="$t('emailValidationMsg')"
-          :label="$t('emailLabel')"
-          v-model="userData.email"
-          @clearBackendError="backendErrors.email.backendError = false"
+          @clearBackendError="clearBackendError('email')"
           :class="{
             'apply-shake': shake.email,
           }"
@@ -25,13 +24,12 @@
         ></FormField>
 
         <PasswordField
-          :backendError="backendErrors.password.backendError"
-          :backendErrorMsg="backendErrors.password.backendErrorMsg"
+          v-model="userData.password"
+          :label="$t('passwordLabel')"
+          :backendErrorMsg="backendErrors.password"
           :validationRule="validationRules.password"
           :validationMsg="$t('passwordValidationMsg')"
-          :label="$t('passwordLabel')"
-          @clearBackendError="backendErrors.password.backendError = false"
-          v-model="userData.password"
+          @clearBackendError="clearBackendError('password')"
           :class="{
             'apply-shake': shake.password,
           }"
@@ -39,7 +37,7 @@
         ></PasswordField>
       </div>
 
-      <button class="log-in-btn" @click="authenticateUser">
+      <button class="log-in-btn" @click="onLogInClick">
         {{ $t('logInButton') }}
       </button>
     </div>
@@ -57,49 +55,38 @@
 import FormField from '../components/authentication/FormField.vue';
 import PasswordField from '../components/authentication/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
-import DialogWindow from '../components/DialogWindow.vue';
+
+import { LOGIN_API_ENDPOINT } from '@/config/apiConfig';
+import { validationRules } from '@/config/validationRules';
+
+const ERROR_MESSAGES = {
+  TIMEOUT: 'Timeout Error',
+  FETCH_FAILED: 'Failed to fetch',
+};
 
 export default {
   components: {
     FormField,
     PasswordField,
     LoadingScreen,
-    DialogWindow,
   },
   data() {
     return {
       isOnline: window.navigator.onLine,
-      isRegistered: false,
-      passwordFieldType: 'password',
-      showPasswordIconClass: 'fa-eye',
       isLoading: false,
-      shake: false,
       userData: {
         email: '',
         password: '',
       },
-      validationRules: {
-        firstName: /^[A-Za-z' ]+$/,
-        lastName: /^[A-Za-z' ]+$/,
-        email: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
-        password: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
-      },
       backendErrors: {
-        email: {
-          backendErrorMsg: '',
-          backendError: false,
-        },
-        password: {
-          backendErrorMsg: '',
-          backendError: false,
-        },
+        email: '',
+        password: '',
       },
       shake: {
-        firstName: false,
-        lastName: false,
         email: false,
         password: false,
       },
+      validationRules: validationRules,
     };
   },
   mounted() {
@@ -120,7 +107,20 @@ export default {
       return value !== '' && this.validationRules[fieldName].test(value);
     },
 
+    clearBackendError(fieldName) {
+      this.backendErrors[fieldName] = '';
+    },
+
     async authenticateUser() {
+      if (!this.isFormValid) {
+        this.shake.email = !this.isValidField(this.userData.email, 'email');
+        this.shake.password = !this.isValidField(
+          this.userData.password,
+          'password'
+        );
+        return;
+      }
+
       try {
         if (!this.isOnline) {
           alert(this.$i18n.t('offlineErrorMsg'));
@@ -130,7 +130,7 @@ export default {
         this.isLoading = true;
 
         const response = await Promise.race([
-          fetch('http://localhost:3000/auth/login', {
+          fetch(LOGIN_API_ENDPOINT, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ export default {
           }),
           new Promise((_, reject) => {
             setTimeout(() => {
-              reject(new Error('Timeout Error'));
+              reject(new Error(ERROR_MESSAGES.TIMEOUT));
             }, 5000);
           }),
         ]);
@@ -151,9 +151,7 @@ export default {
           const jwtToken = data.token;
 
           localStorage.setItem('GeeksJwtToken', jwtToken);
-          console.log(jwtToken);
-
-          this.isEntered = true;
+          this.$router.push('/');
         } else {
           const data = await response.json();
 
@@ -162,12 +160,40 @@ export default {
           }
         }
       } catch (error) {
-        this.backendErrors.email.backendError = true;
-        this.backendErrors.email.backendErrorMsg = error.message;
-
-        this.backendErrors.password.backendError = true;
-        this.backendErrors.password.backendErrorMsg = error.message;
+        this.handleAuthenticationError(error);
       }
+    },
+    handleAuthenticationError(error) {
+      this.isLoading = false;
+      if (error.message === ERROR_MESSAGES.TIMEOUT) {
+        alert(this.$i18n.t('timeoutErrorMsg'));
+      } else if (error.message === ERROR_MESSAGES.FETCH_FAILED) {
+        alert(this.$i18n.t('serverErrorMsg'));
+      } else if (error.message === 'Incorrect username or password') {
+        this.backendErrors.email = error.message;
+        this.shake.email = true;
+
+        this.backendErrors.password = error.message;
+        this.shake.password = true;
+      }
+    },
+    onLogInClick() {
+      if (this.isFormValid) {
+        this.authenticateUser();
+      } else {
+        const fields = ['email', 'password'];
+        for (const fieldName of fields) {
+          if (!this.isValidField(this.userData[fieldName], fieldName)) {
+            this.shakeField(fieldName);
+          }
+        }
+      }
+    },
+    shakeField(fieldName) {
+      this.shake[fieldName] = true;
+      setTimeout(() => {
+        this.shake[fieldName] = false;
+      }, 820);
     },
   },
 };

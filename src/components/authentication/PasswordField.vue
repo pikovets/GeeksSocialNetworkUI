@@ -3,11 +3,7 @@
     <div class="form-field" :class="fieldClasses">
       <input
         :value="modelValue"
-        @input="
-          $emit('update:modelValue', $event.target.value);
-          wasSelected = true;
-          $emit('clearBackendError');
-        "
+        @input="updateModelValue"
         :type="passwordFieldType"
         class="field-input"
         :placeholder="$t('passwordLabel')"
@@ -18,8 +14,16 @@
         class="fa-solid"
       ></i>
     </div>
-    <p class="error-msg" v-show="backendError" v-html="backendErrorMsg"></p>
-    <p class="error-msg" v-show="!isEmpty && !isValid" v-html="validationMsg"></p>
+    <p
+      class="error-msg"
+      v-show="backendErrorMsg !== ''"
+      v-html="backendErrorMsg"
+    ></p>
+    <p
+      class="error-msg"
+      v-show="!isEmpty && !isValid"
+      v-html="validationMsg"
+    ></p>
     <p class="error-msg" v-show="isEmpty && wasSelected">
       {{ $t('emptyFieldMsg') }}
     </p>
@@ -27,41 +31,15 @@
 </template>
 
 <script>
-import FormField from './FormField.vue';
+import { FormFieldMixin } from './FormFieldMixin';
 
 export default {
-  components: {
-    FormField,
-  },
-  props: {
-    validationRule: RegExp,
-    validationMsg: String,
-    modelValue: String,
-    backendError: Boolean,
-    backendErrorMsg: String,
-  },
-  emits: ['update:modelValue', 'clearBackendError'],
+  mixins: [FormFieldMixin],
   data() {
     return {
-      wasSelected: false,
       passwordFieldType: 'password',
       showPasswordIconClass: 'fa-eye',
     };
-  },
-  computed: {
-    fieldClasses() {
-      return {
-        'valid-field': this.isValid && this.wasSelected,
-        'invalid-field':
-          (!this.isValid || this.backendError) && this.wasSelected,
-      };
-    },
-    isEmpty() {
-      return this.modelValue === '';
-    },
-    isValid() {
-      return this.validationRule.test(this.modelValue);
-    },
   },
   methods: {
     togglePasswordVisibility() {

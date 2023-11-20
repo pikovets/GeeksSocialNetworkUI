@@ -12,10 +12,11 @@
       <div>
         <div class="inline-fields">
           <FormField
+            v-model="userData.firstName"
+            :label="$t('firstNameLabel')"
+            :backendErrorMsg="backendErrors.firstName"
             :validationRule="validationRules.firstName"
             :validationMsg="$t('firstNameValidationMsg')"
-            :label="$t('firstNameLabel')"
-            v-model="userData.firstName"
             :class="{
               'apply-shake': shake.firstName,
             }"
@@ -23,10 +24,11 @@
           ></FormField>
 
           <FormField
+            v-model="userData.lastName"
+            :label="$t('lastNameLabel')"
+            :backendErrorMsg="backendErrors.lastName"
             :validationRule="validationRules.lastName"
             :validationMsg="$t('lastNameValidationMsg')"
-            :label="$t('lastNameLabel')"
-            v-model="userData.lastName"
             :class="{
               'apply-shake': shake.lastName,
             }"
@@ -35,13 +37,12 @@
         </div>
 
         <FormField
-          :backendError="backendErrors.email.backendError"
-          :backendErrorMsg="backendErrors.email.backendErrorMsg"
+          v-model="userData.email"
+          :label="$t('emailLabel')"
+          :backendErrorMsg="backendErrors.email"
           :validationRule="validationRules.email"
           :validationMsg="$t('emailValidationMsg')"
-          :label="$t('emailLabel')"
-          v-model="userData.email"
-          @clearBackendError="backendErrors.email.backendError = false"
+          @clearBackendError="clearBackendError('email')"
           :class="{
             'apply-shake': shake.email,
           }"
@@ -49,10 +50,12 @@
         ></FormField>
 
         <PasswordField
+          v-model="userData.password"
+          :label="$t('passwordLabel')"
+          :backendErrorMsg="backendErrors.password"
           :validationRule="validationRules.password"
           :validationMsg="$t('passwordValidationMsg')"
-          :label="$t('passwordLabel')"
-          v-model="userData.password"
+          @clearBackendError="clearBackendError('password')"
           :class="{
             'apply-shake': shake.password,
           }"
@@ -74,7 +77,7 @@
   <LoadingScreen v-if="isLoading" />
 
   <DialogWindow
-    :message="$t('registrationSuccessMsg')"
+    :message="$t('registrationCompleteMsg')"
     :show="isRegistered"
     @close="isRegistered = false"
   />
@@ -85,6 +88,14 @@ import FormField from '../components/authentication/FormField.vue';
 import PasswordField from '../components/authentication/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 import DialogWindow from '../components/DialogWindow.vue';
+
+const ERROR_MESSAGES = {
+  TIMEOUT: 'Timeout Error',
+  FETCH_FAILED: 'Failed to fetch',
+};
+
+import { SIGNUP_API_ENDPOINT } from '@/config/apiConfig';
+import { validationRules } from '@/config/validationRules';
 
 export default {
   components: {
@@ -97,31 +108,18 @@ export default {
     return {
       isOnline: window.navigator.onLine,
       isRegistered: false,
-      passwordFieldType: 'password',
-      showPasswordIconClass: 'fa-eye',
       isLoading: false,
-      shake: false,
       userData: {
         firstName: '',
         lastName: '',
         email: '',
         password: '',
       },
-      validationRules: {
-        firstName: /^[A-Za-z' ]+$/,
-        lastName: /^[A-Za-z' ]+$/,
-        email: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
-        password: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
-      },
       backendErrors: {
-        email: {
-          backendErrorMsg: '',
-          backendError: false,
-        },
-        password: {
-          backendErrorMsg: '',
-          backendError: false,
-        },
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
       },
       shake: {
         firstName: false,
@@ -129,6 +127,7 @@ export default {
         email: false,
         password: false,
       },
+      validationRules: validationRules,
     };
   },
   mounted() {
@@ -151,6 +150,10 @@ export default {
       return value !== '' && this.validationRules[fieldName].test(value);
     },
 
+    clearBackendError(fieldName) {
+      this.backendErrors[fieldName] = '';
+    },
+
     async authenticateUser() {
       try {
         if (!this.isOnline) {
@@ -161,7 +164,7 @@ export default {
         this.isLoading = true;
 
         const response = await Promise.race([
-          fetch('http://localhost:3000/auth/register', {
+          fetch(SIGNUP_API_ENDPOINT, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -170,7 +173,7 @@ export default {
           }),
           new Promise((_, reject) => {
             setTimeout(() => {
-              reject(new Error('Timeout Error'));
+              reject(new Error(ERROR_MESSAGES.TIMEOUT));
             }, 5000);
           }),
         ]);
@@ -193,10 +196,10 @@ export default {
     handleAuthenticationError(error) {
       this.isLoading = false;
 
-      if (error.message === 'Timeout Error') {
+      if (error.message === ERROR_MESSAGES.TIMEOUT) {
         alert(this.$i18n.t('timeoutErrorMsg'));
         return;
-      } else if (error.message === 'Failed to fetch') {
+      } else if (error.message === ERROR_MESSAGES.FETCH_FAILED) {
         alert(this.$i18n.t('serverErrorMsg'));
         return;
       }
@@ -216,10 +219,10 @@ export default {
         fieldErrorMessages.push(message);
       }
 
+      console.log(error);
+
       for (let i = 0; i < fieldNames.length; i++) {
-        this.backendErrors[fieldNames[i]].backendErrorMsg =
-          fieldErrorMessages[i];
-        this.backendErrors[fieldNames[i]].backendError = true;
+        this.backendErrors[fieldNames[i]] = fieldErrorMessages[i];
         this.shakeField(fieldNames[i]);
       }
     },

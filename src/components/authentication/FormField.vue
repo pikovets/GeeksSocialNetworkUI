@@ -1,62 +1,36 @@
 <template>
   <div class="container">
-    <div class="form-field" :class="fieldClasses">
+    <div :class="['form-field', fieldClasses]">
       <input
         :value="modelValue"
-        @input="
-          $emit('update:modelValue', $event.target.value);
-          wasSelected = true;
-          $emit('clearBackendError');
-        "
-        class="field-input"
-        type="text"
-        :pattern="validationRul"
+        @input="updateModelValue"
+        :pattern="validationRule"
         :placeholder="label"
+        type="text"
+        class="field-input"
       />
     </div>
-    <p class="error-msg" v-show="backendError" v-html="backendErrorMsg"></p>
     <p
+      v-show="backendError !== ''"
+      v-html="backendErrorMsg"
       class="error-msg"
+    ></p>
+    <p
       v-show="!isEmpty && !isValid"
       v-html="validationMsg"
+      class="error-msg"
     ></p>
-    <p class="error-msg" v-show="isEmpty && wasSelected">
+    <p v-show="isEmpty && wasSelected" class="error-msg">
       {{ $t('emptyFieldMsg') }}
     </p>
   </div>
 </template>
 
 <script>
+import { FormFieldMixin } from './FormFieldMixin';
+
 export default {
-  props: {
-    modelValue: String,
-    label: String,
-    validationRule: RegExp,
-    validationMsg: String,
-    backendError: Boolean,
-    backendErrorMsg: String,
-  },
-  emits: ['update:modelValue', 'clearBackendError'],
-  data() {
-    return {
-      wasSelected: false,
-    };
-  },
-  computed: {
-    fieldClasses() {
-      return {
-        'valid-field': this.isValid && this.wasSelected,
-        'invalid-field':
-          (!this.isValid || this.backendError) && this.wasSelected,
-      };
-    },
-    isValid() {
-      return this.validationRule.test(this.modelValue);
-    },
-    isEmpty() {
-      return this.modelValue === '';
-    },
-  },
+  mixins: [FormFieldMixin],
 };
 </script>
 

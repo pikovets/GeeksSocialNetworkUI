@@ -1,40 +1,29 @@
 <template>
-  <div class="registration-form">
-    <div class="registration-section">
-      <p class="subtitle">{{ $t('startForFree') }}</p>
-      <p class="title" v-html="$t('createAccountTitle')"></p>
-      <p class="log-in-offer">
-        {{ $t('alreadyMember') }}
-        <router-link to="/login" style="margin-left: 1%">{{
-          $t('logIn')
-        }}</router-link>
-      </p>
-      <div>
-        <div class="inline-fields">
-          <FormField
-            v-model="userData.firstName"
-            :label="$t('firstNameLabel')"
-            :backendErrorMsg="backendErrors.firstName"
-            :validationRule="validationRules.firstName"
-            :validationMsg="$t('firstNameValidationMsg')"
-            :class="{
-              'apply-shake': shake.firstName,
-            }"
-            class="first-name"
-          ></FormField>
+  <div id="animatedBackground" />
+  <Header />
 
-          <FormField
-            v-model="userData.lastName"
-            :label="$t('lastNameLabel')"
-            :backendErrorMsg="backendErrors.lastName"
-            :validationRule="validationRules.lastName"
-            :validationMsg="$t('lastNameValidationMsg')"
-            :class="{
-              'apply-shake': shake.lastName,
-            }"
-            class="last-name"
-          ></FormField>
-        </div>
+  <div class="responsive-container">
+    <div class="registration-form animated-glow">
+      <div class="logo-container">
+        <img class="g-logo" src="../assets/img/logo2.png" />
+      </div>
+      <div class="registration-section">
+        <p class="title" v-html="$t('createAccountTitle')"></p>
+        <p class="log-in-offer">
+          {{ $t('alreadyMember') }}
+          <router-link to="/login">{{ $t('logIn') }}</router-link>
+        </p>
+        <FormField
+          v-model="userData.fullName"
+          :label="$t('fullNameLabel')"
+          :backendErrorMsg="backendErrors.fullName"
+          :validationRule="validationRules.fullName"
+          :validationMsg="$t('fullNameValidationMsg')"
+          :class="{
+            'apply-shake': shake.fullName,
+          }"
+          class="full-name"
+        ></FormField>
 
         <FormField
           v-model="userData.email"
@@ -63,31 +52,23 @@
         ></PasswordField>
       </div>
 
+      <SuccessMessage v-show="isRegistered" />
+
       <button class="create-account-btn" @click="onCreateAccountClick">
         {{ $t('createAccountBtn') }}
       </button>
     </div>
 
-    <div class="right-section">
-      <div class="background-blur" />
-      <img class="g-image" src="../assets/img/G.png" />
-    </div>
+    <LoadingScreen v-if="isLoading" />
   </div>
-
-  <LoadingScreen v-if="isLoading" />
-
-  <DialogWindow
-    :message="$t('registrationCompleteMsg')"
-    :show="isRegistered"
-    @close="isRegistered = false"
-  />
 </template>
 
 <script>
+import Header from '../components/Header.vue';
 import FormField from '../components/authentication/FormField.vue';
 import PasswordField from '../components/authentication/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
-import DialogWindow from '../components/DialogWindow.vue';
+import SuccessMessage from '../components/SuccessMessage.vue';
 
 const ERROR_MESSAGES = {
   TIMEOUT: 'Timeout Error',
@@ -99,10 +80,11 @@ import { validationRules } from '@/config/validationRules';
 
 export default {
   components: {
+    Header,
     FormField,
     PasswordField,
     LoadingScreen,
-    DialogWindow,
+    SuccessMessage,
   },
   data() {
     return {
@@ -110,20 +92,17 @@ export default {
       isRegistered: false,
       isLoading: false,
       userData: {
-        firstName: '',
-        lastName: '',
+        fullName: '',
         email: '',
         password: '',
       },
       backendErrors: {
-        firstName: '',
-        lastName: '',
+        fullName: '',
         email: '',
         password: '',
       },
       shake: {
-        firstName: false,
-        lastName: false,
+        fullName: false,
         email: false,
         password: false,
       },
@@ -131,15 +110,14 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem('GeeksJwtToken')) {
-      this.$router.push('/');
-    }
+    // if (localStorage.getItem('GeeksJwtToken')) {
+    //   this.$router.push('/');
+    // }
   },
   computed: {
     isFormValid() {
       return (
-        this.isValidField(this.userData.firstName, 'firstName') &&
-        this.isValidField(this.userData.lastName, 'lastName') &&
+        this.isValidField(this.userData.fullName, 'fullName') &&
         this.isValidField(this.userData.email, 'email') &&
         this.isValidField(this.userData.password, 'password')
       );
@@ -152,6 +130,7 @@ export default {
 
     clearBackendError(fieldName) {
       this.backendErrors[fieldName] = '';
+      this.isRegistered = false;
     },
 
     async authenticateUser() {
@@ -230,7 +209,7 @@ export default {
       if (this.isFormValid) {
         this.authenticateUser();
       } else {
-        const fields = ['firstName', 'lastName', 'email', 'password'];
+        const fields = ['fullName', 'email', 'password'];
         for (const fieldName of fields) {
           if (!this.isValidField(this.userData[fieldName], fieldName)) {
             this.shakeField(fieldName);

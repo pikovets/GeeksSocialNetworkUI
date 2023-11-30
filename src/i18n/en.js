@@ -1,25 +1,25 @@
 export default {
   startForFree: 'Start for free',
-  createAccountTitle: 'Create your <br> account',
+  createAccountTitle: 'Create your account',
   alreadyMember: 'Already a member?',
   logIn: 'Log in',
-  firstNameLabel: 'First name',
-  firstNameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophes',
-  lastNameLabel: 'Last name',
-  lastNameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophesd',
+  fullNameLabel: 'Full name',
+  fullNameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophes',
   emailLabel: 'Email',
   emailValidationMsg:
-    'Ensure your email is valid by following these criteria:<br>End with gmail.com<br>Include only letters (a-z, A-Z), digits (0-9), and the special characters ".", "_", "%", "+", or "-"',
+    'Ensure your email is valid by following these criteria:<br>' +
+    '• End with gmail.com<br>' +
+    '• Include only letters (a-z, A-Z), digits (0-9), and the special characters ".", "_", "%", "+", or "-"',
   passwordLabel: 'Password',
   passwordValidationMsg:
     'Secure your password by including:<br>' +
-    'One uppercase letter (A-Z)<br>' +
-    'One lowercase letter (a-z)<br>' +
-    'One digit (0-9)<br>' +
-    'Minimum length of 8 characters',
+    '• One uppercase letter (A-Z)<br>' +
+    '• One lowercase letter (a-z)<br>' +
+    '• One digit (0-9)<br>' +
+    '• Minimum length of 8 characters',
   createAccountBtn: 'Create account',
   registrationCompleteMsg:
-    'Welcome to Geeks Social Network! Your registration is complete. You can now access your account by entering your authentication data on the login page',
+    'Registration complete. Log in with your authentication data.',
   offlineErrorMsg: 'Please check your internet connection and try again',
   timeoutErrorMsg: 'The request timed out. Please try again',
   serverErrorMsg:

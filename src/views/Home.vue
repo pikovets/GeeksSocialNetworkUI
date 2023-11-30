@@ -9,6 +9,11 @@ export default {
     AddPost,
     Posts,
   },
+  mounted() {
+    if (localStorage.getItem('GeeksJwtToken') === null) {
+      this.$router.push('/login');
+    }
+  },
 };
 </script>
 

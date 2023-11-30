@@ -1,41 +1,99 @@
-.registration-form {
+body {
+  background-color: rgb(0, 0, 0);
+}
+
+p,
+button {
+  font-family: 'Poppins';
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+}
+
+#animatedBackground {
+  width: 100%;
+  height: 100%;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #343534;
+  top: 0;
+  left: 0;
+  background: url(../icons/registrationBackground.svg) repeat;
+  background-size: cover;
+  background-position: 0 0;
+  animation: animatedBackground 500s linear infinite;
+  opacity: 0.5;
+  z-index: -100;
+}
+
+@keyframes animatedBackground {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 100%;
+  }
+}
+
+.responsive-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
+
+  margin: 0 auto 0 auto;
+  max-width: 1000px;
   width: 100%;
   height: 100%;
-  overflow: auto;
 }
 
-.registration-section {
+.log-in-form {
+  background-color: #252525;
+  width: 350px;
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 40px 40px;
+  box-shadow: 0 0 15px 15px rgba(0, 0, 0, 1);
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 100%;
-  padding-top: 20vh;
-  padding-left: 10%;
+  margin-top: 15%;
+  margin-bottom: 10%;
 }
 
-.subtitle {
-  color: #646464;
-  font-size: 1rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 3%;
+.logo {
+  width: 50px;
+  height: 50px;
+}
+
+.log-in-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .title {
   color: white;
-  font-size: 2.4rem;
-  min-width: 80%;
-  margin-bottom: 1.5%;
+  font-size: 1.5rem;
+  margin-bottom: 4%;
+  align-self: center;
 }
 
 .sign-up-offer {
   color: #a0a0a0;
-  margin-bottom: 20%;
+  margin-bottom: 15%;
+  align-self: center;
+  font-size: 0.9rem;
 }
 
 .sign-up-offer a {
@@ -50,25 +108,29 @@
 
 .email,
 .password {
-  width: 90%;
+  width: 100%;
+}
+
+.password {
+  margin-bottom: 7.5%;
 }
 
 .error-msg {
-  font-size: 0.75em;
+  font-size: 0.75rem;
   color: #cc3300;
 }
 
 .log-in-btn {
   background-color: #48883e;
   border: none;
-  border-radius: 45px;
+  border-radius: 10px;
   color: white;
   font-weight: bold;
   font-size: 1em;
-  padding: 0.75em 2.5em;
-  transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
-  transform-origin: center;
+  padding: 4% 0%;
+  width: 100%;
   margin-bottom: 10%;
+  transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
 }
 .log-in-btn:hover {
   opacity: 0.8;
@@ -104,99 +166,4 @@
 
 .apply-shake {
   animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-
-.right-section {
-  display: none;
-}
-
-.background-blur {
-  background-color: #48883e;
-  width: 50%;
-  height: 50%;
-  filter: blur(6em);
-  position: relative;
-  top: 25%;
-  left: 25%;
-  display: none;
-}
-
-.g-image {
-  max-width: 65%;
-  height: auto;
-  object-fit: cover;
-  position: relative;
-  top: -30%;
-  left: 20%;
-  display: none;
-}
-
-@media screen and (min-width: 48em) {
-  .subtitle {
-    font-size: 1.25rem;
-  }
-
-  .title {
-    font-size: 3rem;
-  }
-
-  .sign-up-offer {
-    font-size: 1.25em;
-  }
-
-  .sign-up-offer span {
-    color: #64b657;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .sign-up-offer span:hover {
-    text-decoration: underline;
-  }
-
-  .log-in-btn {
-    font-size: 1.25em;
-  }
-}
-
-@media screen and (min-width: 75em) {
-  .registration-form {
-    width: 75%;
-    height: 90vh;
-    border-radius: 25px;
-    overflow: hidden;
-  }
-
-  .registration-section {
-    padding-top: 10vh;
-    padding-left: 7.5%;
-    font-size: 0.85rem;
-    width: 40%;
-  }
-
-  .subtitle {
-    font-size: 1.1rem;
-  }
-
-  .title {
-    font-size: 2.5rem;
-  }
-
-  .right-section {
-    display: block;
-    width: 60%;
-    height: 100%;
-  }
-
-  .email,
-  .password {
-    width: 90%;
-  }
-
-  .background-blur {
-    display: block;
-  }
-
-  .g-image {
-    display: block;
-  }
 }

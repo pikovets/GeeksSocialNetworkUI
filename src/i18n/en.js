@@ -9,7 +9,7 @@ export default {
   emailValidationMsg:
     'Ensure your email is valid by following these criteria:<br>' +
     '• End with gmail.com<br>' +
-    '• Include only letters (a-z, A-Z), digits (0-9), and the special characters ".", "_", "%", "+", or "-"',
+    '• Use only: a-z, A-Z, 0-9, ".", "_", "%", "+", "-"',
   passwordLabel: 'Password',
   passwordValidationMsg:
     'Secure your password by including:<br>' +
@@ -25,9 +25,8 @@ export default {
   serverErrorMsg:
     'An error occurred while communicating with the server. Please try again later',
   emptyFieldMsg: 'This field cannot be empty',
-  haveFunText: 'Have fun!',
   logInTitle: 'Log in to your <br> account',
-  noAccountText: "Don't have an account?",
+  noAccountText: 'Not yet registered?',
   signUp: 'Sign Up',
   logInButton: 'Log In',
 };

@@ -35,6 +35,6 @@ input {
 }
 
 .error-msg {
-  color: red;
-  font-size: 14px;
+  color: rgba(255, 0, 0, 0.75);
+  font-size: 0.75rem;
 }

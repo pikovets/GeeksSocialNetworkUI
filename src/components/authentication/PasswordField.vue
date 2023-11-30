@@ -15,9 +15,9 @@
       ></i>
     </div>
     <p
-      class="error-msg"
       v-show="backendErrorMsg !== ''"
       v-html="backendErrorMsg"
+      class="error-msg"
     ></p>
     <p
       class="error-msg"

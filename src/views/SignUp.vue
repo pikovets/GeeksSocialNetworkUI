@@ -1,65 +1,67 @@
 <template>
-  <div id="animatedBackground" />
-  <Header />
+  <div id="animatedBackground">
+    <Header />
 
-  <div class="responsive-container">
-    <div class="registration-form animated-glow">
-      <div class="logo-container">
-        <img class="g-logo" src="../assets/img/logo2.png" />
+    <div class="responsive-container">
+      <div class="registration-form">
+        <div class="logo-container">
+          <img class="logo" src="../assets/img/logo.png" />
+        </div>
+
+        <div class="registration-section">
+          <p class="title" v-html="$t('createAccountTitle')"></p>
+          <p class="log-in-offer">
+            {{ $t('alreadyMember') }}
+            <router-link to="/login">{{ $t('logIn') }}</router-link>
+          </p>
+
+          <FormField
+            v-model="userData.fullName"
+            :label="$t('fullNameLabel')"
+            :validationRule="validationRules.fullName"
+            :validationMsg="$t('fullNameValidationMsg')"
+            :class="{
+              'apply-shake': shake.fullName,
+            }"
+            class="full-name"
+          ></FormField>
+
+          <FormField
+            v-model="userData.email"
+            :label="$t('emailLabel')"
+            :backendErrorMsg="backendErrors.email"
+            :validationRule="validationRules.email"
+            :validationMsg="$t('emailValidationMsg')"
+            @clearBackendErrors="clearBackendErrors"
+            :class="{
+              'apply-shake': shake.email,
+            }"
+            class="email"
+          ></FormField>
+
+          <PasswordField
+            v-model="userData.password"
+            :label="$t('passwordLabel')"
+            :backendErrorMsg="backendErrors.password"
+            :validationRule="validationRules.password"
+            :validationMsg="$t('passwordValidationMsg')"
+            @clearBackendErrors="clearBackendErrors"
+            :class="{
+              'apply-shake': shake.password,
+            }"
+            class="password"
+          ></PasswordField>
+        </div>
+
+        <SuccessMessage v-show="isRegistered" />
+
+        <button class="create-account-btn" @click="onCreateAccountClick">
+          {{ $t('createAccountBtn') }}
+        </button>
       </div>
-      <div class="registration-section">
-        <p class="title" v-html="$t('createAccountTitle')"></p>
-        <p class="log-in-offer">
-          {{ $t('alreadyMember') }}
-          <router-link to="/login">{{ $t('logIn') }}</router-link>
-        </p>
-        <FormField
-          v-model="userData.fullName"
-          :label="$t('fullNameLabel')"
-          :backendErrorMsg="backendErrors.fullName"
-          :validationRule="validationRules.fullName"
-          :validationMsg="$t('fullNameValidationMsg')"
-          :class="{
-            'apply-shake': shake.fullName,
-          }"
-          class="full-name"
-        ></FormField>
 
-        <FormField
-          v-model="userData.email"
-          :label="$t('emailLabel')"
-          :backendErrorMsg="backendErrors.email"
-          :validationRule="validationRules.email"
-          :validationMsg="$t('emailValidationMsg')"
-          @clearBackendError="clearBackendError('email')"
-          :class="{
-            'apply-shake': shake.email,
-          }"
-          class="email"
-        ></FormField>
-
-        <PasswordField
-          v-model="userData.password"
-          :label="$t('passwordLabel')"
-          :backendErrorMsg="backendErrors.password"
-          :validationRule="validationRules.password"
-          :validationMsg="$t('passwordValidationMsg')"
-          @clearBackendError="clearBackendError('password')"
-          :class="{
-            'apply-shake': shake.password,
-          }"
-          class="password"
-        ></PasswordField>
-      </div>
-
-      <SuccessMessage v-show="isRegistered" />
-
-      <button class="create-account-btn" @click="onCreateAccountClick">
-        {{ $t('createAccountBtn') }}
-      </button>
+      <LoadingScreen v-if="isLoading" />
     </div>
-
-    <LoadingScreen v-if="isLoading" />
   </div>
 </template>
 
@@ -97,7 +99,6 @@ export default {
         password: '',
       },
       backendErrors: {
-        fullName: '',
         email: '',
         password: '',
       },
@@ -110,9 +111,9 @@ export default {
     };
   },
   mounted() {
-    // if (localStorage.getItem('GeeksJwtToken')) {
-    //   this.$router.push('/');
-    // }
+    if (localStorage.getItem('GeeksJwtToken')) {
+      this.$router.push('/');
+    }
   },
   computed: {
     isFormValid() {
@@ -128,8 +129,9 @@ export default {
       return value !== '' && this.validationRules[fieldName].test(value);
     },
 
-    clearBackendError(fieldName) {
-      this.backendErrors[fieldName] = '';
+    clearBackendErrors() {
+      this.backendErrors.email = '';
+      this.backendErrors.password = '';
       this.isRegistered = false;
     },
 
@@ -140,7 +142,9 @@ export default {
           return;
         }
 
-        this.isLoading = true;
+        this.interval = setTimeout(() => {
+          this.isLoading = true;
+        }, 500);
 
         const response = await Promise.race([
           fetch(SIGNUP_API_ENDPOINT, {
@@ -158,6 +162,7 @@ export default {
         ]);
 
         this.isLoading = false;
+        clearInterval(this.interval);
 
         if (response.ok) {
           this.isRegistered = true;
@@ -198,8 +203,6 @@ export default {
         fieldErrorMessages.push(message);
       }
 
-      console.log(error);
-
       for (let i = 0; i < fieldNames.length; i++) {
         this.backendErrors[fieldNames[i]] = fieldErrorMessages[i];
         this.shakeField(fieldNames[i]);
@@ -227,4 +230,4 @@ export default {
 };
 </script>
 
-<style src="../assets/styles/SignUp.css"></style>
+<style scoped src="../assets/styles/SignUp.css"></style>

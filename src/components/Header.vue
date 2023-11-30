@@ -2,7 +2,7 @@
   <header>
       <div class="container">
         <div class="logo-section">
-          <img src="../assets/img/logo2.png" class="logo" />
+          <img src="../assets/img/logo.png" class="logo" />
         </div>
 
         <div class="search-box" v-show="isRegistered">

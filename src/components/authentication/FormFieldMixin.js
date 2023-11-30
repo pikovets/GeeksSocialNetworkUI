@@ -4,7 +4,10 @@ export const FormFieldMixin = {
     label: String,
     validationRule: RegExp,
     validationMsg: String,
-    backendErrorMsg: String,
+    backendErrorMsg: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['update:modelValue', 'clearBackendError'],
   data() {
@@ -32,7 +35,7 @@ export const FormFieldMixin = {
     updateModelValue(event) {
       this.$emit('update:modelValue', event.target.value);
       this.wasSelected = true;
-      this.$emit('clearBackendError');
+      this.$emit('clearBackendErrors');
     },
   },
 };

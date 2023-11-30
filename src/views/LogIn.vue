@@ -1,22 +1,28 @@
 <template>
-  <div class="registration-form">
-    <div class="registration-section">
-      <p class="subtitle">{{ $t('haveFunText') }}</p>
-      <p class="title" v-html="$t('logInTitle')"></p>
-      <p class="sign-up-offer">
-        {{ $t('noAccountText') }}
-        <router-link to="/signup" style="margin-left: 1%">{{
-          $t('signUp')
-        }}</router-link>
-      </p>
-      <div>
+  <div id="animatedBackground" />
+
+  <Header />
+
+  <div class="responsive-container">
+    <div class="log-in-form">
+      <div class="logo-container">
+        <img class="logo" src="../assets/img/logo.png" />
+      </div>
+
+      <div class="log-in-section">
+        <p class="title" v-html="$t('createAccountTitle')"></p>
+        <p class="sign-up-offer">
+          {{ $t('noAccountText') }}
+          <router-link to="/signup">{{ $t('signUp') }}</router-link>
+        </p>
+
         <FormField
           v-model="userData.email"
           :label="$t('emailLabel')"
           :backendErrorMsg="backendErrors.email"
           :validationRule="validationRules.email"
           :validationMsg="$t('emailValidationMsg')"
-          @clearBackendError="clearBackendError('email')"
+          @clearBackendErrors="clearBackendErrors"
           :class="{
             'apply-shake': shake.email,
           }"
@@ -29,7 +35,7 @@
           :backendErrorMsg="backendErrors.password"
           :validationRule="validationRules.password"
           :validationMsg="$t('passwordValidationMsg')"
-          @clearBackendError="clearBackendError('password')"
+          @clearBackendErrors="clearBackendErrors"
           :class="{
             'apply-shake': shake.password,
           }"
@@ -41,17 +47,13 @@
         {{ $t('logInButton') }}
       </button>
     </div>
-
-    <div class="right-section">
-      <div class="background-blur" />
-      <img class="g-image" src="../assets/img/G.png" />
-    </div>
   </div>
 
   <LoadingScreen v-if="isLoading" />
 </template>
 
 <script>
+import Header from '../components/Header.vue';
 import FormField from '../components/authentication/FormField.vue';
 import PasswordField from '../components/authentication/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
@@ -66,6 +68,7 @@ const ERROR_MESSAGES = {
 
 export default {
   components: {
+    Header,
     FormField,
     PasswordField,
     LoadingScreen,
@@ -104,11 +107,16 @@ export default {
   },
   methods: {
     isValidField(value, fieldName) {
-      return value !== '' && this.validationRules[fieldName].test(value);
+      return (
+        value !== '' &&
+        this.validationRules[fieldName].test(value) &&
+        this.backendErrors[fieldName] === ''
+      );
     },
 
-    clearBackendError(fieldName) {
-      this.backendErrors[fieldName] = '';
+    clearBackendErrors() {
+      this.backendErrors.email = '';
+      this.backendErrors.password = '';
     },
 
     async authenticateUser() {
@@ -127,7 +135,9 @@ export default {
           return;
         }
 
-        this.isLoading = true;
+        this.interval = setTimeout(() => {
+          this.isLoading = true;
+        }, 500);
 
         const response = await Promise.race([
           fetch(LOGIN_API_ENDPOINT, {
@@ -145,6 +155,7 @@ export default {
         ]);
 
         this.isLoading = false;
+        clearInterval(this.interval);
 
         if (response.ok) {
           const data = await response.json();
@@ -165,16 +176,18 @@ export default {
     },
     handleAuthenticationError(error) {
       this.isLoading = false;
+      clearInterval(this.interval);
+
       if (error.message === ERROR_MESSAGES.TIMEOUT) {
         alert(this.$i18n.t('timeoutErrorMsg'));
       } else if (error.message === ERROR_MESSAGES.FETCH_FAILED) {
         alert(this.$i18n.t('serverErrorMsg'));
       } else if (error.message === 'Incorrect username or password') {
         this.backendErrors.email = error.message;
-        this.shake.email = true;
+        this.shakeField('email');
 
         this.backendErrors.password = error.message;
-        this.shake.password = true;
+        this.shakeField('password');
       }
     },
     onLogInClick() {

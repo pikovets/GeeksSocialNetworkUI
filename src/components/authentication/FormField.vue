@@ -11,7 +11,7 @@
       />
     </div>
     <p
-      v-show="backendError !== ''"
+      v-show="backendErrorMsg !== ''"
       v-html="backendErrorMsg"
       class="error-msg"
     ></p>

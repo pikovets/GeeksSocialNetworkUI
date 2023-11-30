@@ -1,21 +1,10 @@
-body {
-  background-color: rgb(0, 0, 0);
-}
-
 p,
 button {
   font-family: 'Poppins';
 }
 
-html,
 body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-#app {
-  height: 100%;
+  background-color: black;
 }
 
 #animatedBackground {
@@ -24,12 +13,15 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  background: url(../icons/registrationBackground4.svg) repeat;
+  background: url(../icons/registrationBackground2.svg) repeat;
   background-size: cover;
   background-position: 0 0;
   animation: animatedBackground 500s linear infinite;
-  opacity: 0.5;
   z-index: -100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
 }
 
 @keyframes animatedBackground {
@@ -62,30 +54,6 @@ body {
   box-shadow: 0 0 15px 15px rgba(0, 0, 0, 1);
 }
 
-/* @keyframes moveShadow {
-  0% {
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
-  }
-  25% {
-    box-shadow: 0px 0px 20px rgba(0, 255, 0, 0.7);
-  }
-  50% {
-    box-shadow: 0px 0px 20px rgba(0, 0, 255, 0.7);
-  }
-  75% {
-    box-shadow: 0px 0px 20px rgba(0, 255, 0, 0.7);
-  }
-  100% {
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
-  }
-}
-
-.animated-glow {
-  margin: 50px;
-  border-radius: 10px;
-  animation: moveShadow 4s infinite;
-} */
-
 .logo-container {
   display: flex;
   justify-content: center;
@@ -95,7 +63,7 @@ body {
   margin-bottom: 10%;
 }
 
-.g-logo {
+.logo {
   width: 50px;
   height: 50px;
 }
@@ -130,27 +98,8 @@ body {
   text-decoration: underline;
 }
 
-.first-name {
-  margin-right: 2.5%;
-}
-
-.first-name,
-.last-name {
-  width: 50%;
-}
-
-.email,
-.password {
-  width: 100%;
-}
-
 .password {
   margin-bottom: 7.5%;
-}
-
-.error-msg {
-  font-size: 0.75em;
-  color: #cc3300;
 }
 
 .create-account-btn {

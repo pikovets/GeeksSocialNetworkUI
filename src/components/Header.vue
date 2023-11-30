@@ -1,128 +1,119 @@
 <template>
   <header>
-    <div class="left-section">
-      <div class="logo-container">
-        <p class="logo">G</p>
-      </div>
-    </div>
+      <div class="container">
+        <div class="logo-section">
+          <img src="../assets/img/logo2.png" class="logo" />
+        </div>
 
-    <div class="right-section">
-      <div class="search-box">
-        <img class="search-icon" src="../assets/icons/search.svg" />
-        <input class="search-bar" type="text" placeholder="Search" />
-      </div>
-      <div class="extra-buttons-container">
-        <div class="profile-image-container">
-          <img class="profile-image" src="../assets/img/avatars/berserk.jpg" />
+        <div class="search-box" v-show="isRegistered">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input class="search-bar" type="text" placeholder="Search" />
         </div>
-        <div class="chat-container">
-          <img class="chat-image" src="../assets/icons/chat.svg" />
+        <div class="extra-buttons-container">
+          <div class="profile-image-container" v-show="isRegistered">
+            <img
+              class="profile-image"
+              src="../assets/img/avatars/berserk.jpg"
+            />
+          </div>
         </div>
       </div>
-    </div>
   </header>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      isRegistered: localStorage.getItem('GeeksJwtToken'),
+    };
+  },
+};
+</script>
+
 <style scoped>
 header {
-  background-color: #242526;
-  height: 57px;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  background-color: #232223;
+  height: 49px;
 
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
+
+  display: flex;
+  flex-direction: row;
+
+  border-bottom: 1px solid #474a4d3f;
 }
 
-.left-section {
-  margin: 0px 0px 0px 1%;
+.container {
+  display: flex;
+  flex-direction: row;
   align-items: center;
+
+  margin: 0 auto 0 auto;
+  max-width: 1000px;
+  width: 100%;
 }
 
-.logo-container {
-  background-color: rgba(77, 77, 77, 0.4);
-  width: 46px;
-  height: 46px;
-  border-style: none;
-  border-radius: 50px;
+.logo-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-}
-.logo-container:hover {
-  opacity: 0.8;
+  margin: 0 0;
 }
 
 .logo {
-  font-size: 250%;
-  font-family: 'Saira Stencil One', sans-serif;
-  color: #48883e;
-  opacity: 1;
-  margin: 2px 0px 0px -1px;
-}
-
-.right-section {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 0px 0px 0px 75%;
+  width: 30px;
+  height: 30px;
+  filter: brightness(1.15);
 }
 
 .search-box {
-  width: 60%;
+  width: 210px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  border-style: solid;
-  border-radius: 10px;
-  border-color: #424242;
-  border-width: 1px;
-  height: 36px;
-  margin-right: 25px;
+
+  border-radius: 7.5px;
+  background-color: #424343;
+  height: 66%;
+  margin-left: 120px;
 }
 
 .search-icon {
-  margin-left: 10px;
-  width: 18px;
-  height: 18px;
-  object-fit: cover;
+  color: #868686;
+  font-size: 14px;
+  margin-left: 5.5%;
 }
 
 .search-bar {
   width: 100%;
-  background-color: #242526;
+  background-color: #424343;
   border-style: none;
-  margin-left: 5px;
-  font-size: 16px;
-  color: rgb(238, 238, 238);
+  font-size: 14px;
+  color: rgb(219, 219, 219);
   outline: none;
   padding-right: 10px;
+  margin-left: 3.5%;
 }
 .search-bar::placeholder {
-  font-size: 16px;
+  font-size: 14px;
+  color: rgb(136, 136, 136);
 }
 
 .extra-buttons-container {
-  flex: 2;
+  flex: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  justify-content: flex-end;
 }
 
 .profile-image-container {
-  border-style: solid;
-  border-width: 3px;
-  border-radius: 50px;
-  border-color: #48883e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,30 +125,9 @@ header {
 }
 
 .profile-image {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 50px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.chat-container {
-  width: 40px;
-  height: 40px;
-  background-color: rgba(77, 77, 77, 0.4);
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.chat-container:hover {
-  opacity: 0.8;
-}
-
-.chat-image {
-  width: 22px;
-  height: 22px;
   object-fit: cover;
   object-position: center;
 }

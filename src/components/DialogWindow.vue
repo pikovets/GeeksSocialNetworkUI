@@ -110,7 +110,6 @@ export default {
 }
 
 .log-in-btn:hover {
-  background-color: #48883e;
   cursor: pointer;
   transform: scale(1.05);
 }

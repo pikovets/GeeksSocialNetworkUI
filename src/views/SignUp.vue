@@ -1,7 +1,7 @@
 <template>
+  <Header />
+  
   <div id="animatedBackground">
-    <Header />
-
     <div class="responsive-container">
       <div class="registration-form">
         <div class="logo-container">
@@ -111,9 +111,9 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem('GeeksJwtToken')) {
-      this.$router.push('/');
-    }
+    // if (localStorage.getItem('GeeksJwtToken')) {
+    //   this.$router.push('/');
+    // }
   },
   computed: {
     isFormValid() {

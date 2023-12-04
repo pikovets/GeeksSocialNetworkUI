@@ -1,55 +1,56 @@
 <template>
-  <div id="animatedBackground" />
-
   <Header />
 
-  <div class="responsive-container">
-    <div class="log-in-form">
-      <div class="logo-container">
-        <img class="logo" src="../assets/img/logo.png" />
+  <div id="animatedBackground">
+    <div class="responsive-container">
+      <div class="log-in-form">
+        <div class="logo-container">
+          <img class="logo" src="../assets/img/logo.png" />
+        </div>
+
+        <div class="log-in-section">
+          <p class="title" v-html="$t('createAccountTitle')"></p>
+          <p class="sign-up-offer">
+            {{ $t('noAccountText') }}
+            <router-link to="/signup">{{ $t('signUp') }}</router-link>
+          </p>
+
+          <FormField
+            v-model="userData.email"
+            :label="$t('emailLabel')"
+            :backendErrorMsg="backendErrors.email"
+            :validationRule="validationRules.email"
+            :validationMsg="$t('emailValidationMsg')"
+            @clearBackendErrors="clearBackendErrors"
+            :class="{
+              'apply-shake': shake.email,
+            }"
+            class="email"
+          ></FormField>
+
+          <PasswordField
+            v-model="userData.password"
+            :label="$t('passwordLabel')"
+            :backendErrorMsg="backendErrors.password"
+            :validationRule="validationRules.password"
+            :validationMsg="$t('passwordValidationMsg')"
+            @clearBackendErrors="clearBackendErrors"
+            :class="{
+              'apply-shake': shake.password,
+            }"
+            class="password"
+          ></PasswordField>
+        </div>
+
+        <button class="log-in-btn" @click="onLogInClick">
+          {{ $t('logInButton') }}
+        </button>
       </div>
-
-      <div class="log-in-section">
-        <p class="title" v-html="$t('createAccountTitle')"></p>
-        <p class="sign-up-offer">
-          {{ $t('noAccountText') }}
-          <router-link to="/signup">{{ $t('signUp') }}</router-link>
-        </p>
-
-        <FormField
-          v-model="userData.email"
-          :label="$t('emailLabel')"
-          :backendErrorMsg="backendErrors.email"
-          :validationRule="validationRules.email"
-          :validationMsg="$t('emailValidationMsg')"
-          @clearBackendErrors="clearBackendErrors"
-          :class="{
-            'apply-shake': shake.email,
-          }"
-          class="email"
-        ></FormField>
-
-        <PasswordField
-          v-model="userData.password"
-          :label="$t('passwordLabel')"
-          :backendErrorMsg="backendErrors.password"
-          :validationRule="validationRules.password"
-          :validationMsg="$t('passwordValidationMsg')"
-          @clearBackendErrors="clearBackendErrors"
-          :class="{
-            'apply-shake': shake.password,
-          }"
-          class="password"
-        ></PasswordField>
-      </div>
-
-      <button class="log-in-btn" @click="onLogInClick">
-        {{ $t('logInButton') }}
-      </button>
     </div>
   </div>
 
   <LoadingScreen v-if="isLoading" />
+  
 </template>
 
 <script>
@@ -93,9 +94,9 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem('GeeksJwtToken')) {
-      this.$router.push('/');
-    }
+    // if (localStorage.getItem('GeeksJwtToken')) {
+    //   this.$router.push('/');
+    // }
   },
   computed: {
     isFormValid() {
@@ -212,4 +213,4 @@ export default {
 };
 </script>
 
-<style src="../assets/styles/LogIn.css"></style>
+<style scoped src="../assets/styles/LogIn.css"></style>

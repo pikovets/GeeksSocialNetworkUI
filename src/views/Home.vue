@@ -18,9 +18,11 @@ export default {
 </script>
 
 <template>
-  <Header />
-  <AddPost />
-  <Posts />
+  <div id="animatedBackground">
+    <Header />
+    <AddPost />
+    <Posts />
+  </div>
 </template>
 
-<style></style>
+<style scoped src="../assets/styles/pages/Home.css"></style>

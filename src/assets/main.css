@@ -37,3 +37,13 @@ input:focus {
 p {
   color: #c9d4e1;
 }
+
+.filter-green {
+  filter: invert(54%) sepia(9%) saturate(2742%) hue-rotate(65deg)
+    brightness(81%) contrast(80%);
+}
+
+.filter-grey {
+  filter: brightness(0) saturate(100%) invert(45%) sepia(6%) saturate(25%)
+    hue-rotate(2deg) brightness(97%) contrast(84%);
+}

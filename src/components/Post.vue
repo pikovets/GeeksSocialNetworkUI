@@ -10,26 +10,6 @@
       </div>
     </div>
     <img class="post-media" src="../assets/img/posts/griffith_post_1.jpg" />
-    <!-- <div class="post-interaction">
-      <div class="interaction-buttons">
-        <button class="like-btn">
-          <img class="like-image" src="../assets/icons/like.svg" />
-        </button>
-        <button class="comment-btn">
-          <img class="comment-image" src="../assets/icons/comment.svg" />
-        </button>
-      </div>
-      <p class="likes-amount">2,423 likes</p>
-      <div class="post-text-container">
-        <p class="author-name" style="display: inline-block; margin-right: 5px">
-          griffith
-        </p>
-        <p class="post-text" style="display: inline-block">
-          What is the fate of mankind in this world?
-        </p>
-      </div>
-      <p class="comments-amount">View all 69 comments</p>
-    </div> -->
     <div class="post-footer">
       <div class="like-btn">
         <img src="../assets/icons/like.svg" class="like-icon" />
@@ -82,12 +62,14 @@
 .post {
   width: 550px;
   height: 850px;
-  background-color: #242526;
-  border-radius: 15px;
+  background: rgba(36, 36, 36, 0.8);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 12px;
   border: 1px solid #8383833f;
   margin: 0 auto;
-  margin-top: 15px;
-  padding: 0.75% 1%;
+  padding: 15px 20px;
   position: relative;
 }
 
@@ -95,7 +77,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 1.5%;
+  margin-bottom: 15px;
 }
 
 .profile-image-container {
@@ -123,7 +105,7 @@
 
 .author-name {
   display: block;
-  color: #63be55;
+  color: #54a148;
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 1%;

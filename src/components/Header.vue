@@ -1,23 +1,20 @@
 <template>
   <header>
-      <div class="container">
-        <div class="logo-section">
-          <img src="../assets/img/logo.png" class="logo" />
-        </div>
+    <div class="container">
+      <div class="logo-section">
+        <img src="../assets/img/logo.png" class="logo" />
+      </div>
 
-        <div class="search-box" v-show="isRegistered">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input class="search-bar" type="text" placeholder="Search" />
-        </div>
-        <div class="extra-buttons-container">
-          <div class="profile-image-container" v-show="isRegistered">
-            <img
-              class="profile-image"
-              src="../assets/img/avatars/berserk.jpg"
-            />
-          </div>
+      <div class="search-box" v-show="isRegistered">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input class="search-bar" type="text" placeholder="Search" />
+      </div>
+      <div class="extra-buttons-container">
+        <div class="profile-image-container" v-show="isRegistered">
+          <img class="profile-image" src="../assets/img/avatars/berserk.jpg" />
         </div>
       </div>
+    </div>
   </header>
 </template>
 
@@ -62,7 +59,18 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 0;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.logo-section:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+  transition: 0.05s ease-in-out;
+}
+.logo-section:active {
+  opacity: 0.7;
+  transform: scale(0.975);
 }
 
 .logo {
@@ -79,25 +87,25 @@ header {
 
   border-radius: 7.5px;
   background-color: #424343;
-  height: 66%;
+  height: 32px;
   margin-left: 120px;
 }
 
 .search-icon {
   color: #868686;
   font-size: 14px;
-  margin-left: 5.5%;
+  margin-left: 12px;
 }
 
 .search-bar {
   width: 100%;
-  background-color: #424343;
+  background-color: #42434300;
   border-style: none;
   font-size: 14px;
   color: rgb(219, 219, 219);
   outline: none;
   padding-right: 10px;
-  margin-left: 3.5%;
+  margin-left: 7.5px;
 }
 .search-bar::placeholder {
   font-size: 14px;
@@ -122,6 +130,12 @@ header {
 }
 .profile-image-container:hover {
   opacity: 0.8;
+  transform: scale(1.05);
+  transition: 0.05s ease-in-out;
+}
+.profile-image-container:active {
+  opacity: 0.7;
+  transform: scale(0.975);
 }
 
 .profile-image {

@@ -50,7 +50,6 @@
   </div>
 
   <LoadingScreen v-if="isLoading" />
-  
 </template>
 
 <script>
@@ -94,9 +93,9 @@ export default {
     };
   },
   mounted() {
-    // if (localStorage.getItem('GeeksJwtToken')) {
-    //   this.$router.push('/');
-    // }
+    if (localStorage.getItem('GeeksJwtToken')) {
+      this.$router.push('/');
+    }
   },
   computed: {
     isFormValid() {

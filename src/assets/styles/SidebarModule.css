@@ -1,0 +1,32 @@
+.module {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 7.5px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+}
+.module:hover {
+  background-color: #383938;
+}
+.module:active {
+  background-color: #2d2d2d;
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 0.8rem;
+}

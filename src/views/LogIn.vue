@@ -58,8 +58,8 @@ import FormField from '../components/authentication/FormField.vue';
 import PasswordField from '../components/authentication/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 
-import { LOGIN_API_ENDPOINT } from '@/config/apiConfig';
 import { validationRules } from '@/config/validationRules';
+import { login } from '../services/api';
 
 const ERROR_MESSAGES = {
   TIMEOUT: 'Timeout Error',
@@ -120,15 +120,6 @@ export default {
     },
 
     async authenticateUser() {
-      if (!this.isFormValid) {
-        this.shake.email = !this.isValidField(this.userData.email, 'email');
-        this.shake.password = !this.isValidField(
-          this.userData.password,
-          'password'
-        );
-        return;
-      }
-
       try {
         if (!this.isOnline) {
           alert(this.$i18n.t('offlineErrorMsg'));
@@ -139,37 +130,16 @@ export default {
           this.isLoading = true;
         }, 500);
 
-        const response = await Promise.race([
-          fetch(LOGIN_API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.userData),
-          }),
-          new Promise((_, reject) => {
-            setTimeout(() => {
-              reject(new Error(ERROR_MESSAGES.TIMEOUT));
-            }, 5000);
-          }),
-        ]);
+        const response = await login(this.userData);
+        const data = await response.json();
 
         this.isLoading = false;
         clearInterval(this.interval);
 
-        if (response.ok) {
-          const data = await response.json();
-          const jwtToken = data.token;
+        const jwtToken = data.token;
+        localStorage.setItem('GeeksJwtToken', jwtToken);
 
-          localStorage.setItem('GeeksJwtToken', jwtToken);
-          this.$router.push('/');
-        } else {
-          const data = await response.json();
-
-          if (data.statusCode === 400) {
-            throw new Error(data.message);
-          }
-        }
+        this.$router.push('/');
       } catch (error) {
         this.handleAuthenticationError(error);
       }

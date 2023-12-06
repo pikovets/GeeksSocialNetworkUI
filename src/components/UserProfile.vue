@@ -1,23 +1,23 @@
 <template>
   <div class="user-profile">
     <div class="profile-picture-container">
-      <img class="profile-picture" :src="profile.photo" />
+      <img class="profile-picture" :src="getAvatar" />
     </div>
     <div class="user-status">
       <img
         :class="[
-          { 'filter-green': profile.isOnline },
-          { 'filter-grey': !profile.isOnline },
+          { 'filter-green': user.isOnline },
+          { 'filter-grey': !user.isOnline },
           'status-icon',
         ]"
-        src="../assets/icons/status-circle.svg"
+        src="/src/assets/icons/status-circle.svg"
       />
     </div>
 
     <div class="profile-info">
       <div class="profile-info-header">
         <div>
-          <p class="profile-name">{{ profile.name }}</p>
+          <p class="profile-name">{{ fullName }}</p>
         </div>
 
         <div class="interaction-buttons">
@@ -33,7 +33,7 @@
       <p class="profile-bio">{{ profile.bio }}</p>
 
       <div class="extra-info">
-        <div class="profile-address">
+        <div v-show="profile.address" class="profile-address">
           <i
             class="fa-solid fa-map-marker-alt"
             style="color: #8c8e8f; margin-right: 5px"
@@ -56,9 +56,20 @@
 <script>
 export default {
   props: {
+    user: Object,
     profile: Object,
+  },
+  computed: {
+    getAvatar() {
+      return this.user.photoLink
+        ? this.user.photoLink
+        : '/src/assets/img/avatars/default-avatar.jpg';
+    },
+    fullName() {
+      return `${this.profile.firstName} ${this.profile.lastName}`;
+    },
   },
 };
 </script>
 
-<style scoped src="../assets/styles/UserProfile.css"></style>
+<style scoped src="/src/assets/styles/UserProfile.css"></style>

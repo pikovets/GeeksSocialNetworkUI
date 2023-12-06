@@ -1,6 +1,6 @@
 <template>
   <Header />
-  
+
   <div id="animatedBackground">
     <div class="responsive-container">
       <div class="registration-form">
@@ -77,8 +77,8 @@ const ERROR_MESSAGES = {
   FETCH_FAILED: 'Failed to fetch',
 };
 
-import { SIGNUP_API_ENDPOINT } from '@/config/apiConfig';
 import { validationRules } from '@/config/validationRules';
+import { signup } from '../services/api';
 
 export default {
   components: {
@@ -111,9 +111,9 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem('GeeksJwtToken')) {
-      this.$router.push('/');
-    }
+    // if (localStorage.getItem('GeeksJwtToken')) {
+    //   this.$router.push('/');
+    // }
   },
   computed: {
     isFormValid() {
@@ -146,32 +146,13 @@ export default {
           this.isLoading = true;
         }, 500);
 
-        const response = await Promise.race([
-          fetch(SIGNUP_API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.userData),
-          }),
-          new Promise((_, reject) => {
-            setTimeout(() => {
-              reject(new Error(ERROR_MESSAGES.TIMEOUT));
-            }, 5000);
-          }),
-        ]);
+        const response = await signup(this.userData);
 
         this.isLoading = false;
         clearInterval(this.interval);
 
         if (response.ok) {
           this.isRegistered = true;
-        } else {
-          const data = await response.json();
-
-          if (data.statusCode === 400) {
-            throw new Error(data.message);
-          }
         }
       } catch (error) {
         this.handleAuthenticationError(error);
@@ -179,6 +160,8 @@ export default {
     },
     handleAuthenticationError(error) {
       this.isLoading = false;
+      this.isRegistered = false;
+      clearInterval(this.interval);
 
       if (error.message === ERROR_MESSAGES.TIMEOUT) {
         alert(this.$i18n.t('timeoutErrorMsg'));

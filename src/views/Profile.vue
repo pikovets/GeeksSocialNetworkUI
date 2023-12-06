@@ -6,7 +6,7 @@
       <Sidebar />
 
       <div class="main-content">
-        <UserProfile :profile="profile" />
+        <UserProfile :user="user" :profile="profile" />
 
         <div class="sections-grid">
           <Posts :posts="posts" />
@@ -24,6 +24,8 @@ import Posts from '../components/Posts.vue';
 import Friends from '../components/Friends.vue';
 import Sidebar from '../components/Sidebar.vue';
 
+import { getUser, getProfile } from '../services/api';
+
 export default {
   components: {
     Header,
@@ -34,13 +36,8 @@ export default {
   },
   data() {
     return {
-      profile: {
-        name: 'Guts',
-        photo: '/src/assets/img/avatars/berserk.jpg',
-        isOnline: true,
-        bio: 'Что вершит судьбу человечества в этом мире? Некое незримое существо или закон, подобно Длани Господней парящей над миром',
-        address: 'Midland',
-      },
+      user: {},
+      profile: {},
       friends: [
         {
           id: '9e305b70-b8a6-4cc0-9411-8c6915f21a04',
@@ -70,6 +67,18 @@ export default {
       ],
       posts: [],
     };
+  },
+  async mounted() {
+    await this.fetchUserData();
+  },
+  methods: {
+    async fetchUserData() {
+      const userData = await getUser();
+      this.user = userData;
+
+      const profileData = await getProfile();
+      this.profile = profileData;
+    },
   },
 };
 </script>

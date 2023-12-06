@@ -17,7 +17,7 @@
     <div class="profile-info">
       <div class="profile-info-header">
         <div>
-          <p class="profile-name">{{ fullName }}</p>
+          <p class="profile-name">{{ user.firstName + ' ' + user.lastName }}</p>
         </div>
 
         <div class="interaction-buttons">

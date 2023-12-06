@@ -31,10 +31,10 @@ input {
 }
 
 .invalid-field {
-  box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.75);
+  box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.65);
 }
 
 .error-msg {
-  color: rgba(255, 0, 0, 0.75);
+  color: rgba(255, 0, 0, 0.65);
   font-size: 0.75rem;
 }

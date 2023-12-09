@@ -2,6 +2,10 @@ export const FormFieldMixin = {
   props: {
     modelValue: String,
     label: String,
+    required: {
+      type: Boolean,
+      default: false,
+    },
     validationRule: RegExp,
     validationMsg: String,
     backendErrorMsg: {
@@ -18,14 +22,18 @@ export const FormFieldMixin = {
   computed: {
     fieldClasses() {
       return {
-        'valid-field':
-          this.isValid && this.wasSelected && this.backendErrorMsg == '',
-        'invalid-field':
-          (!this.isValid || this.backendErrorMsg !== '') && this.wasSelected,
+        'valid-field': this.isValid && this.wasSelected && !this.isEmpty,
+        'invalid-field': !this.isValid && this.wasSelected && ((this.isEmpty && this.required) || !this.isEmpty),
       };
     },
     isValid() {
-      return this.validationRule.test(this.modelValue);
+      if (this.validationRule === undefined) {
+        return true;
+      }
+
+      return (
+        this.validationRule.test(this.modelValue) && this.backendErrorMsg == ''
+      );
     },
     isEmpty() {
       return this.modelValue === '';

@@ -31,7 +31,6 @@
           <PasswordField
             v-model="userData.password"
             :label="$t('passwordLabel')"
-            :backendErrorMsg="backendErrors.password"
             :validationRule="validationRules.password"
             :validationMsg="$t('passwordValidationMsg')"
             @clearBackendErrors="clearBackendErrors"

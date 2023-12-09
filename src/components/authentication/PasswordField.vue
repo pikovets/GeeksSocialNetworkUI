@@ -5,8 +5,8 @@
         :value="modelValue"
         @input="updateModelValue"
         :type="passwordFieldType"
+        :placeholder="label"
         class="field-input"
-        :placeholder="$t('passwordLabel')"
       />
       <i
         :class="showPasswordIconClass"

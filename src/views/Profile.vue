@@ -83,4 +83,4 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/Profile.css"></style>
+<style scoped src="../assets/styles/pages/Profile.css"></style>

@@ -6,7 +6,7 @@
   left: 0;
   z-index: -100;
 
-  background: url(../icons/registrationBackground.svg) repeat;
+  background: url(../../icons/registrationBackground.svg) repeat;
   background-size: cover;
   background-position: 0 0;
   animation: animatedBackground 500s linear infinite;

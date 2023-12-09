@@ -18,7 +18,7 @@
           <FormField
             v-model="userData.fullName"
             :label="$t('fullNameLabel')"
-            :validationRule="validationRules.fullName"
+            :validationRule="validationRules.name"
             :validationMsg="$t('fullNameValidationMsg')"
             :class="{
               'apply-shake': shake.fullName,

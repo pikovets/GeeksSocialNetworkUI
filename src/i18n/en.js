@@ -4,7 +4,7 @@ export default {
   alreadyMember: 'Already a member?',
   logIn: 'Log in',
   fullNameLabel: 'Full name',
-  fullNameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophes',
+  nameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophes',
   emailLabel: 'Email',
   emailValidationMsg:
     'Ensure your email is valid by following these criteria:<br>' +
@@ -29,4 +29,15 @@ export default {
   noAccountText: 'Not yet registered?',
   signUp: 'Sign Up',
   logInButton: 'Log In',
+  firstNameLabel: 'First name',
+  lastNameLabel: 'Last name',
+  oldPasswordLabel: 'Old password',
+  newPasswordLabel: 'New password',
+  birthDateLabel: 'Birth date (Example: YYYY-MM-DD)',
+  bioLabel: 'Bio',
+  addressLabel: 'Address',
+  birthDateValidationMsg:
+    'Enter your birth date in the following format: YYYY-MM-DD',
+    photoLinkLabel: 'Photo link (URL)',
+  photoLinkValidationMsg: 'Enter a valid URL (Example: https://example.com/image.jpg)',
 };

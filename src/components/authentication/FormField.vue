@@ -20,7 +20,7 @@
       v-html="validationMsg"
       class="error-msg"
     ></p>
-    <p v-show="isEmpty && wasSelected" class="error-msg">
+    <p v-show="isEmpty && wasSelected && required" class="error-msg">
       {{ $t('emptyFieldMsg') }}
     </p>
   </div>

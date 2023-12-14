@@ -10,9 +10,7 @@
   background-size: cover;
   background-position: 0 0;
   animation: animatedBackground 500s linear infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
   background-color: black;
 }
 
@@ -29,6 +27,8 @@
   margin: 0 auto 0 auto;
   max-width: 1000px;
   width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
 .edit-profile-container {
@@ -43,6 +43,7 @@
   width: 450px;
 
   margin: 0 auto;
+  margin-top: 65px;
 }
 
 .title {
@@ -71,7 +72,7 @@
   margin-right: 15px;
 }
 
-.submit-btn {
+.save-btn {
   width: 150px;
   height: 40px;
   border-style: none;
@@ -86,10 +87,7 @@
   transition: opacity 0.1s ease-in-out;
 }
 
-.submit-btn:hover {
+.save-btn:active {
+  padding-top: 3px;
   opacity: 0.8;
-}
-.submit-btn:active {
-  opacity: 0.75;
-  opacity: 0.5;
 }

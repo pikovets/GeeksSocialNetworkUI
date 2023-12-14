@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="container">
-      <div class="logo-section">
+      <div @click="goToHomePage" class="logo-section">
         <img src="../assets/img/logo.png" class="logo" />
       </div>
 
@@ -10,8 +10,15 @@
         <input class="search-bar" type="text" placeholder="Search" />
       </div>
       <div class="extra-buttons-container">
-        <div class="profile-image-container" v-show="isRegistered">
-          <img class="profile-image" src="../assets/img/avatars/berserk.jpg" />
+        <div
+          @click="goToProfilePage"
+          class="profile-image-container"
+          v-show="isRegistered"
+        >
+          <img class="profile-image" :src="getAvatar" />
+        </div>
+        <div @click="logout" class="logout-btn" v-show="isRegistered">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
         </div>
       </div>
     </div>
@@ -20,10 +27,32 @@
 
 <script>
 export default {
+  props: {
+    user: Object,
+  },
   data() {
     return {
       isRegistered: localStorage.getItem('GeeksJwtToken'),
     };
+  },
+  computed: {
+    getAvatar() {
+      return this.user && this.user.photoLink
+        ? this.user.photoLink
+        : '/src/assets/img/avatars/default-avatar.jpg';
+    },
+  },
+  methods: {
+    goToHomePage() {
+      this.$router.push({ name: 'home' });
+    },
+    goToProfilePage() {
+      this.$router.push({ name: 'profile', params: { id: 'me' } });
+    },
+    logout() {
+      localStorage.removeItem('GeeksJwtToken');
+      this.$router.push({ name: 'login' });
+    },
   },
 };
 </script>
@@ -63,14 +92,8 @@ header {
   height: 30px;
   cursor: pointer;
 }
-.logo-section:hover {
-  opacity: 0.8;
-  transform: scale(1.05);
-  transition: 0.05s ease-in-out;
-}
 .logo-section:active {
   opacity: 0.7;
-  transform: scale(0.975);
 }
 
 .logo {
@@ -125,17 +148,11 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
+  margin-right: 20px;
   cursor: pointer;
-}
-.profile-image-container:hover {
-  opacity: 0.8;
-  transform: scale(1.05);
-  transition: 0.05s ease-in-out;
 }
 .profile-image-container:active {
   opacity: 0.7;
-  transform: scale(0.975);
 }
 
 .profile-image {
@@ -144,5 +161,29 @@ header {
   border-radius: 50px;
   object-fit: cover;
   object-position: center;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #424343;
+}
+
+.logout-btn i {
+  color: #a1a1a1;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background-color: #a80000ad;
+}
+
+.logout-btn:active {
+  opacity: 0.7;
 }
 </style>

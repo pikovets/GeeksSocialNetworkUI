@@ -9,7 +9,7 @@
         </div>
 
         <div class="log-in-section">
-          <p class="title" v-html="$t('createAccountTitle')"></p>
+          <p class="title" v-html="$t('signInTitle')"></p>
           <p class="sign-up-offer">
             {{ $t('noAccountText') }}
             <router-link to="/signup">{{ $t('signUp') }}</router-link>
@@ -53,8 +53,8 @@
 
 <script>
 import Header from '../components/Header.vue';
-import FormField from '../components/authentication/FormField.vue';
-import PasswordField from '../components/authentication/PasswordField.vue';
+import FormField from '../components/fields/FormField.vue';
+import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 
 import { validationRules } from '@/config/validationRules';

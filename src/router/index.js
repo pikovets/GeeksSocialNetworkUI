@@ -24,10 +24,10 @@ const router = createRouter({
       component: () => import('../views/Profile.vue'),
     },
     {
-      path: '/profile/:id/edit',
+      path: '/profile/me/edit',
       name: 'edit-profile',
       component: () => import('../views/EditProfile.vue'),
-    }
+    },
   ],
 });
 

@@ -5,10 +5,15 @@ const createApiUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;
 
 const handleResponse = async (response) => {
   if (!response.ok) {
-    const data = await response.json();
+    const clonedResponse = response.clone();
+
+    const data = await clonedResponse.json();
 
     if (data.statusCode === 400) {
       throw new Error(data.message);
+    } else if (data.statusCode === 404) {
+      router.push({ name: '404' });
+      return;
     }
   }
 };
@@ -47,13 +52,16 @@ export const signup = async (userData) => {
 
 export const login = async (userData) => {
   try {
-    const response = await fetchWithTimeout(createApiUrl(API_ENDPOINTS.LOGIN), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
+    const response = await fetchWithTimeout(
+      createApiUrl(API_ENDPOINTS.LOGIN),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      }
+    );
 
     await handleResponse(response);
 
@@ -63,60 +71,66 @@ export const login = async (userData) => {
   }
 };
 
-export const getUser = async (userId) => {
-  let response;
-
-  if (!userId) {
-    response = await fetch(createApiUrl(API_ENDPOINTS.CURRENT_USER), {
+export const getUser = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_USER_BY_ID(userId)),
+    {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
       },
-    });
-  } else {
-    response = await fetch(
-      createApiUrl(API_ENDPOINTS.GET_USER_BY_ID(userId)),
-      {}
-    );
-  }
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      router.push({ name: '404' });
-      return;
     }
+  );
 
-    throw new Error();
-  }
+  handleResponse(response);
 
   return await response.json();
 };
 
-export const getProfile = async (userId) => {
-  let response;
-
-  if (!userId) {
-    response = await fetch(createApiUrl(API_ENDPOINTS.USER_PROFILE), {
+export const getProfile = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_PROFILE_BY_ID(userId)),
+    {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
       },
-    });
-  } else {
-    response = await fetch(
-      createApiUrl(API_ENDPOINTS.GET_PROFILE_BY_ID(userId)),
-      {}
-    );
-  }
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      router.push({ name: '404' });
-      return;
     }
+  );
 
-    throw new Error();
-  }
+  handleResponse(response);
 
   return await response.json();
 };
+
+export const updateUser = async (user, profile) => {
+    const response = await fetch(createApiUrl(API_ENDPOINTS.UPDATE_USER), {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+      body: JSON.stringify({ user, profile }),
+    });
+
+    console.log(JSON.stringify({ user, profile }));
+
+    handleResponse(response);
+
+    return response;
+};
+
+export const uploadPost = async (post) => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLODAD_POST), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+    body: JSON.stringify(post),
+  });
+
+  handleResponse(response);
+
+  return response;
+}

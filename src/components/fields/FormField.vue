@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <p v-show="required" class="required">Required field *</p>
     <div :class="['form-field', fieldClasses]">
       <input
         :value="modelValue"
@@ -16,7 +17,7 @@
       class="error-msg"
     ></p>
     <p
-      v-show="!isEmpty && !isValid"
+      v-show="!isEmpty && !isValid && wasSelected"
       v-html="validationMsg"
       class="error-msg"
     ></p>

@@ -1,6 +1,7 @@
 export default {
   startForFree: 'Start for free',
   createAccountTitle: 'Create your account',
+  signInTitle: 'Sign in',
   alreadyMember: 'Already a member?',
   logIn: 'Log in',
   fullNameLabel: 'Full name',
@@ -33,11 +34,12 @@ export default {
   lastNameLabel: 'Last name',
   oldPasswordLabel: 'Old password',
   newPasswordLabel: 'New password',
-  birthDateLabel: 'Birth date (Example: YYYY-MM-DD)',
+  birthdayLabel: 'Birth date (Example: MM/DD/YYYY)',
   bioLabel: 'Bio',
   addressLabel: 'Address',
-  birthDateValidationMsg:
-    'Enter your birth date in the following format: YYYY-MM-DD',
-    photoLinkLabel: 'Photo link (URL)',
-  photoLinkValidationMsg: 'Enter a valid URL (Example: https://example.com/image.jpg)',
+  birthdayValidationMsg:
+    'Enter your birth date in the following format: MM/DD/YYYY',
+  photoLinkLabel: 'Photo link (URL)',
+  photoLinkValidationMsg:
+    'Enter a valid URL (Example: https://example.com/image.jpg)',
 };

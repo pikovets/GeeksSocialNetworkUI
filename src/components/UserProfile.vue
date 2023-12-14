@@ -5,11 +5,7 @@
     </div>
     <div class="user-status">
       <img
-        :class="[
-          { 'filter-green': user.isOnline },
-          { 'filter-grey': !user.isOnline },
-          'status-icon',
-        ]"
+        :class="[user.isOnline ? 'filter-green' : 'filter-grey', 'status-icon']"
         src="/src/assets/icons/status-circle.svg"
       />
     </div>
@@ -21,11 +17,8 @@
         </div>
 
         <div class="interaction-buttons">
-          <button class="interaction-btn">
+          <button @click="goToEditProfilePage" class="interaction-btn">
             <i class="fas fa-user-edit"></i>
-          </button>
-          <button class="interaction-btn">
-            <i class="fa-solid fa-gear"></i>
           </button>
         </div>
       </div>
@@ -36,7 +29,7 @@
         <div v-show="profile.address" class="profile-address">
           <i
             class="fa-solid fa-map-marker-alt"
-            style="color: #8c8e8f; margin-right: 5px"
+            style="color: #8c8e8f; margin-right: 5px; cursor: default"
           ></i>
           <p class="address-text">{{ profile.address }}</p>
         </div>
@@ -44,7 +37,7 @@
         <div class="more-info-btn">
           <i
             class="fa-solid fa-circle-info"
-            style="color: #8c8e8f; margin-right: 5px"
+            style="color: #8c8e8f; margin-right: 5px; cursor: default"
           ></i>
           <p class="extra-info-text">Learn more info</p>
         </div>
@@ -67,6 +60,13 @@ export default {
     },
     fullName() {
       return `${this.profile.firstName} ${this.profile.lastName}`;
+    },
+  },
+  methods: {
+    goToEditProfilePage() {
+      this.$router.push({
+        name: 'edit-profile',
+      });
     },
   },
 };

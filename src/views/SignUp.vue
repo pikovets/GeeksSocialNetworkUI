@@ -67,8 +67,8 @@
 
 <script>
 import Header from '../components/Header.vue';
-import FormField from '../components/authentication/FormField.vue';
-import PasswordField from '../components/authentication/PasswordField.vue';
+import FormField from '../components/fields/FormField.vue';
+import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 import SuccessMessage from '../components/SuccessMessage.vue';
 
@@ -118,7 +118,7 @@ export default {
   computed: {
     isFormValid() {
       return (
-        this.isValidField(this.userData.fullName, 'fullName') &&
+        this.isValidField(this.userData.fullName, 'name') &&
         this.isValidField(this.userData.email, 'email') &&
         this.isValidField(this.userData.password, 'password')
       );

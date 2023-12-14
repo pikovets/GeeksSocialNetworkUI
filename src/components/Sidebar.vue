@@ -1,11 +1,13 @@
 <template>
   <div class="panel">
     <SidebarModule
-      :icon="'/src/assets/icons/profile.svg'"
-      :name="'My profile'"
+      v-for="(module, index) in modules"
+      :key="module.id"
+      @click="selectTab(index)"
+      :icon="module.icon"
+      :name="module.name"
+      :class="{ 'active-tab': selectedIndex === index && activeTabChange }"
     />
-    <SidebarModule :icon="'/src/assets/icons/friends.svg'" :name="'Friends'" />
-    <SidebarModule :icon="'/src/assets/icons/photo.svg'" :name="'Photos'" />
   </div>
 </template>
 
@@ -13,10 +15,32 @@
 import SidebarModule from './SidebarModule.vue';
 
 export default {
+  props: {
+    modules: Array,
+    activeTabChange: {
+      type: Boolean,
+      default: false,
+    },
+    selectedIndex: {
+      type: Number,
+      default: 0,
+    },
+  },
   components: {
     SidebarModule,
+  },
+  methods: {
+    selectTab(index) {
+      this.$router.push({
+        name: this.modules[index].link.name,
+        query: this.modules[index].link.query || {},
+        params: this.modules[index].link.params || {},
+      });
+    },
   },
 };
 </script>
 
-<style scoped src="../assets/styles/Sidebar.css"></style>
+<style scoped>
+@import '../assets/styles/Sidebar.css';
+</style>

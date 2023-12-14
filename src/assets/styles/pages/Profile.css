@@ -38,3 +38,7 @@
   grid-template-columns: 560px 280px;
   gap: 15px;
 }
+
+.main-sidebar {
+  margin-right: 25px;
+}

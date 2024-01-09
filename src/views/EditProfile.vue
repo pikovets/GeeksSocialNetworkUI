@@ -1,6 +1,6 @@
 <template>
   <div id="animatedBackground">
-    <Header :user="user"/>
+    <Header :user="user" />
 
     <div class="responsive-container">
       <MainSidebar />
@@ -54,7 +54,8 @@ import ProfileEdit from '../components/settings/ProfileEdit.vue';
 import SecurityEdit from '../components/settings/SecurityEdit.vue';
 
 import { validationRules } from '@/config/validationRules';
-import { getUser, getProfile, updateUser } from '../services/api';
+import { errorMessages } from '@/config/errorMessages';
+import { getUser, getProfile, updateUser } from '../services/api';  
 
 export default {
   components: {
@@ -69,6 +70,8 @@ export default {
   },
   data() {
     return {
+      isOnline: window.navigator.onLine,
+      isLoading: false,
       user: { oldPassword: '', newPassword: '' },
       profile: {},
       backendErrors: {
@@ -127,8 +130,39 @@ export default {
       ).toLocaleDateString();
     },
     async saveChanges() {
-      await updateUser(this.user, this.profile);
-      this.$router.push({ name: 'profile', params: { id: 'me' } });
+      try {
+        if (!this.isOnline) {
+          alert(this.$i18n.t('offlineErrorMsg'));
+          return;
+        }
+
+        this.interval = setTimeout(() => {
+          this.isLoading = true;
+        }, 500);
+
+        const response = await updateUser(this.user, this.profile);
+        const data = await response.json();
+
+        this.isLoading = false;
+        clearInterval(this.interval);
+
+        this.$router.push({ name: 'profile', params: { id: 'me' } });
+      } catch (error) {
+        this.handleErrors(error);
+      }
+    },
+    handleErrors(error) {
+      this.isLoading = false;
+      clearInterval(this.interval);
+
+      if (error.message === errorMessages.TIMEOUT) {
+        alert(this.$i18n.t('timeoutErrorMsg'));
+      } else if (error.message === errorMessages.FETCH_FAILED) {
+        alert(this.$i18n.t('serverErrorMsg'));
+      } else if (error.message === 'Incorrect username or password') {
+        this.backendErrors.email = error.message;
+        this.backendErrors.oldPassword = error.message;
+      }
     },
     isFormValid() {
       return (

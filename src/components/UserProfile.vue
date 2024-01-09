@@ -13,7 +13,7 @@
     <div class="profile-info">
       <div class="profile-info-header">
         <div>
-          <p class="profile-name">{{ user.firstName + ' ' + user.lastName }}</p>
+          <p class="profile-name">{{ fullName }}</p>
         </div>
 
         <div class="interaction-buttons">
@@ -59,7 +59,7 @@ export default {
         : '/src/assets/img/avatars/default-avatar.jpg';
     },
     fullName() {
-      return `${this.profile.firstName} ${this.profile.lastName}`;
+      return `${this.user.firstName} ${this.user.lastName}`;
     },
   },
   methods: {

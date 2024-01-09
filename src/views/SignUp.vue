@@ -19,7 +19,7 @@
             v-model="userData.fullName"
             :label="$t('fullNameLabel')"
             :validationRule="validationRules.name"
-            :validationMsg="$t('fullNameValidationMsg')"
+            :validationMsg="$t('nameValidationMsg')"
             :class="{
               'apply-shake': shake.fullName,
             }"
@@ -72,13 +72,10 @@ import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 import SuccessMessage from '../components/SuccessMessage.vue';
 
-const ERROR_MESSAGES = {
-  TIMEOUT: 'Timeout Error',
-  FETCH_FAILED: 'Failed to fetch',
-};
-
 import { validationRules } from '@/config/validationRules';
+import { errorMessages } from '@/config/errorMessages';
 import { signup } from '../services/api';
+
 
 export default {
   components: {
@@ -163,10 +160,10 @@ export default {
       this.isRegistered = false;
       clearInterval(this.interval);
 
-      if (error.message === ERROR_MESSAGES.TIMEOUT) {
+      if (error.message === errorMessages.TIMEOUT) {
         alert(this.$i18n.t('timeoutErrorMsg'));
         return;
-      } else if (error.message === ERROR_MESSAGES.FETCH_FAILED) {
+      } else if (error.message === errorMessages.FETCH_FAILED) {
         alert(this.$i18n.t('serverErrorMsg'));
         return;
       }

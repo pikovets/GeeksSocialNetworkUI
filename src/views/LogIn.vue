@@ -58,12 +58,8 @@ import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 
 import { validationRules } from '@/config/validationRules';
+import { errorMessages } from '@/config/errorMessages';
 import { login } from '../services/api';
-
-const ERROR_MESSAGES = {
-  TIMEOUT: 'Timeout Error',
-  FETCH_FAILED: 'Failed to fetch',
-};
 
 export default {
   components: {
@@ -147,9 +143,9 @@ export default {
       this.isLoading = false;
       clearInterval(this.interval);
 
-      if (error.message === ERROR_MESSAGES.TIMEOUT) {
+      if (error.message === errorMessages.TIMEOUT) {
         alert(this.$i18n.t('timeoutErrorMsg'));
-      } else if (error.message === ERROR_MESSAGES.FETCH_FAILED) {
+      } else if (error.message === errorMessages.FETCH_FAILED) {
         alert(this.$i18n.t('serverErrorMsg'));
       } else if (error.message === 'Incorrect username or password') {
         this.backendErrors.email = error.message;

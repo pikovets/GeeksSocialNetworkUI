@@ -6,4 +6,6 @@ export const API_ENDPOINTS = {
   GET_USER_BY_ID: (userId) => `/users/${userId}`,
   GET_PROFILE_BY_ID: (userId) => `/profiles/${userId}`,
   UPDATE_USER: '/profiles/me',
+  UPLOAD_POST: '/profiles/me/wall',
+  GET_POSTS_BY_ID: (userId) => `/profiles/${userId}/wall`,
 };

@@ -24,7 +24,7 @@
       :validationMsg="$t('passwordValidationMsg')"
       :required="oldPasswordIsValid"
       :class="{
-        passive: oldPasswordIsInvalid,
+        passive: !oldPasswordIsValid,
       }"
     ></PasswordField>
   </div>
@@ -58,13 +58,7 @@ export default {
   },
   computed: {
     oldPasswordIsValid() {
-      return this.validationRules.password.test(this.userData.oldPassword);
-    },
-    oldPasswordIsInvalid() {
-      return (
-        this.userData.oldPassword === '' ||
-        !this.validationRules.password.test(this.userData.oldPassword)
-      );
+      return this.userData.oldPassword !== '' && this.validationRules.password.test(this.userData.oldPassword);
     },
   },
 };

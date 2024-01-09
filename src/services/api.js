@@ -1,22 +1,6 @@
 import { API_BASE_URL, API_ENDPOINTS } from '@/config/apiConfig';
-import router from '@/router';
 
 const createApiUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;
-
-const handleResponse = async (response) => {
-  if (!response.ok) {
-    const clonedResponse = response.clone();
-
-    const data = await clonedResponse.json();
-
-    if (data.statusCode === 400) {
-      throw new Error(data.message);
-    } else if (data.statusCode === 404) {
-      router.push({ name: '404' });
-      return;
-    }
-  }
-};
 
 const fetchWithTimeout = (url, options, timeout = 5000) => {
   return Promise.race([
@@ -27,6 +11,13 @@ const fetchWithTimeout = (url, options, timeout = 5000) => {
       }, timeout);
     }),
   ]);
+};
+
+const handleResponse = async (response) => {
+  if (!response.ok) {
+    const data = await response.clone().json();
+    throw new Error(data.message);
+  }
 };
 
 export const signup = async (userData) => {
@@ -51,24 +42,17 @@ export const signup = async (userData) => {
 };
 
 export const login = async (userData) => {
-  try {
-    const response = await fetchWithTimeout(
-      createApiUrl(API_ENDPOINTS.LOGIN),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      }
-    );
+  const response = await fetchWithTimeout(createApiUrl(API_ENDPOINTS.LOGIN), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
 
-    await handleResponse(response);
+  await handleResponse(response);
 
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  return response;
 };
 
 export const getUser = async (userId = 'me') => {
@@ -82,7 +66,7 @@ export const getUser = async (userId = 'me') => {
     }
   );
 
-  handleResponse(response);
+  await handleResponse(response);
 
   return await response.json();
 };
@@ -98,30 +82,45 @@ export const getProfile = async (userId = 'me') => {
     }
   );
 
-  handleResponse(response);
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const getPosts = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_POSTS_BY_ID(userId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
 
   return await response.json();
 };
 
 export const updateUser = async (user, profile) => {
-    const response = await fetch(createApiUrl(API_ENDPOINTS.UPDATE_USER), {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
-      },
-      body: JSON.stringify({ user, profile }),
-    });
+  const response = await fetch(createApiUrl(API_ENDPOINTS.UPDATE_USER), {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+    body: JSON.stringify({ user, profile }),
+  });
 
-    console.log(JSON.stringify({ user, profile }));
+  await handleResponse(response);
 
-    handleResponse(response);
-
-    return response;
+  return response;
 };
 
 export const uploadPost = async (post) => {
-  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLODAD_POST), {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLOAD_POST), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -130,7 +129,7 @@ export const uploadPost = async (post) => {
     body: JSON.stringify(post),
   });
 
-  handleResponse(response);
+  await handleResponse(response);
 
   return response;
-}
+};

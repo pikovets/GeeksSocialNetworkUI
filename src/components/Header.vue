@@ -175,12 +175,12 @@ header {
 }
 
 .logout-btn i {
-  color: #a1a1a1;
+  color: #ffffff;
   font-size: 14px;
 }
 
 .logout-btn:hover {
-  background-color: #a80000ad;
+  background-color: #d40101ad;
 }
 
 .logout-btn:active {

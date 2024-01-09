@@ -2,25 +2,28 @@
   <div class="post">
     <div class="header">
       <div class="profile-image-container">
-        <img class="profile-image" src="../assets/img/avatars/griffith.png" />
+        <img class="profile-image" :src="getAvatar" />
       </div>
       <div class="metadata-container">
-        <p class="author-name">griffith</p>
-        <p class="published-date">21 Nov at 2:07 pm</p>
+        <p class="author-name">{{ fullName }}</p>
+        <p class="published-date">{{ getPostDate }}</p>
       </div>
     </div>
-    <img class="post-media" src="../assets/img/posts/griffith_post_1.jpg" />
+    <div class="post-content">
+      <p class="post-text">{{ post.text }}</p>
+      <img v-show="post.photoLink" class="post-media" :src="post.photoLink" />
+    </div>
     <div class="post-footer">
       <div class="like-btn">
         <img src="../assets/icons/like.svg" class="like-icon" />
-        <p class="likes-amount">151</p>
+        <p class="likes-amount">{{ post.likesCount }}</p>
       </div>
       <div class="comment-btn">
         <img src="../assets/icons/comment.svg" class="comment-icon" />
-        <p class="comments-amount">22</p>
+        <p class="comments-amount">{{ post.commentsCount }}</p>
       </div>
     </div>
-    <hr class="post-footer-separator" />
+    <!-- <hr class="post-footer-separator" />
     <div class="comment">
       <div class="comment-author-image-container">
         <img
@@ -54,14 +57,39 @@
           <img src="../assets/icons/send.svg" class="post-comment-icon" />
         </button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    post: Object,
+    user: Object,
+    profile: Object,
+  },
+  computed: {
+    fullName() {
+      return `${this.user.firstName} ${this.user.lastName}`;
+    },
+    getAvatar() {
+      return this.user.photoLink
+        ? this.user.photoLink
+        : '/src/assets/img/avatars/default-avatar.jpg';
+    },
+    getPostDate() {
+      const date = new Date(this.post.date);
+      return `${date.getDate()} ${date.toLocaleString('default', {
+        month: 'short',
+      })} at ${date.getHours()}:${date.getMinutes()}`;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .post {
   width: 550px;
-  height: 850px;
   background: rgba(36, 36, 36, 0.8);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
@@ -71,6 +99,7 @@
   margin: 0 auto;
   padding: 15px 20px;
   position: relative;
+  margin-bottom: 15px;
 }
 
 .header {
@@ -111,10 +140,20 @@
   margin-bottom: 1%;
 }
 
+.post-content {
+  margin-bottom: 15px;
+}
 .published-date {
   display: block;
   color: #818181;
   font-size: 12px;
+}
+
+.post-text {
+  display: block;
+  color: rgb(225, 227, 230);
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .post-media {
@@ -125,7 +164,6 @@
   object-position: center;
   border-radius: 10px;
   border: 1px solid #4b4b4b3f;
-  margin-bottom: 2%;
 }
 
 .post-interaction {

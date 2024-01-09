@@ -10,8 +10,8 @@
 
         <div class="sections-grid">
           <div class="post-feed">
-            <AddPost :userAvatar="user.photoLink" :userName="user.firstName"/>
-            <Posts :posts="posts" />
+            <AddPost :userAvatar="user.photoLink" :userName="user.firstName" />
+            <Posts :posts="posts" :user="user" :profile="profile" />
           </div>
 
           <Friends :friends="friends" />
@@ -29,7 +29,7 @@ import Posts from '../components/Posts.vue';
 import Friends from '../components/Friends.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 
-import { getUser, getProfile } from '../services/api';
+import { getUser, getProfile, getPosts } from '../services/api';
 
 export default {
   components: {
@@ -71,10 +71,14 @@ export default {
           photo: '/src/assets/img/avatars/farnese.jpg',
         },
       ],
-      posts: [],
+      posts: [{}],
     };
   },
   async mounted() {
+    if (localStorage.getItem('GeeksJwtToken') === null) {
+      this.$router.push('/login');
+    }
+
     await this.fetchUserData();
   },
   methods: {
@@ -84,6 +88,9 @@ export default {
 
       const profileData = await getProfile(this.$route.params.id);
       this.profile = profileData;
+
+      const postsData = await getPosts(this.$route.params.id);
+      this.posts = postsData.posts;
     },
   },
 };

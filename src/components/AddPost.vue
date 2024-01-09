@@ -84,16 +84,17 @@ export default {
         this.validationRules.photoLink.test(this.photoLink)
       );
     },
-    methods: {
-      async sendPost() {
-        if (this.isPostValid) {
-          uploadPost({
-            text: this.postText,
-            photoLink: this.photoLink,
-          });
-          this.$router.push({ name: 'profile', params: { id: 'me' } });
-        }
-      },
+  },
+  methods: {
+    async sendPost() {
+      if (this.isPostValid) {
+        await uploadPost({
+          text: this.postText,
+          photoLink: this.photoLink,
+        });
+
+        this.$router.go();
+      }
     },
   },
 };
@@ -124,6 +125,7 @@ p {
   flex-direction: column;
   flex-wrap: wrap;
   align-items: flex-start;
+  margin-bottom: 15px;
 }
 
 .profile-image {

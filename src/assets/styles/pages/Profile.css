@@ -6,7 +6,7 @@
   left: 0;
   z-index: -100;
 
-  background: url(../icons/registrationBackground.svg) repeat;
+  background: url(../../icons/registrationBackground.svg) repeat;
   background-size: cover;
   background-position: 0 0;
   animation: animatedBackground 500s linear infinite;
@@ -14,6 +14,7 @@
   align-items: center;
   justify-content: center;
   background-color: black;
+  overflow-y: auto;
 }
 
 @keyframes animatedBackground {
@@ -37,4 +38,8 @@
   display: grid;
   grid-template-columns: 560px 280px;
   gap: 15px;
+}
+
+.main-sidebar {
+  margin-right: 25px;
 }

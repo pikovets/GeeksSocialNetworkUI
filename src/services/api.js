@@ -1,17 +1,6 @@
 import { API_BASE_URL, API_ENDPOINTS } from '@/config/apiConfig';
-import router from '@/router';
 
 const createApiUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;
-
-const handleResponse = async (response) => {
-  if (!response.ok) {
-    const data = await response.json();
-
-    if (data.statusCode === 400) {
-      throw new Error(data.message);
-    }
-  }
-};
 
 const fetchWithTimeout = (url, options, timeout = 5000) => {
   return Promise.race([
@@ -22,6 +11,13 @@ const fetchWithTimeout = (url, options, timeout = 5000) => {
       }, timeout);
     }),
   ]);
+};
+
+const handleResponse = async (response) => {
+  if (!response.ok) {
+    const data = await response.clone().json();
+    throw new Error(data.message);
+  }
 };
 
 export const signup = async (userData) => {
@@ -46,77 +42,94 @@ export const signup = async (userData) => {
 };
 
 export const login = async (userData) => {
-  try {
-    const response = await fetchWithTimeout(createApiUrl(API_ENDPOINTS.LOGIN), {
-      method: 'POST',
+  const response = await fetchWithTimeout(createApiUrl(API_ENDPOINTS.LOGIN), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const getUser = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_USER_BY_ID(userId)),
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const getProfile = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_PROFILE_BY_ID(userId)),
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const getPosts = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_POSTS_BY_ID(userId)),
+    {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-
-    await handleResponse(response);
-
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getUser = async (userId) => {
-  let response;
-
-  if (!userId) {
-    response = await fetch(createApiUrl(API_ENDPOINTS.CURRENT_USER), {
-      method: 'GET',
-      headers: {
         Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
       },
-    });
-  } else {
-    response = await fetch(
-      createApiUrl(API_ENDPOINTS.GET_USER_BY_ID(userId)),
-      {}
-    );
-  }
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      router.push({ name: '404' });
-      return;
     }
+  );
 
-    throw new Error();
-  }
+  await handleResponse(response);
 
   return await response.json();
 };
 
-export const getProfile = async (userId) => {
-  let response;
+export const updateUser = async (user, profile) => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.UPDATE_USER), {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+    body: JSON.stringify({ user, profile }),
+  });
 
-  if (!userId) {
-    response = await fetch(createApiUrl(API_ENDPOINTS.USER_PROFILE), {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
-      },
-    });
-  } else {
-    response = await fetch(
-      createApiUrl(API_ENDPOINTS.GET_PROFILE_BY_ID(userId)),
-      {}
-    );
-  }
+  await handleResponse(response);
 
-  if (!response.ok) {
-    if (response.status === 404) {
-      router.push({ name: '404' });
-      return;
-    }
+  return response;
+};
 
-    throw new Error();
-  }
+export const uploadPost = async (post) => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLOAD_POST), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+    body: JSON.stringify(post),
+  });
 
-  return await response.json();
+  await handleResponse(response);
+
+  return response;
 };

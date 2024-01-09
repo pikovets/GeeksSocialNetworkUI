@@ -1,10 +1,11 @@
 export default {
   startForFree: 'Start for free',
   createAccountTitle: 'Create your account',
+  signInTitle: 'Sign in',
   alreadyMember: 'Already a member?',
   logIn: 'Log in',
   fullNameLabel: 'Full name',
-  fullNameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophes',
+  nameValidationMsg: 'Enter only letters (A-Z, a-z), spaces, apostrophes',
   emailLabel: 'Email',
   emailValidationMsg:
     'Ensure your email is valid by following these criteria:<br>' +
@@ -29,4 +30,16 @@ export default {
   noAccountText: 'Not yet registered?',
   signUp: 'Sign Up',
   logInButton: 'Log In',
+  firstNameLabel: 'First name',
+  lastNameLabel: 'Last name',
+  oldPasswordLabel: 'Old password',
+  newPasswordLabel: 'New password',
+  birthdayLabel: 'Birth date (Example: MM/DD/YYYY)',
+  bioLabel: 'Bio',
+  addressLabel: 'Address',
+  birthdayValidationMsg:
+    'Enter your birth date in the following format: MM/DD/YYYY',
+  photoLinkLabel: 'Photo link (URL)',
+  photoLinkValidationMsg:
+    'Enter a valid URL (Example: https://example.com/image.jpg)',
 };

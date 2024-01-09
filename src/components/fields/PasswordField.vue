@@ -5,8 +5,8 @@
         :value="modelValue"
         @input="updateModelValue"
         :type="passwordFieldType"
+        :placeholder="label"
         class="field-input"
-        :placeholder="$t('passwordLabel')"
       />
       <i
         :class="showPasswordIconClass"
@@ -21,10 +21,10 @@
     ></p>
     <p
       class="error-msg"
-      v-show="!isEmpty && !isValid"
+      v-show="!isEmpty && !isValid && wasSelected"
       v-html="validationMsg"
     ></p>
-    <p class="error-msg" v-show="isEmpty && wasSelected">
+    <p class="error-msg" v-show="isEmpty && wasSelected && required">
       {{ $t('emptyFieldMsg') }}
     </p>
   </div>

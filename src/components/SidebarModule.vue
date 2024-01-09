@@ -1,6 +1,6 @@
 <template>
   <div class="module">
-    <div class="icon-container">
+    <div v-show="icon" class="icon-container">
       <img class="icon filter-green" :src="icon" />
     </div>
 
@@ -14,6 +14,7 @@ export default {
     icon: String,
     name: String,
   },
+  computed: {},
 };
 </script>
 

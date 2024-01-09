@@ -1,15 +1,19 @@
 <template>
   <div id="animatedBackground">
-    <Header />
+    <Header :user="user" />
 
     <div class="responsive-container">
-      <Sidebar />
+      <MainSidebar class="main-sidebar" />
 
       <div class="main-content">
         <UserProfile :user="user" :profile="profile" />
 
         <div class="sections-grid">
-          <Posts :posts="posts" />
+          <div class="post-feed">
+            <AddPost :userAvatar="user.photoLink" :userName="user.firstName" />
+            <Posts :posts="posts" :user="user" :profile="profile" />
+          </div>
+
           <Friends :friends="friends" />
         </div>
       </div>
@@ -20,19 +24,21 @@
 <script>
 import Header from '../components/Header.vue';
 import UserProfile from '../components/UserProfile.vue';
+import AddPost from '../components/AddPost.vue';
 import Posts from '../components/Posts.vue';
 import Friends from '../components/Friends.vue';
-import Sidebar from '../components/Sidebar.vue';
+import MainSidebar from '../components/MainSidebar.vue';
 
-import { getUser, getProfile } from '../services/api';
+import { getUser, getProfile, getPosts } from '../services/api';
 
 export default {
   components: {
     Header,
     UserProfile,
+    AddPost,
     Posts,
     Friends,
-    Sidebar,
+    MainSidebar,
   },
   data() {
     return {
@@ -65,22 +71,29 @@ export default {
           photo: '/src/assets/img/avatars/farnese.jpg',
         },
       ],
-      posts: [],
+      posts: [{}],
     };
   },
   async mounted() {
+    if (localStorage.getItem('GeeksJwtToken') === null) {
+      this.$router.push('/login');
+    }
+
     await this.fetchUserData();
   },
   methods: {
     async fetchUserData() {
-      const userData = await getUser();
+      const userData = await getUser(this.$route.params.id);
       this.user = userData;
 
-      const profileData = await getProfile();
+      const profileData = await getProfile(this.$route.params.id);
       this.profile = profileData;
+
+      const postsData = await getPosts(this.$route.params.id);
+      this.posts = postsData.posts;
     },
   },
 };
 </script>
 
-<style scoped src="../assets/styles/Profile.css"></style>
+<style scoped src="../assets/styles/pages/Profile.css"></style>

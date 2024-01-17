@@ -21,24 +21,17 @@ const handleResponse = async (response) => {
 };
 
 export const signup = async (userData) => {
-  try {
-    const response = await fetchWithTimeout(
-      createApiUrl(API_ENDPOINTS.SIGNUP),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      }
-    );
+  const response = await fetchWithTimeout(createApiUrl(API_ENDPOINTS.SIGNUP), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
 
-    await handleResponse(response);
+  await handleResponse(response);
 
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  return response;
 };
 
 export const login = async (userData) => {
@@ -130,6 +123,55 @@ export const uploadPost = async (post) => {
   });
 
   await handleResponse(response);
+
+  return response;
+};
+
+export const getUsersByName = async (userName) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_USERS_BY_NAME(userName)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const deletePost = async (postId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.DELETE_POST(postId)),
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const toggleLike = async (postId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.TOGGLE_LIKE_POST(postId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
 
   return response;
 };

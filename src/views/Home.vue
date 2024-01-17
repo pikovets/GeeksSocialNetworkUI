@@ -1,15 +1,35 @@
+<template>
+  <div id="animatedBackground">
+    <Header :authUser="authUser" />
+
+    <div class="responsive-container">
+      <MainSidebar class="main-sidebar" />
+
+      <div class="main-content">
+        <div class="post-feed">
+          <AddPost :authUser="authUser" />
+
+          <Posts :posts="posts" :authUser="authUser" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
 import Header from '../components/Header.vue';
 import AddPost from '../components/AddPost.vue';
 import Posts from '../components/Posts.vue';
+import MainSidebar from '../components/MainSidebar.vue';
 
-import { getUser} from '../services/api';
+import { getUser } from '../services/api';
 
 export default {
   components: {
     Header,
     AddPost,
     Posts,
+    MainSidebar,
   },
   async mounted() {
     if (localStorage.getItem('GeeksJwtToken') === null) {
@@ -20,24 +40,17 @@ export default {
   },
   data() {
     return {
-      user: {},
+      authUser: {},
+      posts: [],
     };
   },
   methods: {
     async fetchUserData() {
       const userData = await getUser();
-      this.user = userData;
+      this.authUser = userData;
     },
   },
 };
 </script>
-
-<template>
-  <div id="animatedBackground">
-    <Header :user="user" />
-    <!-- <AddPost /> -->
-    <Posts />
-  </div>
-</template>
 
 <style scoped src="../assets/styles/pages/Home.css"></style>

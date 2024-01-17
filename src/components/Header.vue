@@ -7,7 +7,13 @@
 
       <div class="search-box" v-show="isRegistered">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input class="search-bar" type="text" placeholder="Search" />
+        <input
+          v-model="searchName"
+          v-on:keyup.enter="onSearch"
+          class="search-bar"
+          type="text"
+          placeholder="Search"
+        />
       </div>
       <div class="extra-buttons-container">
         <div
@@ -28,17 +34,18 @@
 <script>
 export default {
   props: {
-    user: Object,
+    authUser: Object,
   },
   data() {
     return {
       isRegistered: localStorage.getItem('GeeksJwtToken'),
+      searchName: '',
     };
   },
   computed: {
     getAvatar() {
-      return this.user && this.user.photoLink
-        ? this.user.photoLink
+      return this.authUser && this.authUser.photoLink
+        ? this.authUser.photoLink
         : '/src/assets/img/avatars/default-avatar.jpg';
     },
   },
@@ -52,6 +59,14 @@ export default {
     logout() {
       localStorage.removeItem('GeeksJwtToken');
       this.$router.push({ name: 'login' });
+    },
+    onSearch() {
+      if (this.searchName === '') return;
+
+      this.$router.push({
+        name: 'search',
+        query: { searchName: this.searchName.replace(/\s/g, '') },
+      });
     },
   },
 };

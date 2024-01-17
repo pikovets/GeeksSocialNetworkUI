@@ -28,6 +28,16 @@ const router = createRouter({
       name: 'edit-profile',
       component: () => import('../views/EditProfile.vue'),
     },
+    {
+      path: '/search',
+      name: 'search',
+      component: () => import('../views/Search.vue'),
+    },
+    {
+      path: '/friends',
+      name: 'friends',
+      component: () => import('../views/Friends.vue'),
+    },
   ],
 });
 

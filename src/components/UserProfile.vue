@@ -29,15 +29,15 @@
         <div v-show="profile.address" class="profile-address">
           <i
             class="fa-solid fa-map-marker-alt"
-            style="color: #8c8e8f; margin-right: 5px; cursor: default"
+            style="color: #8c8e8f; margin-right: 5px"
           ></i>
           <p class="address-text">{{ profile.address }}</p>
         </div>
 
-        <div class="more-info-btn">
+        <div @click="$emit('onMoreInfoClick')" class="more-info-btn">
           <i
             class="fa-solid fa-circle-info"
-            style="color: #8c8e8f; margin-right: 5px; cursor: default"
+            style="color: #8c8e8f; margin-right: 5px"
           ></i>
           <p class="extra-info-text">Learn more info</p>
         </div>
@@ -52,6 +52,7 @@ export default {
     user: Object,
     profile: Object,
   },
+  emits: ['onMoreInfoClick'],
   computed: {
     getAvatar() {
       return this.user.photoLink

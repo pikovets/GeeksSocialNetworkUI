@@ -1,17 +1,25 @@
 <template>
   <div id="animatedBackground">
-    <Header :user="user" />
+    <Header :authUser="authUser" />
 
     <div class="responsive-container">
       <MainSidebar class="main-sidebar" />
 
       <div class="main-content">
-        <UserProfile :user="user" :profile="profile" />
+        <UserProfile
+          @onMoreInfoClick="showAdditionalInfo = true"
+          :user="user"
+          :profile="profile"
+        />
 
         <div class="sections-grid">
           <div class="post-feed">
-            <AddPost :userAvatar="user.photoLink" :userName="user.firstName" />
-            <Posts :posts="posts" :user="user" :profile="profile" />
+            <AddPost :authUser="user" />
+            <Posts
+              @delete-post="deletePost"
+              :posts="posts"
+              :authUser="authUser"
+            />
           </div>
 
           <Friends :friends="friends" />
@@ -19,6 +27,12 @@
       </div>
     </div>
   </div>
+
+  <MoreInfo
+    @onCloseMoreInfo="showAdditionalInfo = false"
+    v-show="showAdditionalInfo"
+    :authProfile="profile"
+  />
 </template>
 
 <script>
@@ -28,8 +42,9 @@ import AddPost from '../components/AddPost.vue';
 import Posts from '../components/Posts.vue';
 import Friends from '../components/Friends.vue';
 import MainSidebar from '../components/MainSidebar.vue';
+import MoreInfo from '../components/MoreInfo.vue';
 
-import { getUser, getProfile, getPosts } from '../services/api';
+import { getUser, getProfile, getPosts, deletePost } from '../services/api';
 
 export default {
   components: {
@@ -39,9 +54,12 @@ export default {
     Posts,
     Friends,
     MainSidebar,
+    MoreInfo,
   },
   data() {
     return {
+      showAdditionalInfo: false,
+      authUser: {},
       user: {},
       profile: {},
       friends: [
@@ -71,7 +89,7 @@ export default {
           photo: '/src/assets/img/avatars/farnese.jpg',
         },
       ],
-      posts: [{}],
+      posts: [],
     };
   },
   async mounted() {
@@ -83,6 +101,9 @@ export default {
   },
   methods: {
     async fetchUserData() {
+      const authUserData = await getUser('me');
+      this.authUser = authUserData;
+
       const userData = await getUser(this.$route.params.id);
       this.user = userData;
 
@@ -91,6 +112,13 @@ export default {
 
       const postsData = await getPosts(this.$route.params.id);
       this.posts = postsData.posts;
+    },
+    async deletePost(postId) {
+      const response = await deletePost(postId);
+
+      if (response.ok) {
+        this.posts = this.posts.filter((post) => post.id !== postId);
+      }
     },
   },
 };

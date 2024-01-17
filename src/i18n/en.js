@@ -42,4 +42,9 @@ export default {
   photoLinkLabel: 'Photo link (URL)',
   photoLinkValidationMsg:
     'Enter a valid URL (Example: https://example.com/image.jpg)',
+  noUsersFound: 'No Users Found',
+  additionInfo: 'Additional info',
+  sexHint: 'Sex:',
+  birthdayHint: 'Birthday:',
+  addressHint: 'Address:',
 };

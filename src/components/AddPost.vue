@@ -6,7 +6,8 @@
         v-model="postText"
         class="add-post-text-input"
         type="text"
-        :placeholder="`What's new ${userName}?`"
+        :placeholder="`What's new ${this.authUser.firstName}?`"
+        @keyup.enter="sendPost"
       />
 
       <div
@@ -52,8 +53,7 @@ import { uploadPost } from '../services/api';
 export default {
   name: 'AddPost',
   props: {
-    userName: String,
-    userAvatar: String,
+    authUser: Object,
   },
   data() {
     return {
@@ -65,8 +65,8 @@ export default {
   },
   computed: {
     getAvatar() {
-      return this.userAvatar
-        ? this.userAvatar
+      return this.authUser.photoLink
+        ? this.authUser.photoLink
         : '/src/assets/img/avatars/default-avatar.jpg';
     },
     isPostTextEmpty() {
@@ -115,14 +115,16 @@ p {
 
 .add-post-container {
   max-width: 550px;
-  background-color: #242526;
+  background: rgba(36, 36, 36, 0.8);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 12px;
   border: 1px solid #8383833f;
-  border-radius: 15px;
   margin: 0 auto;
   padding: 0.75em 1.25em 0.75em 1.25em;
 
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   align-items: flex-start;
   margin-bottom: 15px;

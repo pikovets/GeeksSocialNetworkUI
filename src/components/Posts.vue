@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div :key="post.id" v-for="post in posts">
-      <Post :post="post" :user="user" :profile="profile" />
+      <Post @delete-post="deletePost" :post="post" :authUser="authUser" />
     </div>
   </div>
 </template>
@@ -11,12 +11,17 @@ import Post from './Post.vue';
 
 export default {
   props: {
-    user: Object,
-    profile: Object,
+    authUser: Object,
     posts: Array,
   },
+  emits: ['delete-post'],
   components: {
     Post,
+  },
+  methods: {
+    deletePost(postId) {
+      this.$emit('delete-post', postId);
+    },
   },
 };
 </script>

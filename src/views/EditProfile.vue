@@ -1,6 +1,6 @@
 <template>
   <div id="animatedBackground">
-    <Header :user="user" />
+    <Header :authUser="user" />
 
     <div class="responsive-container">
       <MainSidebar />

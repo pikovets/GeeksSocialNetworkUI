@@ -27,17 +27,11 @@
 }
 
 .responsive-container {
-  margin: 130px auto 0 auto;
+  margin: 130px auto 0 455px;
   max-width: 1000px;
   height: 100%;
   display: flex;
   flex-direction: row;
-}
-
-.sections-grid {
-  display: grid;
-  grid-template-columns: 560px 280px;
-  gap: 15px;
 }
 
 .main-sidebar {

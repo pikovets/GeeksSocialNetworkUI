@@ -9,7 +9,7 @@
         <div class="post-feed">
           <AddPost :authUser="authUser" />
 
-          <Posts :posts="posts" :authUser="authUser" />
+          <Posts :posts="posts" :authUser="authUser" style="width: 850px" />
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@ import AddPost from '../components/AddPost.vue';
 import Posts from '../components/Posts.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 
-import { getUser } from '../services/api';
+import { getUser, getFeed } from '../services/api';
 
 export default {
   components: {
@@ -46,8 +46,11 @@ export default {
   },
   methods: {
     async fetchUserData() {
-      const userData = await getUser();
-      this.authUser = userData;
+      const authUserData = await getUser('me');
+      this.authUser = authUserData;
+
+      const postsData = await getFeed();
+      this.posts = postsData.posts;
     },
   },
 };

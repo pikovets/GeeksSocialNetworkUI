@@ -10,5 +10,16 @@ export const API_ENDPOINTS = {
   GET_POSTS_BY_ID: (userId) => `/profiles/${userId}/wall`,
   GET_USERS_BY_NAME: (userName) => `/users/searchByName?name=${userName}`,
   DELETE_POST: (postId) => `/posts/${postId}`,
-  TOGGLE_LIKE_POST: (postId) => `/posts/${postId}/toggleLike`
+  TOGGLE_LIKE_POST: (postId) => `/posts/${postId}/toggleLike`,
+  GET_FRIEND_REQUEST: (userId) =>
+    `/userRelations/getFriendRequest?userId=${userId}`,
+  ACCEPT_FRIEND_REQUEST: (userId) =>
+    `/userRelations/acceptFriendRequest?userId=${userId}`,
+  SEND_FRIEND_REQUEST: (userId) =>
+    `/userRelations/sendFriendRequest?userId=${userId}`,
+  REMOVE_FRIEND_REQUEST: (userId) =>
+    `/userRelations/removeFriendRequest?userId=${userId}`,
+  GET_FRIENDS: (userId) => `/users/${userId}/getFriends`,
+  GET_ACCEPT_FRIEND_REQUESTS: `/users/me/getAcceptFriendRequests`,
+  GET_FEED: `/posts/feed`,
 };

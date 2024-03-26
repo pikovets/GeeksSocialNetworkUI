@@ -2,15 +2,15 @@
   <div class="post">
     <div class="header">
       <div class="profile-image-container">
-        <img class="profile-image" :src="getAvatar" />
+        <img @click="goToAuthorPage" class="profile-image" :src="getAvatar" />
       </div>
       <div class="metadata-container">
-        <p class="author-name">{{ fullName }}</p>
+        <p @click="goToAuthorPage" class="author-name">{{ fullName }}</p>
         <p class="published-date">{{ getPostDate }}</p>
       </div>
       <div v-show="post.author.id === authUser.id" class="interaction-buttons">
         <div @click="$emit('delete-post', this.post.id)" class="delete-btn">
-          <i class="fa-solid fa-trash"></i>
+          <i class="fa-solid fa-trash" style="margin-right: 0"></i>
         </div>
       </div>
     </div>
@@ -66,6 +66,9 @@
 
 <script>
 import { toggleLike } from '../services/api';
+import defaultAvatar from '../assets/img/avatars/default-avatar.jpg';
+import passiveLike from '../assets/icons/likePassive.svg';
+import activeLike from '../assets/icons/likeActive.svg';
 
 export default {
   props: {
@@ -80,7 +83,7 @@ export default {
     getAvatar() {
       return this.post.author.photoLink
         ? this.post.author.photoLink
-        : '/src/assets/img/avatars/default-avatar.jpg';
+        : defaultAvatar;
     },
     getPostDate() {
       const date = new Date(this.post.date);
@@ -89,9 +92,7 @@ export default {
       })} at ${date.getHours()}:${date.getMinutes()}`;
     },
     getLikeImage() {
-      return this.isLiked
-        ? '/src/assets/icons/like_active.svg'
-        : '/src/assets/icons/like_passive.svg';
+      return this.isLiked ? activeLike : passiveLike;
     },
   },
   data() {
@@ -108,8 +109,16 @@ export default {
 
       if (response.ok) {
         this.isLiked = !this.isLiked;
-        this.likesAmount = this.isLiked ? this.likesAmount + 1 : this.likesAmount - 1;
+        this.likesAmount = this.isLiked
+          ? this.likesAmount + 1
+          : this.likesAmount - 1;
       }
+    },
+    goToAuthorPage() {
+      this.$router.push({
+        name: 'profile',
+        params: { id: this.post.author.id },
+      });
     },
   },
 };

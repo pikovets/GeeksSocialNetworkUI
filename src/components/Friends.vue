@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <p class="title">
+    <p @click="goToFriendsPage" class="title">
       Friends <span class="amount-friends">{{ friends.length }}</span>
     </p>
     <div class="friends-grid">
@@ -20,6 +20,15 @@ export default {
   },
   props: {
     friends: Array,
+    user: Object,
+  },
+  methods: {
+    goToFriendsPage() {
+      this.$router.push({
+        name: 'friends',
+        params: { id: this.$route.query.id },
+      });
+    },
   },
 };
 </script>

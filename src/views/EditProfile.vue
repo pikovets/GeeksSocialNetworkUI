@@ -53,9 +53,9 @@ import UserEdit from '../components/settings/UserEdit.vue';
 import ProfileEdit from '../components/settings/ProfileEdit.vue';
 import SecurityEdit from '../components/settings/SecurityEdit.vue';
 
-import { validationRules } from '@/config/validationRules';
-import { errorMessages } from '@/config/errorMessages';
-import { getUser, getProfile, updateUser } from '../services/api';  
+import { validationRules } from '../config/validationRules';
+import { errorMessages } from '../config/errorMessages';
+import { getUser, getProfile, updateUser } from '../services/api';
 
 export default {
   components: {
@@ -141,12 +141,13 @@ export default {
         }, 500);
 
         const response = await updateUser(this.user, this.profile);
-        const data = await response.json();
 
         this.isLoading = false;
         clearInterval(this.interval);
 
-        this.$router.push({ name: 'profile', params: { id: 'me' } });
+        if (response.ok) {
+          this.$router.push({ name: 'profile', params: { id: 'me' } });
+        }
       } catch (error) {
         this.handleErrors(error);
       }
@@ -155,13 +156,20 @@ export default {
       this.isLoading = false;
       clearInterval(this.interval);
 
+      console.log(error.message);
+
       if (error.message === errorMessages.TIMEOUT) {
         alert(this.$i18n.t('timeoutErrorMsg'));
       } else if (error.message === errorMessages.FETCH_FAILED) {
         alert(this.$i18n.t('serverErrorMsg'));
-      } else if (error.message === 'Incorrect username or password') {
-        this.backendErrors.email = error.message;
-        this.backendErrors.oldPassword = error.message;
+      } else if (error.message === 'user.email: This email is already taken;') {
+        this.backendErrors.email = 'This email is already taken';
+      } else if (
+        error.message ===
+        'user.oldPassword: Password mismatch. Double-check your entry;'
+      ) {
+        this.backendErrors.oldPassword =
+          'Password mismatch. Double-check your entry';
       }
     },
     isFormValid() {

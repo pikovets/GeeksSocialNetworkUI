@@ -4,6 +4,7 @@
       v-model="userData.email"
       :required="true"
       :label="$t('emailLabel')"
+      @clearBackendErrors="backendErrors.email = ''"
       :backendErrorMsg="backendErrors.email"
       :validationRule="validationRules.email"
       :validationMsg="$t('emailValidationMsg')"
@@ -12,6 +13,7 @@
     <PasswordField
       v-model="userData.oldPassword"
       :label="$t('oldPasswordLabel')"
+      @clearBackendErrors="backendErrors.oldPassword = ''"
       :backendErrorMsg="backendErrors.oldPassword"
       :validationRule="validationRules.password"
       :validationMsg="$t('passwordValidationMsg')"
@@ -58,7 +60,10 @@ export default {
   },
   computed: {
     oldPasswordIsValid() {
-      return this.userData.oldPassword !== '' && this.validationRules.password.test(this.userData.oldPassword);
+      return (
+        this.userData.oldPassword !== '' &&
+        this.validationRules.password.test(this.userData.oldPassword)
+      );
     },
   },
 };

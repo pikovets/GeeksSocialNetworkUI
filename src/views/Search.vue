@@ -3,7 +3,7 @@
     <Header :authUser="authUser" />
 
     <div class="responsive-container">
-      <MainSidebar />
+      <MainSidebar class="main-sidebar" />
 
       <div class="main-content">
         <Users
@@ -59,6 +59,10 @@ export default {
         this.$route.query.searchName
       );
       this.searchedUsers = searchedUsersData.users;
+
+      this.searchedUsers = this.searchedUsers.filter(
+        (user) => user.id !== this.authUser.id
+      );
     },
   },
   watch: {

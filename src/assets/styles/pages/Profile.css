@@ -28,7 +28,8 @@
 
 .responsive-container {
   margin: 130px auto 0 auto;
-  max-width: 1000px;
+  width: 1000px;
+
   height: 100%;
   display: flex;
   flex-direction: row;

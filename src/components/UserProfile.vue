@@ -16,7 +16,10 @@
           <p class="profile-name">{{ fullName }}</p>
         </div>
 
-        <div class="interaction-buttons">
+        <div
+          v-show="this.authUser.id === this.user.id"
+          class="interaction-buttons"
+        >
           <button @click="goToEditProfilePage" class="interaction-btn">
             <i class="fas fa-user-edit"></i>
           </button>
@@ -34,7 +37,11 @@
           <p class="address-text">{{ profile.address }}</p>
         </div>
 
-        <div @click="$emit('onMoreInfoClick')" class="more-info-btn">
+        <div
+          v-show="showAdditionalInfoButton"
+          @click="$emit('onMoreInfoClick')"
+          class="more-info-btn"
+        >
           <i
             class="fa-solid fa-circle-info"
             style="color: #8c8e8f; margin-right: 5px"
@@ -47,20 +54,29 @@
 </template>
 
 <script>
+import DefaultAvatar from '../assets/img/avatars/default-avatar.jpg';
+
 export default {
   props: {
+    authUser: Object,
     user: Object,
     profile: Object,
   },
   emits: ['onMoreInfoClick'],
   computed: {
     getAvatar() {
-      return this.user.photoLink
-        ? this.user.photoLink
-        : '/src/assets/img/avatars/default-avatar.jpg';
+      return this.user.photoLink ? this.user.photoLink : DefaultAvatar;
     },
     fullName() {
       return `${this.user.firstName} ${this.user.lastName}`;
+    },
+    showAdditionalInfoButton() {
+      return (
+        this.profile.bio !== null ||
+        this.profile.sex !== null ||
+        this.profile.birthday !== null ||
+        this.profile.address !== null
+      );
     },
   },
   methods: {

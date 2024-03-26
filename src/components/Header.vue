@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import DefaultAvatar from '../assets/img/avatars/default-avatar.jpg';
+
 export default {
   props: {
     authUser: Object,
@@ -46,7 +48,7 @@ export default {
     getAvatar() {
       return this.authUser && this.authUser.photoLink
         ? this.authUser.photoLink
-        : '/src/assets/img/avatars/default-avatar.jpg';
+        : DefaultAvatar;
     },
   },
   methods: {

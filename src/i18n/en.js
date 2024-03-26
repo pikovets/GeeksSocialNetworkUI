@@ -47,4 +47,5 @@ export default {
   sexHint: 'Sex:',
   birthdayHint: 'Birthday:',
   addressHint: 'Address:',
+  cancelRequest: 'Cancel',
 };

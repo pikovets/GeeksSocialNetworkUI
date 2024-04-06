@@ -48,4 +48,6 @@ export default {
   birthdayHint: 'Birthday:',
   addressHint: 'Address:',
   cancelRequest: 'Cancel',
+  reply: 'Reply',
+  delete: 'Delete',
 };

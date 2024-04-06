@@ -19,30 +19,26 @@
       <img v-show="post.photoLink" class="post-media" :src="post.photoLink" />
     </div>
     <div class="post-footer">
-      <div @click="toggleLike" :class="[{ liked: isLiked }, 'like-btn']">
+      <div @click="toggleLike" :class="[{ liked: isLiked }, 'post-btn']">
         <img :src="getLikeImage" class="like-icon" />
         <p class="likes-amount">
           {{ likesAmount }}
         </p>
       </div>
-    </div>
-    <!-- <hr class="post-footer-separator" />
-    <div class="comment">
-      <div class="comment-author-image-container">
-        <img
-          src="../assets/img/avatars/berserk.jpg"
-          class="comment-author-image"
-        />
-      </div>
-      <div class="comment-content">
-        <p class="comment-author-name">Guts</p>
-        <p class="comment-text">
-          I don't know, but I'm sure that I will find out
+      <div @click="focusCommentInput" class="post-btn">
+        <img src="../assets/icons/comment.svg" class="comment-icon" />
+        <p class="comments-amount">
+          {{ commentsAmount }}
         </p>
-        <p class="published-date">21 Nov at 3:05 pm</p>
       </div>
     </div>
-    <p class="show-more-comments">Show more comments</p>
+    <hr class="post-footer-separator" />
+    <Comments
+      v-if="post.comments.length > 0"
+      :comments="sortedComments"
+      :authUser="authUser"
+      @delete-comment="deleteComment"
+    />
     <div class="my-comment">
       <div class="comment-author-image-container">
         <img
@@ -52,30 +48,37 @@
       </div>
       <div class="my-comment-content">
         <input
+          ref="commentInput"
           class="comment-input"
           type="text"
           placeholder="Add a comment..."
         />
-        <button class="post-comment-btn">
-          <img src="../assets/icons/send.svg" class="post-comment-icon" />
-        </button>
+        <img
+          @click="sendComment"
+          src="../assets/icons/activeSend.svg"
+          class="send-comment-icon"
+        />
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import { toggleLike } from '../services/api';
-import defaultAvatar from '../assets/img/avatars/default-avatar.jpg';
-import passiveLike from '../assets/icons/likePassive.svg';
 import activeLike from '../assets/icons/likeActive.svg';
+import passiveLike from '../assets/icons/likePassive.svg';
+import defaultAvatar from '../assets/img/avatars/default-avatar.jpg';
+import { sendComment, toggleLike, deleteComment } from '../services/api';
+import Comments from './Comments.vue';
 
 export default {
   props: {
     post: Object,
     authUser: Object,
   },
-  emits: ['delete-post'],
+  components: {
+    Comments,
+  },
+  emits: ['delete-post', 'update-post'],
   computed: {
     fullName() {
       return `${this.post.author.firstName} ${this.post.author.lastName}`;
@@ -94,13 +97,41 @@ export default {
     getLikeImage() {
       return this.isLiked ? activeLike : passiveLike;
     },
+    getMostLikedComment() {
+      return this.post.comments.filter;
+    },
+    sortedComments() {
+      return this.post.comments
+        ? this.post.comments.slice().sort((a, b) => {
+            if (a.likes && b.likes) {
+              if (b.likes.length !== a.likes.length) {
+                return b.likes.length - a.likes.length;
+              } else {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateB - dateA;
+              }
+            } else if (a.likes && !b.likes) {
+              return -1;
+            } else if (!a.likes && b.likes) {
+              return 1;
+            } else {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
+              return dateB - dateA;
+            }
+          })
+        : [];
+    },
   },
   data() {
     return {
       isLiked: this.post.likes.some(
         (like) => like.user.id === this.authUser.id
       ),
+
       likesAmount: this.post.likes.length,
+      commentsAmount: this.post.comments.length,
     };
   },
   methods: {
@@ -114,11 +145,52 @@ export default {
           : this.likesAmount - 1;
       }
     },
+    async sendComment() {
+      if (this.$refs.commentInput.value.trim() === '') {
+        return;
+      }
+
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString();
+
+      const response = await sendComment(this.post.id, {
+        text: this.$refs.commentInput.value.trim(),
+        author: this.authUser,
+      });
+
+      if (response.ok) {
+        const newComment = {
+          text: this.$refs.commentInput.value.trim(),
+          author: this.authUser,
+          date: formattedDate,
+        };
+        this.post.comments.push(newComment);
+
+        this.commentsAmount++;
+
+        this.$refs.commentInput.value = '';
+      }
+    },
+    async deleteComment(commentId) {
+      const response = await deleteComment(commentId);
+
+      if (response.ok) {
+        this.post.comments = this.post.comments.filter(
+          (comment) => comment.id !== commentId
+        );
+        this.commentsAmount--;
+
+        this.$emit('update-post');
+      }
+    },
     goToAuthorPage() {
       this.$router.push({
         name: 'profile',
         params: { id: this.post.author.id },
       });
+    },
+    focusCommentInput() {
+      this.$refs.commentInput.focus();
     },
   },
 };

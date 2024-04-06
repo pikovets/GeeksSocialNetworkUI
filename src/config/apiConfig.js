@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   UPDATE_USER: '/profiles/me',
   UPLOAD_POST: '/profiles/me/wall',
   GET_POSTS_BY_ID: (userId) => `/profiles/${userId}/wall`,
+  GET_POST: (postId) => `/posts/${postId}`,
   GET_USERS_BY_NAME: (userName) => `/users/searchByName?name=${userName}`,
   DELETE_POST: (postId) => `/posts/${postId}`,
   TOGGLE_LIKE_POST: (postId) => `/posts/${postId}/toggleLike`,
@@ -22,4 +23,7 @@ export const API_ENDPOINTS = {
   GET_FRIENDS: (userId) => `/users/${userId}/getFriends`,
   GET_ACCEPT_FRIEND_REQUESTS: `/users/me/getAcceptFriendRequests`,
   GET_FEED: `/posts/feed`,
+  TOGGLE_LIKE_COMMENT: (commentId) => `/comments/${commentId}/toggleLike`,
+  SEND_COMMNENT: (postId) => `/posts/${postId}/addComment`,
+  DELETE_COMMENT: (commentId) => `/comments/${commentId}`,
 };

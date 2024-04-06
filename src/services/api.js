@@ -99,6 +99,23 @@ export const getPosts = async (userId = 'me') => {
   return await response.json();
 };
 
+export const getPost = async (postId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_POST(postId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
 export const updateUser = async (user, profile) => {
   const response = await fetch(createApiUrl(API_ENDPOINTS.UPDATE_USER), {
     method: 'PATCH',
@@ -295,4 +312,50 @@ export const getFeed = async () => {
   await handleResponse(response);
 
   return await response.json();
+};
+
+export const toggleCommentLike = async (commentId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.TOGGLE_LIKE_COMMENT(commentId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  return response;
+};
+
+export const sendComment = async (postId, comment) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.SEND_COMMNENT(postId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+      body: JSON.stringify(comment),
+    }
+  );
+
+  return response;
+};
+
+export const deleteComment = async (commentId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.DELETE_COMMENT(commentId)),
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  return response;
 };

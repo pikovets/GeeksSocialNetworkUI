@@ -15,9 +15,14 @@
 
         <div class="sections-grid">
           <div class="post-feed">
-            <AddPost v-show="user.id === authUser.id" :authUser="user" :posts="posts"/>
+            <AddPost
+              v-show="user.id === authUser.id"
+              :authUser="user"
+              :posts="posts"
+            />
             <Posts
               @delete-post="deletePost"
+              @update-post="updatePost"
               :posts="posts"
               :authUser="authUser"
             />
@@ -45,7 +50,14 @@ import Friends from '../components/Friends.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 import MoreInfo from '../components/MoreInfo.vue';
 
-import { getUser, getProfile, getPosts, deletePost, getFriends } from '../services/api';
+import {
+  getUser,
+  getProfile,
+  getPosts,
+  getPost,
+  deletePost,
+  getFriends,
+} from '../services/api';
 
 export default {
   components: {

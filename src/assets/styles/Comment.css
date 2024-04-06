@@ -1,0 +1,86 @@
+.comment {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  margin-bottom: 10px;
+}
+
+.comment-author-image-container {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  margin-right: 2%;
+}
+
+.comment-author-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.comment-content {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.comment-author-name {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.comment-text {
+  font-size: 13px;
+  color: rgb(219, 219, 219);
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+}
+
+.published-date {
+  color: #818181;
+  font-size: 12px;
+  justify-content: start;
+}
+
+.interaction-section {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.reply-btn {
+  font-size: 12.5px;
+  margin-left: 10px;
+  color: #54a148;
+  cursor: pointer;
+}
+.reply-btn:hover {
+  text-decoration: underline;
+}
+
+.comment-likes-amount {
+  color: #818181;
+  justify-items: end;
+  margin-left: 5px;
+  font-size: 13.5px;
+}
+
+.like-btn {
+  width: 17.5px;
+  height: 17.5px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.delete-btn {
+  font-size: 12.5px;
+  margin-left: 10px;
+  color: #ca3131;
+  cursor: pointer;
+}
+.delete-btn:hover {
+  text-decoration: underline;
+}

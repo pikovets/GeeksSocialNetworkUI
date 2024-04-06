@@ -1,0 +1,13 @@
+.panel {
+  margin-bottom: 20px;
+}
+
+.show-more-comments {
+  color: #63be55;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+}
+.show-more-comments:hover {
+  text-decoration: underline;
+}

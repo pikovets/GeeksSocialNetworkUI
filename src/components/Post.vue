@@ -42,9 +42,9 @@
     <div class="my-comment">
       <div class="comment-author-image-container">
         <img
-          src="../assets/img/avatars/berserk.jpg"
+          :src="getAvatar"
           class="comment-author-image"
-        />
+        />  
       </div>
       <div class="my-comment-content">
         <input

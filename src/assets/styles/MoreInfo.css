@@ -39,11 +39,11 @@ div p {
 }
 
 .more-info-content {
-  padding: 15px 25px;
+  padding: 0px 25px;
 }
 
 .info-section {
-  padding: 10px 0px;
+  padding: 20px 0px;
   display: flex;
 }
 

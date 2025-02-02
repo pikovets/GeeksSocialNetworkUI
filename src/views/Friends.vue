@@ -3,9 +3,18 @@
     <Header :authUser="authUser" />
 
     <div class="responsive-container">
-      <MainSidebar />
+      <MainSidebar class="main-sidebar" />
 
       <div class="main-content">
+        <Users
+          v-if="acceptFriends.length !== 0"
+          :users="acceptFriends"
+          :authUser="authUser"
+          :authUserProfile="authUserProfile"
+          title="Friend requests:"
+          class="accept-friends-panel"
+        />
+
         <Users
           :users="friends"
           :authUser="authUser"
@@ -21,7 +30,12 @@ import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 import Users from '../components/Users.vue';
 
-import { getUser, getProfile, getUsersByName } from '../services/api.js';
+import {
+  getUser,
+  getProfile,
+  getFriends,
+  getAcceptFriendRequests,
+} from '../services/api.js';
 
 export default {
   name: 'Friends',
@@ -32,38 +46,8 @@ export default {
   },
   data() {
     return {
-      friends: [
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f21a04',
-          firstName: 'Griffith',
-          lastName: '',
-          photoLink: '/src/assets/img/avatars/griffith.png',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f21a04',
-          firstName: 'Casca',
-          lastName: '',
-          photoLink: '/src/assets/img/avatars/casca.jpg',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f22a04',
-          firstName: 'Judeau',
-          lastName: '',
-          photoLink: '/src/assets/img/avatars/judeau.jpg',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f23a04',
-          firstName: 'Pippin',
-          lastName: '',
-          photoLink: '/src/assets/img/avatars/pippin.jpg',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f24a04',
-          firstName: 'Farnese',
-          lastName: '',
-          photoLink: '/src/assets/img/avatars/farnese.jpg',
-        },
-      ],
+      acceptFriends: [],
+      friends: [],
       authUser: {},
       authUserProfile: {},
     };
@@ -74,27 +58,24 @@ export default {
     }
     await this.fetchUserData();
   },
-  methods: {
-    async fetchUserData() {
-      const userData = await getUser();
-      this.authUser = userData;
-
-      const profileData = await getProfile();
-      this.authUserProfile = profileData;
-
-      this.fetchSearchedUsersData();
-    },
-
-    async fetchFriends() {
-      const searchedUsersData = await getUsersByName(
-        this.$route.query.searchName
-      );
-      this.searchedUsers = searchedUsersData.users;
-    },
-  },
   watch: {
     '$route.query'() {
-      this.fetchSearchedUsersData();
+      this.$router.go();
+    },
+  },
+  methods: {
+    async fetchUserData() {
+      this.authUser = await getUser();
+
+      this.authUserProfile = await getProfile(this.$route.params.id);
+
+      const friendsData = await getFriends(this.$route.params.id);
+      this.friends = friendsData.users;
+
+      const acceptFriendsData = await getAcceptFriendRequests(
+        this.$route.params.id
+      );
+      this.acceptFriends = acceptFriendsData.users;
     },
   },
 };

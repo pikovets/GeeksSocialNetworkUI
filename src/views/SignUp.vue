@@ -72,10 +72,9 @@ import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 import SuccessMessage from '../components/SuccessMessage.vue';
 
-import { validationRules } from '@/config/validationRules';
-import { errorMessages } from '@/config/errorMessages';
+import { validationRules } from '../config/validationRules';
+import { errorMessages } from '../config/errorMessages';
 import { signup } from '../services/api';
-
 
 export default {
   components: {
@@ -108,9 +107,9 @@ export default {
     };
   },
   mounted() {
-    // if (localStorage.getItem('GeeksJwtToken')) {
-    //   this.$router.push('/');
-    // }
+    if (localStorage.getItem('GeeksJwtToken')) {
+      this.$router.push('/');
+    }
   },
   computed: {
     isFormValid() {

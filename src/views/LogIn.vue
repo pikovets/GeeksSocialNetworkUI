@@ -5,7 +5,7 @@
     <div class="responsive-container">
       <div class="log-in-form">
         <div class="logo-container">
-          <img class="logo" src="../assets/img/logo.png" />
+          <img class="logo" src="@/assets/img/logo.png" />
         </div>
 
         <div class="log-in-section">
@@ -57,8 +57,8 @@ import FormField from '../components/fields/FormField.vue';
 import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 
-import { validationRules } from '@/config/validationRules';
-import { errorMessages } from '@/config/errorMessages';
+import { validationRules } from '../config/validationRules';
+import { errorMessages } from '../config/errorMessages';
 import { login } from '../services/api';
 
 export default {

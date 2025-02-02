@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_ENDPOINTS } from '@/config/apiConfig';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/apiConfig';
 
 const createApiUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;
 
@@ -54,6 +54,7 @@ export const getUser = async (userId = 'me') => {
     {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
       },
     }
@@ -70,6 +71,7 @@ export const getProfile = async (userId = 'me') => {
     {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
       },
     }
@@ -174,4 +176,123 @@ export const toggleLike = async (postId) => {
   );
 
   return response;
+};
+
+export const sendFriendRequest = async (userId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.SEND_FRIEND_REQUEST(userId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+      body: JSON.stringify(userId),
+    }
+  );
+
+  return response;
+};
+
+export const acceptFriendRequest = async (userId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.ACCEPT_FRIEND_REQUEST(userId)),
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+      body: JSON.stringify(userId),
+    }
+  );
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const removeFriendRequest = async (userId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.REMOVE_FRIEND_REQUEST(userId)),
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+      body: JSON.stringify(userId),
+    }
+  );
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const getFriendRequest = async (userId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_FRIEND_REQUEST(userId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return await response.json();
+};
+
+export const getFriends = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_FRIENDS(userId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const getAcceptFriendRequests = async () => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_ACCEPT_FRIEND_REQUESTS),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const getFeed = async () => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.GET_FEED), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+  });
+
+  await handleResponse(response);
+
+  return await response.json();
 };

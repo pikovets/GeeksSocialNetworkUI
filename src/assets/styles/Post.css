@@ -47,6 +47,11 @@
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 3.5px;
+  cursor: pointer;
+
+}
+.author-name:hover {
+  text-decoration: underline;
 }
 
 .interaction-buttons {

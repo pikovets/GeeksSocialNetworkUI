@@ -19,7 +19,4 @@ COPY . .
 RUN npm run build
 
 EXPOSE 8080
-
-VOLUME ["/app/data"]
-
 CMD [ "http-server", "dist" ]

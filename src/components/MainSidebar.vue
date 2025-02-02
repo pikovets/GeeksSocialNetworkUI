@@ -6,6 +6,8 @@
 
 <script>
 import Sidebar from './Sidebar.vue';
+import ProfileIcon from '../assets/icons/profile.svg';
+import FriendsIcon from '../assets/icons/friends.svg';
 
 export default {
   name: 'MainSidebar',
@@ -17,12 +19,12 @@ export default {
       pages: [
         {
           name: 'Profile',
-          icon: '/src/assets/icons/profile.svg',
+          icon: ProfileIcon,
           link: { name: 'profile', params: { id: 'me' } },
         },
         {
           name: 'Friends',
-          icon: '/src/assets/icons/friends.svg',
+          icon: FriendsIcon,
           link: { name: 'friends', params: { id: 'me' } },
         },
       ],
@@ -30,3 +32,5 @@ export default {
   },
 };
 </script>
+
+<style scoped src="../assets/styles/MainSidebar.css"></style>

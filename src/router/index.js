@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/signup',
@@ -34,10 +34,11 @@ const router = createRouter({
       component: () => import('../views/Search.vue'),
     },
     {
-      path: '/friends',
+      path: '/profile/:id/friends',
       name: 'friends',
       component: () => import('../views/Friends.vue'),
     },
+    { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
 });
 

@@ -1,5 +1,6 @@
 <template>
   <div class="users">
+    <p v-if="title" class="users-title">{{ title }}</p>
     <div :key="user.id" v-for="user in users" class="user">
       <User
         :user="user"
@@ -23,6 +24,7 @@ export default {
     authUser: Object,
     authUserProfile: Object,
     users: Array,
+    title: String,
   },
   components: {
     User,
@@ -30,4 +32,4 @@ export default {
 };
 </script>
 
-<style scoped src="/src/assets/styles/Users.css"></style>
+<style scoped src="../assets/styles/Users.css"></style>

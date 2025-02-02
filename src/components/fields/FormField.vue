@@ -12,16 +12,22 @@
       />
     </div>
     <p
+      id="backend-error-msg"
       v-show="backendErrorMsg !== ''"
       v-html="backendErrorMsg"
       class="error-msg"
     ></p>
     <p
+      id="validation-error-msg"
       v-show="!isEmpty && !isValid && wasSelected"
       v-html="validationMsg"
       class="error-msg"
     ></p>
-    <p v-show="isEmpty && wasSelected && required" class="error-msg">
+    <p
+      id="empty-field-error-msg"
+      v-show="isEmpty && wasSelected && required"
+      class="error-msg"
+    >
       {{ $t('emptyFieldMsg') }}
     </p>
   </div>

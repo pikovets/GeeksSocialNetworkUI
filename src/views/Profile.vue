@@ -8,13 +8,14 @@
       <div class="main-content">
         <UserProfile
           @onMoreInfoClick="showAdditionalInfo = true"
+          :authUser="authUser"
           :user="user"
           :profile="profile"
         />
 
         <div class="sections-grid">
           <div class="post-feed">
-            <AddPost :authUser="user" />
+            <AddPost v-show="user.id === authUser.id" :authUser="user" :posts="posts"/>
             <Posts
               @delete-post="deletePost"
               :posts="posts"
@@ -22,7 +23,7 @@
             />
           </div>
 
-          <Friends :friends="friends" />
+          <Friends :user="user" :friends="friends" />
         </div>
       </div>
     </div>
@@ -44,7 +45,7 @@ import Friends from '../components/Friends.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 import MoreInfo from '../components/MoreInfo.vue';
 
-import { getUser, getProfile, getPosts, deletePost } from '../services/api';
+import { getUser, getProfile, getPosts, deletePost, getFriends } from '../services/api';
 
 export default {
   components: {
@@ -62,33 +63,7 @@ export default {
       authUser: {},
       user: {},
       profile: {},
-      friends: [
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f21a04',
-          name: 'Griffith',
-          photo: '/src/assets/img/avatars/griffith.png',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f21a04',
-          name: 'Casca',
-          photo: '/src/assets/img/avatars/casca.jpg',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f22a04',
-          name: 'Judeau',
-          photo: '/src/assets/img/avatars/judeau.jpg',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f23a04',
-          name: 'Pippin',
-          photo: '/src/assets/img/avatars/pippin.jpg',
-        },
-        {
-          id: '9e305b70-b8a6-4cc0-9411-8c6915f24a04',
-          name: 'Farnese',
-          photo: '/src/assets/img/avatars/farnese.jpg',
-        },
-      ],
+      friends: [],
       posts: [],
     };
   },
@@ -98,6 +73,11 @@ export default {
     }
 
     await this.fetchUserData();
+  },
+  watch: {
+    '$route.query'() {
+      this.$router.go();
+    },
   },
   methods: {
     async fetchUserData() {
@@ -112,6 +92,9 @@ export default {
 
       const postsData = await getPosts(this.$route.params.id);
       this.posts = postsData.posts;
+
+      const friendsData = await getFriends(this.$route.params.id);
+      this.friends = friendsData.users;
     },
     async deletePost(postId) {
       const response = await deletePost(postId);

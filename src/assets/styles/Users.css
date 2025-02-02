@@ -13,6 +13,10 @@
   margin-bottom: 0;
 }
 
+.users-title {
+  margin-bottom: 10px;
+}
+
 .user {
   margin-bottom: 25px;
   display: grid;

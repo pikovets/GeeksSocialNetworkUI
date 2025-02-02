@@ -35,10 +35,36 @@
           placeholder="Photo URL: "
           class="photo-url-input"
         />
-        <p
-          v-if="!isPhotoUrlValid && !isPhotoUrlEmpty"
-          class="photo-invalid-error"
-        >
+      </div>
+    </div>
+    <div
+      v-if="(!isPhotoUrlValid && !isPhotoUrlEmpty) || !isPostTextValid"
+      class="validation-container"
+    >
+      <div v-if="!isPostTextValid" class="post-text-validation-container">
+        <div class="error-icon-background">
+          <img
+            src="../assets/icons/warning.svg"
+            class="warning-icon filter-green"
+          />
+        </div>
+        <p>
+          <span style="color: #54a148">Warning:</span>
+          {{ $t('postTextValidationMsg') }}
+        </p>
+      </div>
+      <div
+        v-if="!isPhotoUrlValid && !isPhotoUrlEmpty"
+        class="post-image-url-validation-container"
+      >
+        <div class="error-icon-background">
+          <img
+            src="../assets/icons/warning.svg"
+            class="warning-icon filter-green"
+          />
+        </div>
+        <p>
+          <span style="color: #54a148">Error:</span>
           {{ $t('photoLinkValidationMsg') }}
         </p>
       </div>
@@ -47,9 +73,9 @@
 </template>
 
 <script>
+import defaultAvatar from '../assets/img/avatars/default-avatar.jpg';
 import { validationRules } from '../config/validationRules';
 import { uploadPost } from '../services/api';
-import defaultAvatar from '../assets/img/avatars/default-avatar.jpg';
 
 export default {
   name: 'AddPost',
@@ -68,14 +94,14 @@ export default {
     getAvatar() {
       return this.authUser.photoLink ? this.authUser.photoLink : defaultAvatar;
     },
-    isPostTextEmpty() {
-      return this.postText === '';
+    isPostTextValid() {
+      return this.postText !== '' && this.postText.length <= 2200;
     },
     isPhotoUrlEmpty() {
       return this.photoLink === '';
     },
     isPostValid() {
-      return !this.isPostTextEmpty || this.isPhotoUrlValid;
+      return this.isPostTextValid && (this.isPhotoUrlValid || this.isPhotoUrlEmpty);
     },
     isPhotoUrlValid() {
       return (

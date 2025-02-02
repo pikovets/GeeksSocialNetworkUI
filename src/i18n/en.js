@@ -39,6 +39,7 @@ export default {
   addressLabel: 'Address',
   birthdayValidationMsg:
     'Enter your birth date in the following format: MM/DD/YYYY',
+  postTextValidationMsg: 'The post text should contain between 1 and 2200 characters',
   photoLinkLabel: 'Photo link (URL)',
   photoLinkValidationMsg:
     'Enter a valid URL (Example: https://example.com/image.jpg)',

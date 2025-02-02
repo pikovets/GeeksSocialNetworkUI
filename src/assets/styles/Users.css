@@ -20,7 +20,7 @@
 .user {
   margin-bottom: 25px;
   display: grid;
-  grid-template-columns: 75px 1fr 135px;
+  grid-template-columns: 75px 1fr 1fr;
 }
 
 .nothing-found {

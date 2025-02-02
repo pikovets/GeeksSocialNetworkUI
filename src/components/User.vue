@@ -28,6 +28,15 @@ import {
 
 import DefaultAvatar from '../assets/img/avatars/default-avatar.jpg';
 
+import {
+  getFriendRequest,
+  sendFriendRequest,
+  acceptFriendRequest,
+  removeFriendRequest,
+} from '../services/api';
+
+import DefaultAvatar from '../assets/img/avatars/default-avatar.jpg';
+
 export default {
   props: {
     authUser: Object,
@@ -39,6 +48,30 @@ export default {
       return this.user.firstName + ' ' + this.user.lastName;
     },
     getAvatar() {
+      return this.user.photoLink ? this.user.photoLink : DefaultAvatar;
+    },
+    getFriendButtonState() {
+      if (this.userRelationship === null) {
+        return 'Add Friend';
+      }
+
+      switch (this.userRelationship.type) {
+        case 'ACCEPTOR_PENDING':
+          return 'Pending...';
+        case 'AUTH_USER_PENDING':
+          return 'Accept';
+        case 'FRIENDS':
+          return 'Remove Friend';
+      }
+    },
+  },
+  data() {
+    return {
+      userRelationship: {},
+    };
+  },
+  async mounted() {
+    this.userRelationship = await this.getFriendRequest(this.user.id);
       return this.user.photoLink ? this.user.photoLink : DefaultAvatar;
     },
     getFriendButtonState() {

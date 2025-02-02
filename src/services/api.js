@@ -1,4 +1,5 @@
 import { API_BASE_URL, API_ENDPOINTS } from '../config/apiConfig';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/apiConfig';
 
 const createApiUrl = (endpoint) => `${API_BASE_URL}${endpoint}`;
 
@@ -55,6 +56,7 @@ export const getUser = async (userId = 'me') => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
       },
     }
@@ -72,6 +74,7 @@ export const getProfile = async (userId = 'me') => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
       },
     }
@@ -85,6 +88,23 @@ export const getProfile = async (userId = 'me') => {
 export const getPosts = async (userId = 'me') => {
   const response = await fetch(
     createApiUrl(API_ENDPOINTS.GET_POSTS_BY_ID(userId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const getPost = async (postId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_POST(postId)),
     {
       method: 'GET',
       headers: {

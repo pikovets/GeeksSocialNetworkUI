@@ -3,13 +3,16 @@
     <div class="header">
       <div class="profile-image-container">
         <img @click="goToAuthorPage" class="profile-image" :src="getAvatar" />
+        <img @click="goToAuthorPage" class="profile-image" :src="getAvatar" />
       </div>
       <div class="metadata-container">
+        <p @click="goToAuthorPage" class="author-name">{{ fullName }}</p>
         <p @click="goToAuthorPage" class="author-name">{{ fullName }}</p>
         <p class="published-date">{{ getPostDate }}</p>
       </div>
       <div v-show="post.author.id === authUser.id" class="interaction-buttons">
         <div @click="$emit('delete-post', this.post.id)" class="delete-btn">
+          <i class="fa-solid fa-trash" style="margin-right: 0"></i>
           <i class="fa-solid fa-trash" style="margin-right: 0"></i>
         </div>
       </div>
@@ -19,30 +22,26 @@
       <img v-show="post.photoLink" class="post-media" :src="post.photoLink" />
     </div>
     <div class="post-footer">
-      <div @click="toggleLike" :class="[{ liked: isLiked }, 'like-btn']">
+      <div @click="toggleLike" :class="[{ liked: isLiked }, 'post-btn']">
         <img :src="getLikeImage" class="like-icon" />
         <p class="likes-amount">
           {{ likesAmount }}
         </p>
       </div>
-    </div>
-    <!-- <hr class="post-footer-separator" />
-    <div class="comment">
-      <div class="comment-author-image-container">
-        <img
-          src="../assets/img/avatars/berserk.jpg"
-          class="comment-author-image"
-        />
-      </div>
-      <div class="comment-content">
-        <p class="comment-author-name">Guts</p>
-        <p class="comment-text">
-          I don't know, but I'm sure that I will find out
+      <div @click="focusCommentInput" class="post-btn">
+        <img src="../assets/icons/comment.svg" class="comment-icon" />
+        <p class="comments-amount">
+          {{ commentsAmount }}
         </p>
-        <p class="published-date">21 Nov at 3:05 pm</p>
       </div>
     </div>
-    <p class="show-more-comments">Show more comments</p>
+    <hr class="post-footer-separator" />
+    <Comments
+      v-if="post.comments.length > 0"
+      :comments="sortedComments"
+      :authUser="authUser"
+      @delete-comment="deleteComment"
+    />
     <div class="my-comment">
       <div class="comment-author-image-container">
         <img
@@ -52,15 +51,18 @@
       </div>
       <div class="my-comment-content">
         <input
+          ref="commentInput"
           class="comment-input"
           type="text"
           placeholder="Add a comment..."
         />
-        <button class="post-comment-btn">
-          <img src="../assets/icons/send.svg" class="post-comment-icon" />
-        </button>
+        <img
+          @click="sendComment"
+          src="../assets/icons/activeSend.svg"
+          class="send-comment-icon"
+        />
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -75,7 +77,10 @@ export default {
     post: Object,
     authUser: Object,
   },
-  emits: ['delete-post'],
+  components: {
+    Comments,
+  },
+  emits: ['delete-post', 'update-post'],
   computed: {
     fullName() {
       return `${this.post.author.firstName} ${this.post.author.lastName}`;
@@ -83,6 +88,7 @@ export default {
     getAvatar() {
       return this.post.author.photoLink
         ? this.post.author.photoLink
+        : defaultAvatar;
         : defaultAvatar;
     },
     getPostDate() {
@@ -100,7 +106,9 @@ export default {
       isLiked: this.post.likes.some(
         (like) => like.user.id === this.authUser.id
       ),
+
       likesAmount: this.post.likes.length,
+      commentsAmount: this.post.comments.length,
     };
   },
   methods: {
@@ -109,6 +117,9 @@ export default {
 
       if (response.ok) {
         this.isLiked = !this.isLiked;
+        this.likesAmount = this.isLiked
+          ? this.likesAmount + 1
+          : this.likesAmount - 1;
         this.likesAmount = this.isLiked
           ? this.likesAmount + 1
           : this.likesAmount - 1;

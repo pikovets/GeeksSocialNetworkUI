@@ -9,20 +9,27 @@
         <UserProfile
           @onMoreInfoClick="showAdditionalInfo = true"
           :authUser="authUser"
+          :authUser="authUser"
           :user="user"
           :profile="profile"
         />
 
         <div class="sections-grid">
           <div class="post-feed">
-            <AddPost v-show="user.id === authUser.id" :authUser="user" :posts="posts"/>
+            <AddPost
+              v-show="user.id === authUser.id"
+              :authUser="user"
+              :posts="posts"
+            />
             <Posts
               @delete-post="deletePost"
+              @update-post="updatePost"
               :posts="posts"
               :authUser="authUser"
             />
           </div>
 
+          <Friends :user="user" :friends="friends" />
           <Friends :user="user" :friends="friends" />
         </div>
       </div>
@@ -45,7 +52,13 @@ import Friends from '../components/Friends.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 import MoreInfo from '../components/MoreInfo.vue';
 
-import { getUser, getProfile, getPosts, deletePost, getFriends } from '../services/api';
+import {
+  getUser,
+  getProfile,
+  getPosts,
+  deletePost,
+  getFriends,
+} from '../services/api';
 
 export default {
   components: {
@@ -64,6 +77,7 @@ export default {
       user: {},
       profile: {},
       friends: [],
+      friends: [],
       posts: [],
     };
   },
@@ -73,6 +87,11 @@ export default {
     }
 
     await this.fetchUserData();
+  },
+  watch: {
+    '$route.query'() {
+      this.$router.go();
+    },
   },
   watch: {
     '$route.query'() {
@@ -92,6 +111,9 @@ export default {
 
       const postsData = await getPosts(this.$route.params.id);
       this.posts = postsData.posts;
+
+      const friendsData = await getFriends(this.$route.params.id);
+      this.friends = friendsData.users;
 
       const friendsData = await getFriends(this.$route.params.id);
       this.friends = friendsData.users;

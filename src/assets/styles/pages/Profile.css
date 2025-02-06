@@ -44,3 +44,7 @@
 .main-sidebar {
   margin-right: 25px;
 }
+
+.sidebar div {
+  margin-bottom: 15px;
+}

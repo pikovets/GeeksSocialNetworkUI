@@ -46,16 +46,16 @@
 <script>
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
-import PasswordField from '../components/fields/PasswordField.vue';
-import FormField from '../components/fields/FormField.vue';
 import SettingsSidebar from '../components/SettingsSidebar.vue';
-import UserEdit from '../components/settings/UserEdit.vue';
+import FormField from '../components/fields/FormField.vue';
+import PasswordField from '../components/fields/PasswordField.vue';
 import ProfileEdit from '../components/settings/ProfileEdit.vue';
 import SecurityEdit from '../components/settings/SecurityEdit.vue';
+import UserEdit from '../components/settings/UserEdit.vue';
 
-import { validationRules } from '../config/validationRules';
 import { errorMessages } from '../config/errorMessages';
-import { getUser, getProfile, updateUser } from '../services/api';
+import { validationRules } from '../config/validationRules';
+import { getProfile, getUser, updateUser } from '../services/api';
 
 export default {
   components: {
@@ -122,12 +122,15 @@ export default {
   methods: {
     async fetchUserData() {
       this.user = await getUser();
-
       this.profile = await getProfile();
 
-      this.profile.birthday = new Date(
-        this.profile.birthday
-      ).toLocaleDateString();
+      const birthdayDate = new Date(this.profile.birthday);
+
+      const day = String(birthdayDate.getDate()).padStart(2, '0');
+      const month = String(birthdayDate.getMonth() + 1).padStart(2, '0');
+      const year = birthdayDate.getFullYear();
+
+      this.profile.birthday = `${day}.${month}.${year}`;
     },
     async saveChanges() {
       try {

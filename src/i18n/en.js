@@ -34,11 +34,11 @@ export default {
   lastNameLabel: 'Last name',
   oldPasswordLabel: 'Old password',
   newPasswordLabel: 'New password',
-  birthdayLabel: 'Birth date (Example: MM/DD/YYYY)',
+  birthdayLabel: 'Birth date (Example: 25.01.2000)',
   bioLabel: 'Bio',
   addressLabel: 'Address',
   birthdayValidationMsg:
-    'Enter your birth date in the following format: MM/DD/YYYY',
+    'Enter your birth date in the following format: dd/MM/yyyy',
   postTextValidationMsg: 'The post text should contain between 1 and 2200 characters',
   photoLinkLabel: 'Photo link (URL)',
   photoLinkValidationMsg:
@@ -51,4 +51,5 @@ export default {
   cancelRequest: 'Cancel',
   reply: 'Reply',
   delete: 'Delete',
+  noCommunitiesFound: 'No Communities Found',
 };

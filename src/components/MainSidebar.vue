@@ -8,6 +8,7 @@
 import Sidebar from './Sidebar.vue';
 import ProfileIcon from '../assets/icons/profile.svg';
 import FriendsIcon from '../assets/icons/friends.svg';
+import CommunitiesIcon from '../assets/icons/communities.svg';
 
 export default {
   name: 'MainSidebar',
@@ -26,6 +27,11 @@ export default {
           name: 'Friends',
           icon: FriendsIcon,
           link: { name: 'friends', params: { id: 'me' } },
+        },
+        {
+          name: 'Communities',
+          icon: CommunitiesIcon,
+          link: { name: 'communities', params: { id: 'me' } },
         },
       ],
     };

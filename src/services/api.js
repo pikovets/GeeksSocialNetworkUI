@@ -100,16 +100,13 @@ export const getPosts = async (userId = 'me') => {
 };
 
 export const getPost = async (postId) => {
-  const response = await fetch(
-    createApiUrl(API_ENDPOINTS.GET_POST(postId)),
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
-      },
-    }
-  );
+  const response = await fetch(createApiUrl(API_ENDPOINTS.GET_POST(postId)), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+  });
 
   await handleResponse(response);
 
@@ -358,4 +355,68 @@ export const deleteComment = async (commentId) => {
   );
 
   return response;
+};
+
+export const getCommunities = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_COMMUNITIES(userId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const joinCommunity = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.JOIN_COMMUNITY(communityId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  return response;
+};
+
+export const leaveCommunity = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.LEAVE_COMMUNITY(communityId)),
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  return response;
+};
+
+export const getUserCommunityState = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_USER_COMMUNITY(communityId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
 };

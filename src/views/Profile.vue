@@ -28,7 +28,22 @@
             />
           </div>
 
-          <Friends :user="user" :friends="friends" />
+          <div class="sidebar">
+            <ProfileSidebarSection
+              title="Friends"
+              routeName="friends"
+              componentName="Friends"
+              itemPropName="friend"
+              :items="friends"
+            />
+            <ProfileSidebarSection
+              title="Communities"
+              routeName="communities"
+              componentName="Communities"
+              itemPropName="community"
+              :items="communities"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -42,21 +57,21 @@
 </template>
 
 <script>
-import Header from '../components/Header.vue';
-import UserProfile from '../components/UserProfile.vue';
 import AddPost from '../components/AddPost.vue';
-import Posts from '../components/Posts.vue';
-import Friends from '../components/Friends.vue';
+import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 import MoreInfo from '../components/MoreInfo.vue';
+import Posts from '../components/Posts.vue';
+import ProfileSidebarSection from '../components/ProfileSidebarSection.vue';
+import UserProfile from '../components/UserProfile.vue';
 
 import {
-  getUser,
-  getProfile,
-  getPosts,
-  getPost,
   deletePost,
+  getCommunities,
   getFriends,
+  getPosts,
+  getProfile,
+  getUser,
 } from '../services/api';
 
 export default {
@@ -65,9 +80,9 @@ export default {
     UserProfile,
     AddPost,
     Posts,
-    Friends,
     MainSidebar,
     MoreInfo,
+    ProfileSidebarSection,
   },
   data() {
     return {
@@ -77,6 +92,7 @@ export default {
       profile: {},
       friends: [],
       posts: [],
+      communities: [],
     };
   },
   async mounted() {
@@ -107,6 +123,9 @@ export default {
 
       const friendsData = await getFriends(this.$route.params.id);
       this.friends = friendsData.users;
+
+      const communitiesData = await getCommunities(this.$route.params.id);
+      this.communties = communitiesData.communities;
     },
     async deletePost(postId) {
       const response = await deletePost(postId);

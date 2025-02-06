@@ -1,0 +1,30 @@
+.panel {
+  background: rgba(36, 36, 36, 0.8);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid #8383833f;
+  border-radius: 10px;
+  height: 225px;
+  padding: 20px;
+}
+
+.title {
+  font-weight: 500;
+  cursor: pointer;
+}
+.title:hover {
+  color: rgb(207, 207, 207);
+  text-decoration: underline;
+}
+
+.amount {
+  font-weight: 300;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  margin-top: 10px;
+}

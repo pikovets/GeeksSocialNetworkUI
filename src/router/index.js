@@ -38,6 +38,11 @@ const router = createRouter({
       name: 'friends',
       component: () => import('../views/Friends.vue'),
     },
+    {
+      path: '/profile/:id/communities',
+      name: 'communities',
+      component: () => import('../views/Communities.vue'),
+    },
   ],
 });
 

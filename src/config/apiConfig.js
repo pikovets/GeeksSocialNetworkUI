@@ -29,5 +29,7 @@ export const API_ENDPOINTS = {
   GET_COMMUNITIES: (userId) => `/users/${userId}/getCommunities`,
   JOIN_COMMUNITY: (communityId) => `/communities/${communityId}/join`,
   LEAVE_COMMUNITY: (communityId) => `/communities/${communityId}/leave`,
-  GET_USER_COMMUNITY: (communityId) => `/communities/${communityId}/getCurrentUserRole`
+  GET_USER_COMMUNITY: (communityId) =>
+    `/communities/${communityId}/getCurrentUserRole`,
+  CREATE_COMMUNITY: '/communities',
 };

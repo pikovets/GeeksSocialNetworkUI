@@ -401,10 +401,12 @@ export const leaveCommunity = async (communityId) => {
     }
   );
 
+  await handleResponse(response);
+
   return response;
 };
 
-export const getUserCommunityState = async (communityId) => {
+export const fetchUserCommunityState = async (communityId) => {
   const response = await fetch(
     createApiUrl(API_ENDPOINTS.GET_USER_COMMUNITY(communityId)),
     {
@@ -418,5 +420,21 @@ export const getUserCommunityState = async (communityId) => {
 
   await handleResponse(response);
 
+
   return await response.json();
+};
+
+export const createCommunity = async (community) => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.CREATE_COMMUNITY), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+    body: JSON.stringify(community),
+  });
+
+  await handleResponse(response);
+
+  return response;
 };

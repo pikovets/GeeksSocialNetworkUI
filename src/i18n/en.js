@@ -39,7 +39,8 @@ export default {
   addressLabel: 'Address',
   birthdayValidationMsg:
     'Enter your birth date in the following format: dd/MM/yyyy',
-  postTextValidationMsg: 'The post text should contain between 1 and 2200 characters',
+  postTextValidationMsg:
+    'The post text should contain between 1 and 2200 characters',
   photoLinkLabel: 'Photo link (URL)',
   photoLinkValidationMsg:
     'Enter a valid URL (Example: https://example.com/image.jpg)',
@@ -52,4 +53,17 @@ export default {
   reply: 'Reply',
   delete: 'Delete',
   noCommunitiesFound: 'No Communities Found',
+  createCommunityLabel: 'Create Community',
+  createCommunitySubtitle:
+    'Use words that reflect the essence of the community. You can rename it later.',
+  communityNameSection: 'Community name',
+  enterName: 'Enter a name',
+  communityNameValidationMsg:
+    'The community name must be 48 characters or less',
+  communityPrivacySection: 'Community privacy',
+  continue: 'Continue',
+  selectSubjectLabel: 'Select subject',
+  selectSubjectSubtitle:
+    "Your choice won't impact the community's opportunities. You can update the community topic anytime.",
+  communityCategorySection: '',
 };

@@ -23,10 +23,12 @@
 
 <script>
 import {
-  getUserCommunityState,
+  fetchUserCommunityState,
   joinCommunity,
   leaveCommunity,
 } from '../services/api';
+
+import { errorMessages } from '../config/errorMessages';
 
 import DefaultCommunityAvatar from '../assets/img/avatars/default-community-avatar.jpg';
 
@@ -34,7 +36,7 @@ export default {
   props: {
     authUser: Object,
     authUserProfile: Object,
-    user: Object,
+    community: Object,
   },
   computed: {
     getAvatar() {
@@ -52,11 +54,13 @@ export default {
   },
   data() {
     return {
+      isOnline: window.navigator.onLine,
+      isLoading: false,
       userCommunityState: {},
     };
   },
   async mounted() {
-    this.userCommunityState = await getUserCommunityState(this.community.id);
+    this.userCommunityState = await fetchUserCommunityState(this.community.id);
   },
   methods: {
     async switchSubscriptionState() {
@@ -66,9 +70,39 @@ export default {
         await leaveCommunity(this.community.id);
       }
 
-      this.userCommunityState = await this.getUserCommunityState(
-        this.community.id
-      );
+      try {
+        if (!this.isOnline) {
+          alert(this.$i18n.t('offlineErrorMsg'));
+          return;
+        }
+
+        this.interval = setTimeout(() => {
+          this.isLoading = true;
+        }, 500);
+
+        this.userCommunityState = await fetchUserCommunityState(
+          this.community.id
+        );
+
+        this.isLoading = false;
+        clearInterval(this.interval);
+      } catch (error) {
+        this.handleErrors(error);
+      }
+    },
+    handleErrors(error) {
+      this.isLoading = false;
+      clearInterval(this.interval);
+
+      console.log(error.message);
+
+      if (error.message === errorMessages.TIMEOUT) {
+        alert(this.$i18n.t('timeoutErrorMsg'));
+      } else if (error.message === errorMessages.FETCH_FAILED) {
+        alert(this.$i18n.t('serverErrorMsg'));
+      } else if (error.message === 'User not found in community') {
+        this.userCommunityState = null;
+      }
     },
     openCommunityProfile(id) {
       this.$router.push({

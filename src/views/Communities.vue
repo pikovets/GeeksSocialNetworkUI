@@ -6,6 +6,15 @@
       <MainSidebar class="main-sidebar" />
 
       <div class="main-content">
+        <div class="communities-header-buttons">
+          <button
+            class="create-community-btn"
+            @click="showCreateCommunityDialog = true"
+          >
+            {{ $t('createCommunityLabel') }}
+          </button>
+        </div>
+
         <Communities
           :communities="communities"
           :authUser="authUser"
@@ -14,18 +23,22 @@
       </div>
     </div>
   </div>
+
+  <CreateCommunity
+    @onCloseCommunityCreation="showCreateCommunityDialog = false"
+    v-show="showCreateCommunityDialog"
+  >
+  </CreateCommunity>
 </template>
 
 <script>
+import Communities from '../components/Communities.vue';
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
-import Communities from '../components/Communities.vue';
+import CreateCommunity from '../components/CreateCommunity.vue';
 
-import {
-  getUser,
-  getProfile,
-  getCommunities
-} from '../services/api.js';
+import { getCommunities, getProfile, getUser } from '../services/api.js';
+
 
 export default {
   name: 'Friends',
@@ -33,9 +46,11 @@ export default {
     Header,
     MainSidebar,
     Communities,
+    CreateCommunity
   },
   data() {
     return {
+      showCreateCommunityDialog: false,
       communities: [],
       authUser: {},
       authUserProfile: {},
@@ -60,10 +75,9 @@ export default {
 
       const communitiesData = await getCommunities(this.$route.params.id);
       this.communities = communitiesData.communities;
-
     },
   },
 };
 </script>
 
-<style scoped src="../assets/styles/pages/Friends.css"></style>
+<style scoped src="../assets/styles/pages/Communities.css"></style>

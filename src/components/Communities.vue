@@ -29,6 +29,7 @@ export default {
   components: {
     Community,
   },
+  method: {},
 };
 </script>
 

@@ -75,12 +75,14 @@
 <script>
 import defaultAvatar from '../assets/img/avatars/default-avatar.jpg';
 import { validationRules } from '../config/validationRules';
-import { uploadPost } from '../services/api';
+
+import { uploadCommunityPost, uploadUserPost } from '../services/api';
 
 export default {
   name: 'AddPost',
   props: {
     authUser: Object,
+    community: Object,
   },
   data() {
     return {
@@ -101,7 +103,9 @@ export default {
       return this.photoLink === '';
     },
     isPostValid() {
-      return this.isPostTextValid && (this.isPhotoUrlValid || this.isPhotoUrlEmpty);
+      return (
+        this.isPostTextValid && (this.isPhotoUrlValid || this.isPhotoUrlEmpty)
+      );
     },
     isPhotoUrlValid() {
       return (
@@ -113,10 +117,20 @@ export default {
   methods: {
     async sendPost() {
       if (this.isPostValid) {
-        await uploadPost({
-          text: this.postText,
-          photoLink: this.photoLink,
-        });
+        if (this.community !== null) {
+          await uploadCommunityPost(
+            {
+              text: this.postText,
+              photoLink: this.photoLink,
+            },
+            this.community.id
+          );
+        } else {
+          await uploadUserPost({
+            text: this.postText,
+            photoLink: this.photoLink,
+          });
+        }
 
         this.$router.go();
       }

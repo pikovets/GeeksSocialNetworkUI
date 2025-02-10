@@ -1,13 +1,13 @@
 <template>
   <div class="profile-image-container">
     <img
-      @click="openCommunityPage(this.community.id)"
+      @click="openCommunityProfile(this.community.id)"
       class="profile-image"
       :src="getAvatar"
     />
   </div>
   <div class="community-data">
-    <p @click="openCommunityPage(this.community.id)" class="community-name">
+    <p @click="openCommunityProfile(this.community.id)" class="community-name">
       {{ this.community.name }}
     </p>
   </div>
@@ -106,7 +106,7 @@ export default {
     },
     openCommunityProfile(id) {
       this.$router.push({
-        name: 'community',
+        name: 'communityProfile',
         params: { id: id },
       });
     },

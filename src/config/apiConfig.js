@@ -6,7 +6,7 @@ export const API_ENDPOINTS = {
   GET_USER_BY_ID: (userId) => `/users/${userId}`,
   GET_PROFILE_BY_ID: (userId) => `/profiles/${userId}`,
   UPDATE_USER: '/profiles/me',
-  UPLOAD_POST: '/profiles/me/wall',
+  UPLOAD_USER_POST: '/profiles/me/wall',
   GET_POSTS_BY_ID: (userId) => `/profiles/${userId}/wall`,
   GET_POST: (postId) => `/posts/${postId}`,
   GET_USERS_BY_NAME: (userName) => `/users/searchByName?name=${userName}`,
@@ -32,4 +32,7 @@ export const API_ENDPOINTS = {
   GET_USER_COMMUNITY: (communityId) =>
     `/communities/${communityId}/getCurrentUserRole`,
   CREATE_COMMUNITY: '/communities',
+  GET_COMMUNITY_PROFILE: (communityId) =>
+    `/communities/${communityId}/getCommunityProfile`,
+  UPLOAD_COMMUNITY_POST: (communityId) => `/communities/${communityId}/wall`,
 };

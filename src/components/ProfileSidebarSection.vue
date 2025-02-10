@@ -12,6 +12,10 @@
 </template>
 
 <script>
+import ProfileCommunityCell from './profile/ProfileCommunityCell.vue';
+import Follower from './Follower.vue';
+import Friend from './Friend.vue';
+
 export default {
   props: {
     title: String,
@@ -19,6 +23,11 @@ export default {
     routeName: String,
     componentName: String,
     itemPropName: String,
+  },
+  components: {
+    Friend,
+    Follower,
+    ProfileCommunityCell
   },
   methods: {
     goToPage() {

@@ -128,8 +128,8 @@ export const updateUser = async (user, profile) => {
   return response;
 };
 
-export const uploadPost = async (post) => {
-  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLOAD_POST), {
+export const uploadUserPost = async (post) => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLOAD_USER_POST), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -137,6 +137,24 @@ export const uploadPost = async (post) => {
     },
     body: JSON.stringify(post),
   });
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const uploadCommunityPost = async (post, communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.UPLOAD_COMMUNITY_POST(communityId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+      body: JSON.stringify(post),
+    }
+  );
 
   await handleResponse(response);
 
@@ -420,7 +438,6 @@ export const fetchUserCommunityState = async (communityId) => {
 
   await handleResponse(response);
 
-
   return await response.json();
 };
 
@@ -437,4 +454,21 @@ export const createCommunity = async (community) => {
   await handleResponse(response);
 
   return response;
+};
+
+export const getCommunityProfile = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_COMMUNITY_PROFILE(communityId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
 };

@@ -43,6 +43,16 @@ const router = createRouter({
       name: 'communities',
       component: () => import('../views/Communities.vue'),
     },
+    {
+      path: '/community/:id',
+      name: 'communityProfile',
+      component: () => import('../views/CommunityProfile.vue'),
+    },
+    {
+      path: '/followers',
+      name: 'followers',
+      component: () => import('../views/Followers.vue'),
+    },
   ],
 });
 

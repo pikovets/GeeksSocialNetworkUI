@@ -32,14 +32,14 @@
             <ProfileSidebarSection
               title="Friends"
               routeName="friends"
-              componentName="Friends"
+              componentName="Friend"
               itemPropName="friend"
               :items="friends"
             />
             <ProfileSidebarSection
               title="Communities"
               routeName="communities"
-              componentName="Communities"
+              componentName="ProfileCommunityCell"
               itemPropName="community"
               :items="communities"
             />
@@ -125,7 +125,7 @@ export default {
       this.friends = friendsData.users;
 
       const communitiesData = await getCommunities(this.$route.params.id);
-      this.communties = communitiesData.communities;
+      this.communities = communitiesData.communities;
     },
     async deletePost(postId) {
       const response = await deletePost(postId);

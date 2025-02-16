@@ -208,14 +208,14 @@ export default {
 }
 
 .log-in-offer {
-  color: $muted-text;
+  color: $color-text-muted;
   margin-bottom: 40px;
   text-align: center;
   font-size: 14px;
 }
 
 .log-in-offer a {
-  color: $secondary-color;
+  color: $color-secondary;
   font-weight: 800;
   cursor: pointer;
   text-decoration: none;
@@ -226,7 +226,7 @@ export default {
 }
 
 .create-account-btn {
-  @include button-mixin($primary-color);
+  @include button-mixin($color-primary);
 }
 
 .password {

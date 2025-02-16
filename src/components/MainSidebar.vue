@@ -38,9 +38,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.main-sidebar {
-  margin-right: 25px;
-}
-</style>

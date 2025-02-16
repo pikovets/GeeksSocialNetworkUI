@@ -30,10 +30,10 @@ export default {
   border-radius: 5px;
 }
 .module:hover {
-  background-color: #383938;
+  background-color: #2c2c2c;
 }
 .module:active {
-  background-color: #383838;
+  background-color: #353535;
 }
 
 .icon-container {
@@ -51,5 +51,6 @@ export default {
 
 .name {
   font-size: 0.8rem;
+  color: $color-text-default;
 }
 </style>

@@ -1,36 +1,3 @@
-<template>
-  <header>
-    <div class="container">
-      <div @click="goToHomePage" class="logo-section">
-        <img src="../assets/img/logo.png" class="logo" />
-      </div>
-
-      <div class="search-box" v-show="isRegistered">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input
-          v-model="searchName"
-          v-on:keyup.enter="onSearch"
-          class="search-bar"
-          type="text"
-          placeholder="Search"
-        />
-      </div>
-      <div class="extra-buttons-container">
-        <div
-          @click="goToProfilePage"
-          class="profile-image-container"
-          v-show="isRegistered"
-        >
-          <img class="profile-image" :src="getAvatar" />
-        </div>
-        <div @click="logout" class="logout-btn" v-show="isRegistered">
-          <i class="fa fa-sign-out" aria-hidden="true"></i>
-        </div>
-      </div>
-    </div>
-  </header>
-</template>
-
 <script>
 import DefaultAvatar from '../assets/img/avatars/default-avatar.jpg';
 
@@ -40,76 +7,99 @@ export default {
   },
   data() {
     return {
-      isRegistered: localStorage.getItem('GeeksJwtToken'),
-      searchName: '',
+      isAuthenticated: localStorage.getItem('GeeksJwtToken'),
+      searchQuery: '',
     };
   },
   computed: {
-    getAvatar() {
-      return this.authUser && this.authUser.photoLink
-        ? this.authUser.photoLink
-        : DefaultAvatar;
+    userAvatar() {
+      return this.authUser?.photoLink || DefaultAvatar;
     },
   },
   methods: {
-    goToHomePage() {
+    navigateToHome() {
       this.$router.push({ name: 'home' });
     },
-    goToProfilePage() {
+    navigateToProfile() {
       this.$router.push({ name: 'profile', params: { id: 'me' } });
     },
-    logout() {
+    handleLogout() {
       localStorage.removeItem('GeeksJwtToken');
       this.$router.push({ name: 'login' });
     },
-    onSearch() {
-      if (this.searchName === '') return;
-
+    performSearch() {
+      if (!this.searchQuery.trim()) return;
+      
       this.$router.push({
         name: 'search',
-        query: { searchName: this.searchName.replace(/\s/g, '') },
+        query: { searchQuery: this.searchQuery.replace(/\s/g, '') },
       });
     },
   },
 };
 </script>
 
-<style scoped>
-header {
+<template>
+  <header class="header">
+    <div class="header-container">
+      <div @click="navigateToHome" class="logo-wrapper">
+        <img src="../assets/img/logo.png" class="logo" />
+      </div>
+
+      <div class="search-container" v-if="isAuthenticated">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input
+          v-model="searchQuery"
+          @keyup.enter="performSearch"
+          class="search-input"
+          type="text"
+          placeholder="Search"
+        />
+      </div>
+      
+      <div class="user-actions" v-if="isAuthenticated">
+        <div @click="navigateToProfile" class="avatar-wrapper">
+          <img class="avatar" :src="userAvatar" />
+        </div>
+        <div @click="handleLogout" class="logout-button">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+  </header>
+</template>
+
+<style scoped lang="scss">
+.header {
   background-color: #232223;
   height: 49px;
-
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-
   display: flex;
-  flex-direction: row;
-
-  border-bottom: 1px solid #474a4d3f;
+  align-items: center;
+  border-bottom: $border;
 }
 
-.container {
+.header-container {
   display: flex;
-  flex-direction: row;
   align-items: center;
-
-  margin: 0 auto 0 auto;
+  margin: 0 auto;
   max-width: 1000px;
   width: 100%;
 }
 
-.logo-section {
+.logo-wrapper {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
   cursor: pointer;
 }
-.logo-section:active {
+.logo-wrapper:active {
   opacity: 0.7;
 }
 
@@ -119,12 +109,10 @@ header {
   filter: brightness(1.15);
 }
 
-.search-box {
+.search-container {
   width: 210px;
   display: flex;
-  flex-direction: row;
   align-items: center;
-
   border-radius: 7.5px;
   background-color: #424343;
   height: 32px;
@@ -137,50 +125,47 @@ header {
   margin-left: 12px;
 }
 
-.search-bar {
+.search-input {
   width: 100%;
-  background-color: #42434300;
-  border-style: none;
+  background: transparent;
+  border: none;
   font-size: 14px;
-  color: rgb(219, 219, 219);
+  color: $color-text-secondary;
   outline: none;
   padding-right: 10px;
   margin-left: 7.5px;
 }
-.search-bar::placeholder {
+.search-input::placeholder {
   font-size: 14px;
-  color: rgb(136, 136, 136);
+  color: $color-text-muted;
 }
 
-.extra-buttons-container {
+.user-actions {
   flex: 1;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-
   justify-content: flex-end;
+  align-items: center;
 }
 
-.profile-image-container {
+.avatar-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 20px;
   cursor: pointer;
 }
-.profile-image-container:active {
+.avatar-wrapper:active {
   opacity: 0.7;
 }
 
-.profile-image {
+.avatar {
   width: 32px;
   height: 32px;
-  border-radius: 50px;
+  border-radius: 50%;
   object-fit: cover;
-  object-position: center;
 }
 
-.logout-btn {
+.logout-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,19 +173,19 @@ header {
   height: 32px;
   border-radius: 10px;
   cursor: pointer;
-  background-color: #424343;
+  background-color: $color-grey-light;
 }
 
-.logout-btn i {
-  color: #ffffff;
+.logout-button i {
+  color: white;
   font-size: 14px;
 }
 
-.logout-btn:hover {
-  background-color: #d40101ad;
+.logout-button:hover {
+  background-color: #9b0000b2;
 }
 
-.logout-btn:active {
+.logout-button:active {
   opacity: 0.7;
 }
 </style>

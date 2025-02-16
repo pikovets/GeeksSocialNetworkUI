@@ -212,7 +212,7 @@ export default {
 }
 
 .sign-up-offer a {
-  color: $secondary-color;
+  color: $color-secondary;
   font-weight: 800;
   cursor: pointer;
   text-decoration: none;
@@ -231,6 +231,6 @@ export default {
 }
 
 .log-in-btn {
-  @include button-mixin($primary-color);
+  @include button-mixin($color-primary);
 }
 </style>

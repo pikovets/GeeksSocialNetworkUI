@@ -1,10 +1,13 @@
-@use "./variables";
+@use './variables';
 
-@mixin button-mixin($bg-color: variables.$primary-color, $text-color: variables.$text-color) {
-  background-color: $bg-color;
+@mixin button-mixin(
+  $color-background: variables.$color-primary,
+  $color-text: variables.$color-text-primary
+) {
+  background-color: $color-background;
   border: none;
   border-radius: 10px;
-  color: $text-color;
+  color: $color-text;
   font-weight: bold;
   font-size: 16px;
   padding: 4% 0%;
@@ -22,8 +25,12 @@
   }
 }
 
-@mixin form-mixin($bg-color: variables.$dark-bg, $width: 350px, $box-shadow: variables.$box-shadow) {
-  background-color: $bg-color;
+@mixin form-mixin(
+  $color-background: variables.$color-bg-dark,
+  $width: 350px,
+  $box-shadow: variables.$box-shadow
+) {
+  background-color: $color-background;
   width: $width;
   border-radius: 15px;
   overflow: hidden;

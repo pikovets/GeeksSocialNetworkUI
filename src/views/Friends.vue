@@ -28,7 +28,7 @@
 <script>
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
-import Users from '../components/Users.vue';
+import Users from '../components/friends-page/Users.vue';
 
 import {
   getUser,

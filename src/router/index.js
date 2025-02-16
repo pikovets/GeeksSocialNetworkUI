@@ -19,12 +19,12 @@ const router = createRouter({
       component: () => import('../views/Home.vue'),
     },
     {
-      path: '/profile/:id',
-      name: 'profile',
-      component: () => import('../views/Profile.vue'),
+      path: '/user-profile-page/:id',
+      name: 'user-profile',
+      component: () => import('../views/UserProfile.vue'),
     },
     {
-      path: '/profile/me/edit',
+      path: '/user-profile-page/me/edit',
       name: 'edit-profile',
       component: () => import('../views/EditProfile.vue'),
     },
@@ -34,18 +34,18 @@ const router = createRouter({
       component: () => import('../views/Search.vue'),
     },
     {
-      path: '/profile/:id/friends',
+      path: '/user-profile-page/:id/friends',
       name: 'friends',
       component: () => import('../views/Friends.vue'),
     },
     {
-      path: '/profile/:id/communities',
+      path: '/user-profile-page/:id/communities',
       name: 'communities',
       component: () => import('../views/Communities.vue'),
     },
     {
       path: '/community/:id',
-      name: 'communityProfile',
+      name: 'community-profile',
       component: () => import('../views/CommunityProfile.vue'),
     },
     {

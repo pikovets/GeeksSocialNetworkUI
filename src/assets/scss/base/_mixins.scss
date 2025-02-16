@@ -1,0 +1,33 @@
+@use "./variables";
+
+@mixin button-mixin($bg-color: variables.$primary-color, $text-color: variables.$text-color) {
+  background-color: $bg-color;
+  border: none;
+  border-radius: 10px;
+  color: $text-color;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 4% 0%;
+  width: 100%;
+  transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
+
+  &:hover {
+    opacity: 0.8;
+    transform: scale(1.025);
+  }
+
+  &:active {
+    opacity: 1;
+    transform: scale(0.95);
+  }
+}
+
+@mixin form-mixin($bg-color: variables.$dark-bg, $width: 350px, $box-shadow: variables.$box-shadow) {
+  background-color: $bg-color;
+  width: $width;
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 40px;
+  box-shadow: $box-shadow;
+}

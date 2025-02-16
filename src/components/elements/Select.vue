@@ -29,11 +29,6 @@ export default {
 </script>
 
 <style scoped>
-p,
-input {
-  font-family: 'Poppins';
-}
-
 .select {
   padding: 10px 10px 10px 10px;
   background-color: #3f3f3f;

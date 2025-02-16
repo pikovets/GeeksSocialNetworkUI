@@ -1,6 +1,6 @@
 <template>
   <div class="main-sidebar">
-    <Sidebar :modules="pages" />
+    <Sidebar :modules="pages"/>
   </div>
 </template>
 
@@ -21,17 +21,17 @@ export default {
         {
           name: 'Profile',
           icon: ProfileIcon,
-          link: { name: 'profile', params: { id: 'me' } },
+          link: {name: 'user-profile', params: {id: 'me'}},
         },
         {
           name: 'Friends',
           icon: FriendsIcon,
-          link: { name: 'friends', params: { id: 'me' } },
+          link: {name: 'friends', params: {id: 'me'}},
         },
         {
           name: 'Communities',
           icon: CommunitiesIcon,
-          link: { name: 'communities', params: { id: 'me' } },
+          link: {name: 'communities', params: {id: 'me'}},
         },
       ],
     };
@@ -39,4 +39,8 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/MainSidebar.css"></style>
+<style scoped>
+.main-sidebar {
+  margin-right: 25px;
+}
+</style>

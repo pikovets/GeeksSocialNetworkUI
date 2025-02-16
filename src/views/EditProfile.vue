@@ -1,44 +1,44 @@
 <template>
   <div id="animatedBackground">
-    <Header :authUser="user" />
+    <Header :authUser="user"/>
 
     <div class="responsive-container">
-      <MainSidebar />
+      <MainSidebar/>
 
       <div class="edit-profile-container">
         <p class="title">{{ formatTabName }}</p>
         <div class="edit-form">
           <UserEdit
-            v-show="isUserEditPage"
-            :userData="user"
-            :profileData="profile"
+              v-show="isUserEditPage"
+              :userData="user"
+              :profileData="profile"
           />
 
           <ProfileEdit
-            v-show="isProfileEditPage"
-            :profileData="profile"
-            :userData="user"
+              v-show="isProfileEditPage"
+              :profileData="profile"
+              :userData="user"
           />
 
           <SecurityEdit
-            v-show="isSecurityEditPage"
-            :userData="user"
-            :backendErrors="backendErrors"
-            :oldPassword="user.oldPassword"
-            :newPassword="user.newPassword"
+              v-show="isSecurityEditPage"
+              :userData="user"
+              :backendErrors="backendErrors"
+              :oldPassword="user.oldPassword"
+              :newPassword="user.newPassword"
           />
 
           <button
-            @click="saveChanges"
-            class="save-btn"
-            :disabled="!isFormValid"
+              @click="saveChanges"
+              class="save-btn"
+              :disabled="!isFormValid"
           >
             Save
           </button>
         </div>
       </div>
 
-      <SettingsSidebar :selectedIndex="selectedPage" />
+      <SettingsSidebar :selectedIndex="selectedPage"/>
     </div>
   </div>
 </template>
@@ -46,16 +46,16 @@
 <script>
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
-import SettingsSidebar from '../components/SettingsSidebar.vue';
+import SettingsSidebar from '../components/profile-page/user-profile/settings/SettingsSidebar.vue';
 import FormField from '../components/fields/FormField.vue';
 import PasswordField from '../components/fields/PasswordField.vue';
-import ProfileEdit from '../components/settings/ProfileEdit.vue';
-import SecurityEdit from '../components/settings/SecurityEdit.vue';
-import UserEdit from '../components/settings/UserEdit.vue';
+import ProfileEdit from '../components/profile-page/user-profile/settings/ProfileEdit.vue';
+import SecurityEdit from '../components/profile-page/user-profile/settings/SecurityEdit.vue';
+import UserEdit from '../components/profile-page/user-profile/settings/UserEdit.vue';
 
-import { errorMessages } from '../config/errorMessages';
-import { validationRules } from '../config/validationRules';
-import { getProfile, getUser, updateUser } from '../services/api';
+import {errorMessages} from '../config/errorMessages';
+import {validationRules} from '../config/validationRules';
+import {getProfile, getUser, updateUser} from '../services/api';
 
 export default {
   components: {
@@ -72,7 +72,7 @@ export default {
     return {
       isOnline: window.navigator.onLine,
       isLoading: false,
-      user: { oldPassword: '', newPassword: '' },
+      user: {oldPassword: '', newPassword: ''},
       profile: {},
       backendErrors: {
         email: '',
@@ -87,7 +87,7 @@ export default {
   },
   async mounted() {
     if (!localStorage.getItem('GeeksJwtToken')) {
-      this.$router.push({ name: 'LogIn' });
+      this.$router.push({name: 'LogIn'});
     }
     await this.fetchUserData();
 
@@ -149,7 +149,7 @@ export default {
         clearInterval(this.interval);
 
         if (response.ok) {
-          this.$router.push({ name: 'profile', params: { id: 'me' } });
+          this.$router.push({name: 'profile', params: {id: 'me'}});
         }
       } catch (error) {
         this.handleErrors(error);
@@ -168,29 +168,29 @@ export default {
       } else if (error.message === 'user.email: This email is already taken;') {
         this.backendErrors.email = 'This email is already taken';
       } else if (
-        error.message ===
-        'user.oldPassword: Password mismatch. Double-check your entry;'
+          error.message ===
+          'user.oldPassword: Password mismatch. Double-check your entry;'
       ) {
         this.backendErrors.oldPassword =
-          'Password mismatch. Double-check your entry';
+            'Password mismatch. Double-check your entry';
       }
     },
     isFormValid() {
       return (
-        this.isRequiredFieldValid(this.user.firstName, 'name') &&
-        this.isNotRequiredFieldValid(this.user.lastName, 'name') &&
-        this.isRequiredFieldValid(this.user.email, 'email') &&
-        this.isValidField(this.profile.birthday, 'birthday') &&
-        this.isValidField(this.user.photoLink, 'photoLink') &&
-        this.isNotRequiredFieldValid(this.user.oldPassword, 'password') &&
-        this.isNotRequiredFieldValid(this.user.newPassword, 'password')
+          this.isRequiredFieldValid(this.user.firstName, 'name') &&
+          this.isNotRequiredFieldValid(this.user.lastName, 'name') &&
+          this.isRequiredFieldValid(this.user.email, 'email') &&
+          this.isValidField(this.profile.birthday, 'birthday') &&
+          this.isValidField(this.user.photoLink, 'photoLink') &&
+          this.isNotRequiredFieldValid(this.user.oldPassword, 'password') &&
+          this.isNotRequiredFieldValid(this.user.newPassword, 'password')
       );
     },
     tabHandler(newQuery, oldQuery) {
       const tabs = {
-        'personal-information': { index: 0, page: 'isUserEditPage' },
-        profile: { index: 1, page: 'isProfileEditPage' },
-        security: { index: 2, page: 'isSecurityEditPage' },
+        'personal-information': {index: 0, page: 'isUserEditPage'},
+        profile: {index: 1, page: 'isProfileEditPage'},
+        security: {index: 2, page: 'isSecurityEditPage'},
       };
 
       const selectedTab = newQuery.tab || 'personal-information';
@@ -205,9 +205,9 @@ export default {
     },
     isRequiredFieldValid(value, fieldName) {
       return (
-        value !== '' &&
-        this.validationRules[fieldName].test(value) &&
-        this.backendErrors[fieldName] === ''
+          value !== '' &&
+          this.validationRules[fieldName].test(value) &&
+          this.backendErrors[fieldName] === ''
       );
     },
     isNotRequiredFieldValid(value, fieldName) {
@@ -217,4 +217,65 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/pages/EditProfile.css"></style>
+<style scoped>
+.edit-profile-container {
+  background: rgba(36, 36, 36, 0.8);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 15px;
+  border: 1px solid #8383833f;
+  margin-bottom: 15px;
+  padding: 40px 40px 40px 40px;
+  width: 450px;
+
+  margin: 0 auto;
+}
+
+.title {
+  font-family: 'Poppins';
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: whitesmoke;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+}
+
+.inline-fields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.inline-fields > div:first-of-type {
+  margin-right: 15px;
+}
+
+.save-btn {
+  width: 150px;
+  height: 40px;
+  border-style: none;
+  border-radius: 5px;
+  align-self: center;
+  margin-top: 5px;
+  background-color: #48883e;
+  cursor: pointer;
+  color: whitesmoke;
+  font-family: 'Poppins';
+  font-weight: bold;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.save-btn:active {
+  padding-top: 3px;
+  opacity: 0.8;
+}
+
+</style>

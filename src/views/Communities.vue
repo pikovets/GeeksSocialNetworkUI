@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import Communities from '../components/Communities.vue';
+import Communities from '../components/communities-page/Communities.vue';
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
-import CreateCommunity from '../components/CreateCommunity.vue';
+import CreateCommunity from '../components/communities-page/CreateCommunity.vue';
 
 import { getCommunities, getProfile, getUser } from '../services/api.js';
 
@@ -80,4 +80,33 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/pages/Communities.css"></style>
+<style scoped>
+.communities-header-buttons {
+  width: 550px;
+  background: rgba(36, 36, 36, 0.8);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 12px;
+  border: 1px solid #8383833f;
+  padding: 15px 20px;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.create-community-btn {
+  background-color: rgb(72, 136, 63);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 10px;
+  width: 100%;
+  transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
+}
+
+.create-community-btn:hover {
+  opacity: 0.8;;
+}
+</style>

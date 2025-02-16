@@ -19,7 +19,7 @@
 <script>
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
-import Users from '../components/Users.vue';
+import Users from '../components/friends-page/Users.vue';
 
 import { getUser, getProfile, getUsersByName } from '../services/api.js';
 
@@ -72,5 +72,3 @@ export default {
   },
 };
 </script>
-
-<style scoped src="../assets/styles/pages/Search.css"></style>

@@ -90,7 +90,7 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 
 .comment {
   display: flex;
@@ -121,13 +121,14 @@ export default {
 }
 
 .comment-author-name {
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: bold;
+  font-size: 12.5px;
+  color: $color-text-primary;
 }
 
 .comment-text {
   font-size: 13px;
-  color: rgb(219, 219, 219);
+  color: $color-text-primary;
   margin-top: 2.5px;
   margin-bottom: 2.5px;
 }

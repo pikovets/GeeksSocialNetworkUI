@@ -110,7 +110,8 @@ export default {
           <div class="sidebar">
             <ProfileSidebarSection
                 title="Followers"
-                itemType="follower"
+                itemType="user"
+                routeName="friends"
                 :items="community.followers"
             />
           </div>

@@ -1,9 +1,3 @@
-<template>
-  <div class="main-sidebar">
-    <Sidebar :modules="pages"/>
-  </div>
-</template>
-
 <script>
 import Sidebar from './Sidebar.vue';
 import ProfileIcon from '../assets/icons/profile.svg';
@@ -38,3 +32,9 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="main-sidebar" style="margin-right: 25px;">
+    <Sidebar :modules="pages"/>
+  </div>
+</template>

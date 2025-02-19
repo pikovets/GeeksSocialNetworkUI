@@ -42,7 +42,7 @@ export default {
   <div id="animatedBackground">
     <Header :authUser="authUser"/>
 
-    <div class="responsive-container" style="margin-top: 130px;">
+    <div class="responsive-container">
       <MainSidebar class="main-sidebar"/>
 
       <div class="main-content">

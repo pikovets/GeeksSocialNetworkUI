@@ -1,3 +1,39 @@
+<script>
+import DefaultAvatar from '../../../assets/img/avatars/default-avatar.jpg';
+
+export default {
+  props: {
+    authUser: Object,
+    user: Object,
+    profile: Object,
+  },
+  emits: ['onMoreInfoClick'],
+  computed: {
+    getAvatar() {
+      return this.user.photoLink ? this.user.photoLink : DefaultAvatar;
+    },
+    fullName() {
+      return `${this.user.firstName} ${this.user.lastName}`;
+    },
+    showAdditionalInfoButton() {
+      return (
+        this.profile.bio !== null ||
+        this.profile.sex !== null ||
+        this.profile.birthday !== null ||
+        this.profile.address !== null
+      );
+    },
+  },
+  methods: {
+    goToEditProfilePage() {
+      this.$router.push({
+        name: 'edit-profile',
+      });
+    },
+  },
+};
+</script>
+
 <template>
   <div class="user-profile">
     <div class="profile-picture-container">
@@ -53,50 +89,11 @@
   </div>
 </template>
 
-<script>
-import DefaultAvatar from '../../../assets/img/avatars/default-avatar.jpg';
-
-export default {
-  props: {
-    authUser: Object,
-    user: Object,
-    profile: Object,
-  },
-  emits: ['onMoreInfoClick'],
-  computed: {
-    getAvatar() {
-      return this.user.photoLink ? this.user.photoLink : DefaultAvatar;
-    },
-    fullName() {
-      return `${this.user.firstName} ${this.user.lastName}`;
-    },
-    showAdditionalInfoButton() {
-      return (
-        this.profile.bio !== null ||
-        this.profile.sex !== null ||
-        this.profile.birthday !== null ||
-        this.profile.address !== null
-      );
-    },
-  },
-  methods: {
-    goToEditProfilePage() {
-      this.$router.push({
-        name: 'edit-profile',
-      });
-    },
-  },
-};
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 .user-profile {
-  background: rgba(36, 36, 36, 0.8);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  @include transperent-panel-mixin;
   border-radius: 15px;
-  border: 1px solid #8383833f;
+  border: $border;
   margin-bottom: 15px;
   padding: 47.5px;
 
@@ -124,18 +121,14 @@ export default {
 }
 
 .user-status {
+  @include transperent-panel-mixin;
   position: absolute;
   top: 165px;
   left: 160px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: rgba(36, 36, 36, 0.8);
-
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   border-radius: 50px;
-
   padding: 5px;
 }
 
@@ -157,6 +150,7 @@ export default {
 .profile-name {
   font-weight: bold;
   font-size: 1.25rem;
+  color: $color-text-primary;
 }
 
 .interaction-buttons {
@@ -168,21 +162,7 @@ export default {
 }
 
 .interaction-btn {
-  background-color: #383938;
-  font-size: 1;
-  font-weight: 500;
-  color: #e0e2e6;
-  border: none;
-  border-radius: 7px;
-  width: 35px;
-  height: 35px;
-  margin-right: 7.5px;
-}
-.interaction-btn:hover {
-  background-color: rgb(65, 65, 65);
-}
-.interaction-btn:active {
-  background-color: rgb(50, 50, 50);
+  @include button-mixin($color-grey-light, $color-text-primary, 35px, 35px);
 }
 
 .profile-info div {
@@ -192,17 +172,18 @@ export default {
 }
 
 .profile-bio {
+  color: $color-text-muted;
   font-size: 0.9rem;
   line-height: 150%;
-
   width: 350px;
   margin-bottom: 20px;
+  color: $color-text-muted;
 }
 
 .address-text {
   font-size: 0.9rem;
-  color: #8c8e8f;
   margin-right: 12px;
+  color: $color-text-muted;
 }
 
 .more-info-btn {

@@ -1,68 +1,3 @@
-<template>
-  <div class="post">
-    <div class="header">
-      <div class="profile-image-container">
-        <img @click="goToAuthorPage" class="profile-image" :src="getAvatar" />
-      </div>
-      <div class="metadata-container">
-        <p @click="goToAuthorPage" class="author-name">{{ fullName }}</p>
-        <p class="published-date">{{ getPostDate }}</p>
-      </div>
-      <div v-show="post.author.id === authUser.id" class="interaction-buttons">
-        <div @click="$emit('delete-post', this.post.id)" class="delete-btn">
-          <i class="fa-solid fa-trash" style="margin-right: 0"></i>
-        </div>
-      </div>
-    </div>
-    <div class="post-content">
-      <p class="post-text">{{ post.text }}</p>
-      <img v-show="post.photoLink" class="post-media" :src="post.photoLink" />
-    </div>
-    <div class="post-footer">
-      <div @click="toggleLike" :class="[{ liked: isLiked }, 'post-btn']">
-        <img :src="getLikeImage" class="like-icon" />
-        <p class="likes-amount">
-          {{ likesAmount }}
-        </p>
-      </div>
-      <div @click="focusCommentInput" class="post-btn">
-        <img src="../../assets/icons/comment.svg" class="comment-icon" />
-        <p class="comments-amount">
-          {{ commentsAmount }}
-        </p>
-      </div>
-    </div>
-    <hr class="post-footer-separator" />
-    <Comments
-      v-if="post.comments.length > 0"
-      :comments="sortedComments"
-      :authUser="authUser"
-      @delete-comment="deleteComment"
-    />
-    <div class="my-comment">
-      <div class="comment-author-image-container">
-        <img
-          :src="getAvatar"
-          class="comment-author-image"
-        />  
-      </div>
-      <div class="my-comment-content">
-        <input
-          ref="commentInput"
-          class="comment-input"
-          type="text"
-          placeholder="Add a comment..."
-        />
-        <img
-          @click="sendComment"
-          src="../../assets/icons/activeSend.svg"
-          class="send-comment-icon"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import activeLike from '../../assets/icons/likeActive.svg';
 import passiveLike from '../../assets/icons/likePassive.svg';
@@ -185,7 +120,7 @@ export default {
     },
     goToAuthorPage() {
       this.$router.push({
-        name: 'profile',
+        name: 'user-profile',
         params: { id: this.post.author.id },
       });
     },
@@ -196,18 +131,79 @@ export default {
 };
 </script>
 
-<style scoped>
+<template>
+  <div class="post">
+    <div class="header">
+      <div class="profile-image-container">
+        <img @click="goToAuthorPage" class="profile-image" :src="getAvatar" />
+      </div>
+      <div class="metadata-container">
+        <p @click="goToAuthorPage" class="author-name">{{ fullName }}</p>
+        <p class="published-date">{{ getPostDate }}</p>
+      </div>
+      <div v-show="post.author.id === authUser.id" class="interaction-buttons">
+        <div @click="$emit('delete-post', this.post.id)" class="delete-btn">
+          <i class="fa-solid fa-trash" style="margin-right: 0"></i>
+        </div>
+      </div>
+    </div>
+    <div class="post-content">
+      <p class="post-text">{{ post.text }}</p>
+      <img v-show="post.photoLink" class="post-media" :src="post.photoLink" />
+    </div>
+    <div class="post-footer">
+      <div @click="toggleLike" :class="[{ liked: isLiked }, 'post-btn']">
+        <img :src="getLikeImage" class="like-icon" />
+        <p class="likes-amount">
+          {{ likesAmount }}
+        </p>
+      </div>
+      <div @click="focusCommentInput" class="post-btn">
+        <img src="../../assets/icons/comment.svg" class="comment-icon" />
+        <p class="comments-amount">
+          {{ commentsAmount }}
+        </p>
+      </div>
+    </div>
+    <hr class="post-footer-separator" />
+    <Comments
+        v-if="post.comments.length > 0"
+        :comments="sortedComments"
+        :authUser="authUser"
+        @delete-comment="deleteComment"
+    />
+    <div class="my-comment">
+      <div class="comment-author-image-container">
+        <img
+            :src="getAvatar"
+            class="comment-author-image"
+        />
+      </div>
+      <div class="my-comment-content">
+        <input
+            ref="commentInput"
+            class="comment-input"
+            type="text"
+            placeholder="Add a comment..."
+        />
+        <img
+            @click="sendComment"
+            src="../../assets/icons/activeSend.svg"
+            class="send-comment-icon"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
 .post {
+  @include transperent-panel-mixin;
   width: 550px;
-  background: rgba(36, 36, 36, 0.8);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   border-radius: 12px;
   border: 1px solid #8383833f;
-  margin: 0 auto;
   padding: 15px 20px;
-  margin-bottom: 15px;
+  margin: 0 auto 15px;
 }
 
 .header {
@@ -242,9 +238,9 @@ export default {
 
 .author-name {
   display: block;
-  color: #54a148;
+  color: $color-text-primary;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
   margin-bottom: 3.5px;
   cursor: pointer;
 }
@@ -258,14 +254,10 @@ export default {
 }
 .interaction-buttons i {
   font-size: 16px;
-  color: rgb(201, 201, 201);
 }
 
 .interaction-buttons div {
-  background-color: #323233;
-  padding: 9px 10px 9px 10px;
-  border-radius: 10px;
-  cursor: pointer;
+  @include button-mixin($color-grey-light, $color-text-primary, 35px, 35px);
 }
 .interaction-buttons div:hover {
   background-color: #414141;

@@ -43,9 +43,8 @@ export default {
 
 <style scoped lang="scss">
 .panel {
-  background: rgba(36, 36, 36, 0.8);
+  @include transperent-panel-mixin;
   border: $border;
-  backdrop-filter: blur(5px);
   width: 150px;
   padding: 10px;
   padding-bottom: 0;

@@ -1,13 +1,13 @@
 <script>
 import Select from '../elements/Select.vue';
-import FormField from '../fields/FormField.vue';
 import {errorMessages} from '../../config/errorMessages';
 import {validationRules} from '../../config/validationRules';
 import {createCommunity} from '../../services/api';
+import GlowInput from "@/components/elements/GlowInput.vue";
 
 export default {
   components: {
-    FormField,
+    GlowInput,
     Select,
   },
   computed: {
@@ -171,14 +171,14 @@ export default {
               </p>
             </div>
 
-            <FormField
+            <GlowInput
                 v-model="communityData.name"
                 :label="$t('enterName')"
                 :validationRule="validationRules.communityName"
                 :validationMsg="$t('communityNameValidationMsg')"
                 @clearBackendErrors="clearBackendErrors"
                 :class="{ 'apply-shake': shake.name }"
-            ></FormField>
+            ></GlowInput>
           </div>
 
           <div class="community-privacy-section" v-show="currentStep === 1">
@@ -228,7 +228,7 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang='scss'>
 .overlay {
   width: 100%;
   height: 100%;
@@ -248,7 +248,7 @@ export default {
 
 .panel {
   width: 450px;
-  background-color: rgb(41, 41, 41);
+  background-color: $color-bg-dark;
   border-radius: 10px;
   margin-right: 15px;
   padding: 22.5px;
@@ -264,6 +264,7 @@ export default {
 .current-step {
   font-size: 14px;
   margin-bottom: 5px;
+  color: $color-text-muted;
 }
 
 .title {
@@ -277,6 +278,7 @@ export default {
   font-size: 14px;
   width: 350px;
   text-align: center;
+  color: $color-text-muted;
 }
 
 .section-metadata {
@@ -289,6 +291,10 @@ export default {
 .section-metadata p {
   font-size: 14px;
   color: rgb(147, 147, 147);
+}
+
+.community-name-section {
+  margin-bottom: 15px;
 }
 
 .create-community-btn {

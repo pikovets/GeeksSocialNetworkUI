@@ -1,13 +1,3 @@
-<template>
-  <div class="settings-sidebar">
-    <Sidebar
-      :modules="pages"
-      :activeTabChange="true"
-      :selectedIndex="selectedIndex"
-    />
-  </div>
-</template>
-
 <script>
 import Sidebar from '../../../Sidebar.vue';
 
@@ -51,6 +41,16 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="settings-sidebar">
+    <Sidebar
+      :modules="pages"
+      :activeTabChange="true"
+      :selectedIndex="selectedIndex"
+    />
+  </div>
+</template>
 
 <style scoped>
 .settings-sidebar {

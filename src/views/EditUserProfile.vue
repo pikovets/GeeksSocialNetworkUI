@@ -1,54 +1,7 @@
-<template>
-  <div id="animatedBackground">
-    <Header :authUser="user"/>
-
-    <div class="responsive-container">
-      <MainSidebar/>
-
-      <div class="edit-profile-container">
-        <p class="title">{{ formatTabName }}</p>
-        <div class="edit-form">
-          <UserEdit
-              v-show="isUserEditPage"
-              :userData="user"
-              :profileData="profile"
-          />
-
-          <ProfileEdit
-              v-show="isProfileEditPage"
-              :profileData="profile"
-              :userData="user"
-          />
-
-          <SecurityEdit
-              v-show="isSecurityEditPage"
-              :userData="user"
-              :backendErrors="backendErrors"
-              :oldPassword="user.oldPassword"
-              :newPassword="user.newPassword"
-          />
-
-          <button
-              @click="saveChanges"
-              class="save-btn"
-              :disabled="!isFormValid"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-
-      <SettingsSidebar :selectedIndex="selectedPage"/>
-    </div>
-  </div>
-</template>
-
 <script>
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 import SettingsSidebar from '../components/profile-page/user-profile/settings/SettingsSidebar.vue';
-import FormField from '../components/fields/FormField.vue';
-import PasswordField from '../components/fields/PasswordField.vue';
 import ProfileEdit from '../components/profile-page/user-profile/settings/ProfileEdit.vue';
 import SecurityEdit from '../components/profile-page/user-profile/settings/SecurityEdit.vue';
 import UserEdit from '../components/profile-page/user-profile/settings/UserEdit.vue';
@@ -61,8 +14,6 @@ export default {
   components: {
     Header,
     MainSidebar,
-    FormField,
-    PasswordField,
     SettingsSidebar,
     UserEdit,
     ProfileEdit,
@@ -149,7 +100,7 @@ export default {
         clearInterval(this.interval);
 
         if (response.ok) {
-          this.$router.push({name: 'profile', params: {id: 'me'}});
+          this.$router.push({name: 'user-profile', params: {id: 'me'}});
         }
       } catch (error) {
         this.handleErrors(error);
@@ -217,26 +168,71 @@ export default {
 };
 </script>
 
-<style scoped>
+<template>
+  <div id="animatedBackground">
+    <Header :authUser="user"/>
+
+    <div class="responsive-container">
+      <MainSidebar/>
+
+      <div class="edit-profile-container">
+        <p class="title">{{ formatTabName }}</p>
+        <div class="edit-form">
+          <UserEdit
+              v-show="isUserEditPage"
+              :userData="user"
+              :profileData="profile"
+          />
+
+          <ProfileEdit
+              v-show="isProfileEditPage"
+              :profileData="profile"
+              :userData="user"
+          />
+
+          <SecurityEdit
+              v-show="isSecurityEditPage"
+              :userData="user"
+              :backendErrors="backendErrors"
+              :oldPassword="user.oldPassword"
+              :newPassword="user.newPassword"
+          />
+
+          <button
+              @click="saveChanges"
+              class="save-btn"
+              :disabled="!isFormValid"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+
+      <SettingsSidebar :selectedIndex="selectedPage"/>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.responsive-container {
+  align-items: flex-start;
+}
+
 .edit-profile-container {
-  background: rgba(36, 36, 36, 0.8);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  @include transperent-panel-mixin;
   border-radius: 15px;
-  border: 1px solid #8383833f;
-  margin-bottom: 15px;
+  border: $border;
   padding: 40px 40px 40px 40px;
   width: 450px;
 
   margin: 0 auto;
+
 }
 
 .title {
-  font-family: 'Poppins';
   font-weight: bold;
   font-size: 1.5rem;
-  color: whitesmoke;
+  color: $color-text-primary;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -248,34 +244,11 @@ export default {
   width: 100%;
 }
 
-.inline-fields {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.inline-fields > div:first-of-type {
-  margin-right: 15px;
-}
-
 .save-btn {
-  width: 150px;
-  height: 40px;
-  border-style: none;
-  border-radius: 5px;
+  @include button-mixin($color-primary, color-text-primary, 150px, 40px, 0% 0%, true);
   align-self: center;
-  margin-top: 5px;
-  background-color: #48883e;
-  cursor: pointer;
-  color: whitesmoke;
-  font-family: 'Poppins';
-  font-weight: bold;
-  transition: opacity 0.1s ease-in-out;
-}
 
-.save-btn:active {
-  padding-top: 3px;
-  opacity: 0.8;
+  color: $color-text-primary;
 }
 
 </style>

@@ -77,7 +77,7 @@ export default {
   <div id="animatedBackground">
     <Header :authUser="authUser"/>
 
-    <div class="responsive-container">
+    <div class="responsive-container" style="margin-top: 130px;">
       <MainSidebar class="main-sidebar"/>
 
       <div class="main-content">
@@ -134,10 +134,6 @@ export default {
   display: grid;
   grid-template-columns: 560px 280px;
   gap: 15px;
-}
-
-.main-sidebar {
-  margin-right: 25px;
 }
 
 .sidebar div {

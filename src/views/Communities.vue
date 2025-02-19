@@ -1,43 +1,10 @@
-<template>
-  <div id="animatedBackground">
-    <Header :authUser="authUser" />
-
-    <div class="responsive-container">
-      <MainSidebar class="main-sidebar" />
-
-      <div class="main-content">
-        <div class="communities-header-buttons">
-          <button
-            class="create-community-btn"
-            @click="showCreateCommunityDialog = true"
-          >
-            {{ $t('createCommunityLabel') }}
-          </button>
-        </div>
-
-        <Communities
-          :communities="communities"
-          :authUser="authUser"
-          :authUserProfile="authUserProfile"
-        />
-      </div>
-    </div>
-  </div>
-
-  <CreateCommunity
-    @onCloseCommunityCreation="showCreateCommunityDialog = false"
-    v-show="showCreateCommunityDialog"
-  >
-  </CreateCommunity>
-</template>
-
 <script>
 import Communities from '../components/communities-page/Communities.vue';
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 import CreateCommunity from '../components/communities-page/CreateCommunity.vue';
 
-import { getCommunities, getProfile, getUser } from '../services/api.js';
+import { getCommunities, getProfile, getUser } from '@/services/api.js';
 
 
 export default {
@@ -80,25 +47,56 @@ export default {
 };
 </script>
 
-<style scoped>
+<template>
+  <div id="animatedBackground">
+    <Header :authUser="authUser" />
+
+    <div class="responsive-container">
+      <MainSidebar class="main-sidebar" />
+
+      <div class="main-content">
+        <div class="communities-header-buttons">
+          <button
+              class="create-community-btn"
+              @click="showCreateCommunityDialog = true"
+          >
+            {{ $t('createCommunityLabel') }}
+          </button>
+        </div>
+
+        <Communities
+            :communities="communities"
+            :authUser="authUser"
+            :authUserProfile="authUserProfile"
+        />
+      </div>
+    </div>
+  </div>
+
+  <CreateCommunity
+      @onCloseCommunityCreation="showCreateCommunityDialog = false"
+      v-show="showCreateCommunityDialog"
+  >
+  </CreateCommunity>
+</template>
+
+<style scoped lang="scss">
 .communities-header-buttons {
+  @include transperent-panel-mixin;
   width: 550px;
-  background: rgba(36, 36, 36, 0.8);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   border-radius: 12px;
-  border: 1px solid #8383833f;
+  border: $border;
   padding: 15px 20px;
   position: relative;
   margin-bottom: 15px;
 }
 
 .create-community-btn {
-  background-color: rgb(72, 136, 63);
+  background-color: $color-primary;
   border: none;
   border-radius: 10px;
-  color: white;
+  color: $color-text-primary;
   font-weight: bold;
   font-size: 14px;
   padding: 10px 10px;

@@ -1,85 +1,13 @@
-<template>
-  <div class="add-post-container">
-    <div class="text-content">
-      <img :src="getAvatar" class="profile-image" />
-      <input
-        v-model="postText"
-        class="add-post-text-input"
-        type="text"
-        :placeholder="`What's new ${this.authUser.firstName}?`"
-        @keyup.enter="sendPost"
-      />
-
-      <div
-        @click="sendPost"
-        :class="[!isPostValid ? 'passive-btn' : '', 'send-btn']"
-      >
-        <i class="fa fa-paper-plane filter-green" aria-hidden="true"></i>
-      </div>
-    </div>
-
-    <hr class="separator" />
-    <div class="extra-content-buttons">
-      <div
-        @click="isAddPhotoActive = !isAddPhotoActive"
-        :class="[isAddPhotoActive ? 'active-photo-btn' : '', 'photo-btn']"
-      >
-        <img src="../assets/icons/photo.svg" class="photo-icon filter-grey" />
-        <p class="photo-text">Add photo</p>
-      </div>
-
-      <div v-if="isAddPhotoActive" class="photo-url-container">
-        <input
-          v-model="photoLink"
-          type="text"
-          placeholder="Photo URL: "
-          class="photo-url-input"
-        />
-      </div>
-    </div>
-    <div
-      v-if="(!isPhotoUrlValid && !isPhotoUrlEmpty) || !isPostTextValid"
-      class="validation-container"
-    >
-      <div v-if="!isPostTextValid" class="post-text-validation-container">
-        <div class="error-icon-background">
-          <img
-            src="../assets/icons/warning.svg"
-            class="warning-icon filter-green"
-          />
-        </div>
-        <p>
-          <span style="color: #54a148">Warning:</span>
-          {{ $t('postTextValidationMsg') }}
-        </p>
-      </div>
-      <div
-        v-if="!isPhotoUrlValid && !isPhotoUrlEmpty"
-        class="post-image-url-validation-container"
-      >
-        <div class="error-icon-background">
-          <img
-            src="../assets/icons/warning.svg"
-            class="warning-icon filter-green"
-          />
-        </div>
-        <p>
-          <span style="color: #54a148">Error:</span>
-          {{ $t('photoLinkValidationMsg') }}
-        </p>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import defaultAvatar from '../assets/img/avatars/default-avatar.jpg';
-import { validationRules } from '../config/validationRules';
+import {validationRules} from '../config/validationRules';
 
-import { uploadCommunityPost, uploadUserPost } from '../services/api';
+import {uploadCommunityPost, uploadUserPost} from '../services/api';
+import GlowInput from "@/components/elements/GlowInput.vue";
 
 export default {
   name: 'AddPost',
+  components: {GlowInput},
   props: {
     authUser: Object,
     community: Object,
@@ -104,13 +32,13 @@ export default {
     },
     isPostValid() {
       return (
-        this.isPostTextValid && (this.isPhotoUrlValid || this.isPhotoUrlEmpty)
+          this.isPostTextValid && (this.isPhotoUrlValid || this.isPhotoUrlEmpty)
       );
     },
     isPhotoUrlValid() {
       return (
-        this.isAddPhotoActive &&
-        this.validationRules.photoLink.test(this.photoLink)
+          this.isAddPhotoActive &&
+          this.validationRules.photoLink.test(this.photoLink)
       );
     },
   },
@@ -119,11 +47,11 @@ export default {
       if (this.isPostValid) {
         if (this.community !== null) {
           await uploadCommunityPost(
-            {
-              text: this.postText,
-              photoLink: this.photoLink,
-            },
-            this.community.id
+              {
+                text: this.postText,
+                photoLink: this.photoLink,
+              },
+              this.community.id
           );
         } else {
           await uploadUserPost({
@@ -139,9 +67,81 @@ export default {
 };
 </script>
 
-<style scoped>
+<template>
+  <div class="add-post-container">
+    <div class="text-content">
+      <img :src="getAvatar" class="profile-image"/>
+      <input
+          v-model="postText"
+          class="add-post-text-input"
+          type="text"
+          :placeholder="`What's new ${this.authUser.firstName}?`"
+          @keyup.enter="sendPost"
+      />
+
+      <div
+          @click="sendPost"
+          :class="[!isPostValid ? 'passive-btn' : '', 'send-btn']"
+      >
+        <i class="fa fa-paper-plane filter-green" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <hr class="separator"/>
+    <div class="add-photo-container">
+      <div
+          @click="isAddPhotoActive = !isAddPhotoActive"
+          :class="[isAddPhotoActive ? 'active-photo-btn' : '', 'photo-btn']"
+      >
+        <img src="../assets/icons/photo.svg" class="photo-icon filter-grey"/>
+        <p class="photo-text">Add photo</p>
+      </div>
+
+      <div v-if="isAddPhotoActive" class="photo-url-container">
+        <GlowInput v-model="photoLink"
+                   :label="$t('photoLinkLabel')"
+                   :validationRule="validationRules.photoLink"
+                   :show-error-msg="false"></GlowInput>
+      </div>
+    </div>
+    <div
+        v-if="(!isPhotoUrlValid && !isPhotoUrlEmpty) || !isPostTextValid"
+        class="validation-container"
+    >
+      <div v-if="!isPostTextValid" class="post-text-validation-container">
+        <div class="error-icon-background">
+          <img
+              src="../assets/icons/warning.svg"
+              class="warning-icon filter-green"
+          />
+        </div>
+        <p>
+          <span style="color: #ffc600; font-weight: bold">Warning:</span>
+          {{ $t('postTextValidationMsg') }}
+        </p>
+      </div>
+      <div
+          v-if="!isPhotoUrlValid && !isPhotoUrlEmpty"
+          class="post-image-url-validation-container"
+      >
+        <div class="error-icon-background">
+          <img
+              src="../assets/icons/warning.svg"
+              class="warning-icon filter-green"
+          />
+        </div>
+        <p>
+          <span style="color: #cc3300; font-weight: bold">Error:</span>
+          {{ $t('photoLinkValidationMsg') }}
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
 p {
-  color: #8c8e8f;
+  color: $color-text-muted;
 }
 
 .text-content {
@@ -153,20 +153,16 @@ p {
 }
 
 .add-post-container {
+  @include transperent-panel-mixin;
   max-width: 550px;
-  background: rgba(36, 36, 36, 0.8);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   border-radius: 12px;
-  border: 1px solid #8383833f;
-  margin: 0 auto;
+  border: $border;
   padding: 0.75em 1.25em 0.75em 1.25em;
-
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  margin-bottom: 15px;
+  margin: 0 auto 15px;
 }
 
 .profile-image {
@@ -182,39 +178,20 @@ p {
   border-style: none;
   background-color: rgba(0, 0, 0, 0);
   font-size: 13px;
-  color: rgb(238, 238, 238);
-  outline: none;
+  color: $color-text-primary;
   padding: 0 15px;
-  transition: opacity 0.1s;
 }
 
 .add-post-text-input::placeholder {
   font-size: 13px;
-  color: rgb(125, 125, 125);
+  color: $color-text-muted;
 }
 
 .send-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 35px;
-  height: 35px;
-  border-radius: 10px;
-  background-color: #333333;
-  margin-left: 0.5em;
-  cursor: pointer;
-  transition: opacity 0.1s;
-}
-.send-btn:hover {
-  opacity: 0.7;
-}
-.send-btn:active {
-  opacity: 0.5;
+  @include button-mixin(#333333, white, 35px, 35px);
 }
 
 .send-btn i {
-  color: #a1a1a1;
   font-size: 14px;
 }
 
@@ -231,7 +208,7 @@ p {
   margin: 2.5% 0 3% 0;
 }
 
-.extra-content-buttons {
+.add-photo-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -247,11 +224,13 @@ p {
   padding: 5px 5px 5px 5px;
   cursor: pointer;
 }
+
 .photo-btn:hover {
   border: 2px solid #4d4d4d;
   background-color: #6464643f;
   user-select: none;
 }
+
 .photo-btn:active {
   opacity: 0.7;
 }
@@ -273,26 +252,7 @@ p {
 }
 
 .photo-url-container {
-  background-color: #242526;
   margin-left: 15px;
-}
-
-.photo-url-input {
-  border-style: none;
-  background-color: rgba(56, 56, 56, 0.308);
-  padding: 7px 5px;
-  border-radius: 5px;
-  font-size: 14px;
-  color: rgb(216, 216, 216);
-  outline: none;
-  transition: opacity 0.1s;
-}
-
-.photo-invalid-error {
-  color: #ff0000a8;
-  font-size: 12px;
-  margin-top: 5px;
-  margin-left: 5px;
 }
 
 .validation-container {

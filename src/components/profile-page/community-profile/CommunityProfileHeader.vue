@@ -1,3 +1,32 @@
+<script>
+import DefaultCommunityAvatar from '../../../assets/img/avatars/default-community-avatar.jpg';
+
+export default {
+  props: {
+    authUser: Object,
+    community: Object,
+  },
+  emits: ['onMoreInfoClick'],
+  computed: {
+    getAvatar() {
+      return this.community.photoLink
+        ? this.community.photoLink
+        : DefaultCommunityAvatar;
+    },
+    showAdditionalInfoButton() {
+      return this.community.description !== null;
+    },
+  },
+  methods: {
+    goToEditProfilePage() {
+      this.$router.push({
+        name: 'edit-community-user-profile-page',
+      });
+    },
+  },
+};
+</script>
+
 <template>
   <div class="community-profile">
     <div class="profile-picture-container">
@@ -28,43 +57,12 @@
     </div>
 </template>
 
-<script>
-import DefaultCommunityAvatar from '../../../assets/img/avatars/default-community-avatar.jpg';
-
-export default {
-  props: {
-    authUser: Object,
-    community: Object,
-  },
-  emits: ['onMoreInfoClick'],
-  computed: {
-    getAvatar() {
-      return this.community.photoLink
-        ? this.community.photoLink
-        : DefaultCommunityAvatar;
-    },
-    showAdditionalInfoButton() {
-      return this.community.description !== null;
-    },
-  },
-  methods: {
-    goToEditProfilePage() {
-      this.$router.push({
-        name: 'edit-community-user-profile-page',
-      });
-    },
-  },
-};
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 .community-profile {
-  background: rgba(36, 36, 36, 0.8);
+  @include transperent-panel-mixin;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   border-radius: 15px;
-  border: 1px solid #8383833f;
+  border: $border;
   margin-bottom: 15px;
   padding: 47.5px;
 
@@ -103,6 +101,12 @@ export default {
 .profile-name {
   font-weight: bold;
   font-size: 1.25rem;
+  color: $color-text-primary;
+  margin-bottom: 10px;
+}
+
+.description {
+  color: $color-text-muted;
 }
 
 .interaction-buttons {

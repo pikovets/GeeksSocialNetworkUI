@@ -2,26 +2,39 @@
 
 @mixin button-mixin(
   $color-background: variables.$color-primary,
-  $color-text: variables.$color-text-primary
+  $color-text: variables.$color-text-primary,
+  $width: 100%,
+  $height: 100%,
+  $padding: 0% 0%,
+  $is-scalable: false
 ) {
   background-color: $color-background;
   border: none;
   border-radius: 10px;
   color: $color-text;
   font-weight: bold;
-  font-size: 16px;
-  padding: 4% 0%;
-  width: 100%;
+  font-size: 17px;
+  padding: $padding;
+  width: $width;
+  height: $height;
   transition: background-color 0.1s, transform 0.1s, opacity 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    opacity: 0.8;
-    transform: scale(1.025);
+    opacity: 0.6;
+    cursor: pointer;
+    @if $is-scalable {
+      transform: scale(1.025);
+    }
   }
 
   &:active {
     opacity: 1;
-    transform: scale(0.95);
+    @if $is-scalable {
+      transform: scale(0.95);
+    }
   }
 }
 
@@ -37,4 +50,10 @@
   margin: 0 auto;
   padding: 40px;
   box-shadow: $box-shadow;
+}
+
+@mixin transperent-panel-mixin {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background: variables.$color-transperent-panel;
 }

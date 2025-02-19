@@ -1,40 +1,6 @@
-<template>
-  <div class="section">
-    <div class="inline-fields">
-      <FormField
-        v-model="userData.firstName"
-        required="true"
-        :label="$t('firstNameLabel')"
-        :validationRule="validationRules.name"
-        :validationMsg="$t('nameValidationMsg')"
-      ></FormField>
-
-      <FormField
-        v-model="userData.lastName"
-        :label="$t('lastNameLabel')"
-        :validationRule="validationRules.name"
-        :validationMsg="$t('nameValidationMsg')"
-      ></FormField>
-    </div>
-    <FormField
-      v-model="profileData.birthday"
-      :label="$t('birthdayLabel')"
-      :validationRule="validationRules.birthday"
-      :validationMsg="$t('birthdayValidationMsg')"
-    ></FormField>
-
-    <Select
-      :model-value="profileData.sex"
-      @update:model-value="(newValue) => (profileData.sex = newValue)"
-      :placeholder="'Please select your gender'"
-      :options="genderOptions"
-    />
-  </div>
-</template>
-
 <script>
-import FormField from '../../../fields/FormField.vue';
-import Select from '../../../elements/Select.vue';
+import GlowInput from '@/components/elements/GlowInput.vue';
+import Select from '@/components/elements/Select.vue';
 
 import { validationRules } from '@/config/validationRules';
 
@@ -50,7 +16,7 @@ export default {
     },
   },
   components: {
-    FormField,
+    GlowInput,
     Select,
   },
   data() {
@@ -67,6 +33,40 @@ export default {
 };
 </script>
 
+<template>
+  <div class="section">
+    <div class="inline-fields">
+      <GlowInput
+        v-model="userData.firstName"
+        required="true"
+        :label="$t('firstNameLabel')"
+        :validationRule="validationRules.name"
+        :validationMsg="$t('nameValidationMsg')"
+      ></GlowInput>
+
+      <GlowInput
+        v-model="userData.lastName"
+        :label="$t('lastNameLabel')"
+        :validationRule="validationRules.name"
+        :validationMsg="$t('nameValidationMsg')"
+      ></GlowInput>
+    </div>
+    <GlowInput
+      v-model="profileData.birthday"
+      :label="$t('birthdayLabel')"
+      :validationRule="validationRules.birthday"
+      :validationMsg="$t('birthdayValidationMsg')"
+    ></GlowInput>
+
+    <Select
+      :model-value="profileData.sex"
+      @update:model-value="(newValue) => (profileData.sex = newValue)"
+      :placeholder="'Please select your gender'"
+      :options="genderOptions"
+    />
+  </div>
+</template>
+
 <style scoped>
 .inline-fields {
   display: flex;
@@ -76,5 +76,9 @@ export default {
 
 .inline-fields > div:first-of-type {
   margin-right: 15px;
+}
+
+.section div {
+  margin-bottom: 10px;
 }
 </style>

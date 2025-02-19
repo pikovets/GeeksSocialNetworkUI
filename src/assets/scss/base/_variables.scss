@@ -1,12 +1,12 @@
 $color-primary: #48883e;
 $color-secondary: #64b657;
 $color-bg-dark: #1e1e1e;
-$color-grey-light: #424343;
+$color-grey-light: #424343; //buttons and input background color
 $color-error: #cc3300;
+$color-warning: #ffc600;
 $color-text-muted: #a0a0a0;
-$color-text-primary: white;
-$color-text-secondary: rgb(219, 219, 219);
-$color-text-default: rgb(202, 202, 202);
+$color-text-primary: rgba(225, 227, 230, 0.9);
+$color-transperent-panel: rgba(36, 36, 36, 0.8);
 
 
 $box-shadow: 0 0 15px 15px rgba(0, 0, 0, 1);

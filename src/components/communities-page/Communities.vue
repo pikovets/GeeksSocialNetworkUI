@@ -33,13 +33,11 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .communities {
+  @include transperent-panel-mixin;
   width: 550px;
-  background: rgba(36, 36, 36, 0.8);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   border-radius: 12px;
   border: 1px solid #8383833f;
   padding: 15px 20px;
@@ -56,7 +54,8 @@ export default {
 .community {
   margin-bottom: 25px;
   display: grid;
-  grid-template-columns: 75px 1fr 1fr;
+  grid-template-columns: 75px 3fr 1fr;
+  margin-right: 15px;
 }
 
 .nothing-found {
@@ -76,5 +75,6 @@ export default {
   font-size: 24px;
   margin-bottom: 75px;
   font-weight: bold;
+  color: $color-text-primary;
 }
 </style>

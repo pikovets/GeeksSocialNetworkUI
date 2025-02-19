@@ -26,7 +26,7 @@ const router = createRouter({
     {
       path: '/user-profile-page/me/edit',
       name: 'edit-profile',
-      component: () => import('../views/EditProfile.vue'),
+      component: () => import('../views/EditUserProfile.vue'),
     },
     {
       path: '/search',

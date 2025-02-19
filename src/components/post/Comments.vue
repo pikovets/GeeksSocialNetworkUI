@@ -65,14 +65,14 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .panel {
   margin-bottom: 20px;
 }
 
 .show-more-comments {
-  color: #63be55;
-  font-weight: 500;
+  color: $color-secondary;
+  font-weight: bold;
   font-size: 13px;
   cursor: pointer;
 }

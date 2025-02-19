@@ -51,6 +51,6 @@ export default {
 
 .name {
   font-size: 0.8rem;
-  color: $color-text-default;
+  color: $color-text-primary;
 }
 </style>

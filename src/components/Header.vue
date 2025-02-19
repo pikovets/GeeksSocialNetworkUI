@@ -21,7 +21,7 @@ export default {
       this.$router.push({ name: 'home' });
     },
     navigateToProfile() {
-      this.$router.push({ name: 'profile', params: { id: 'me' } });
+      this.$router.push({ name: 'user-profile', params: { id: 'me' } });
     },
     handleLogout() {
       localStorage.removeItem('GeeksJwtToken');
@@ -130,7 +130,7 @@ export default {
   background: transparent;
   border: none;
   font-size: 14px;
-  color: $color-text-secondary;
+  color: $color-text-primary;
   outline: none;
   padding-right: 10px;
   margin-left: 7.5px;
@@ -166,18 +166,13 @@ export default {
 }
 
 .logout-button {
+  @include button-mixin($color-grey-light, $color-text-primary, 32px, 32px);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  cursor: pointer;
-  background-color: $color-grey-light;
 }
 
 .logout-button i {
-  color: white;
   font-size: 14px;
 }
 

@@ -6,6 +6,7 @@ export default {
     title: String,
     items: Array,
     itemType: String,
+    routeName: String,
   },
   components: {
     ProfileSidebarItem
@@ -35,32 +36,30 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-$panel-bg: rgba(36, 36, 36, 0.8);
-$panel-shadow: rgba(0, 0, 0, 0.1);
-$panel-border: #8383833f;
-
 .panel {
-  background: $panel-bg;
-  box-shadow: 0 4px 30px $panel-shadow;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid $panel-border;
+  @include transperent-panel-mixin;
+
+  box-shadow: 0 4px 30px $box-shadow;
+
+  border: $border;
   border-radius: 10px;
   height: 225px;
   padding: 20px;
 
   .title {
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
+    color: $color-text-primary;
 
     &:hover {
-      color: rgb(207, 207, 207);
+      color: $color-text-muted;
       text-decoration: underline;
     }
   }
 
   .amount {
-    font-weight: 300;
+    color: $color-text-muted;
   }
 
   .items-grid {

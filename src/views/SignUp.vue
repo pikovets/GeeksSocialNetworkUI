@@ -185,6 +185,7 @@ export default {
 
 .responsive-container {
   align-items: center;
+  margin-top: 0px;
 }
 
 .logo-container {
@@ -201,7 +202,7 @@ export default {
 }
 
 .title {
-  color: white;
+  color: $color-text-primary;
   font-size: 24px;
   margin-bottom: 10px;
   text-align: center;
@@ -226,7 +227,11 @@ export default {
 }
 
 .create-account-btn {
-  @include button-mixin($color-primary);
+  @include button-mixin($color-primary, $color-text-primary, 100%, 100%, 4% 0%, true);
+}
+
+.full-name, .email, .password {
+  margin-bottom: 15px;
 }
 
 .password {

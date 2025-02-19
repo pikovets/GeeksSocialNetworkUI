@@ -1,12 +1,3 @@
-<template>
-  <div @click="goToItemPage" class="profile-item">
-    <div class="avatar-container">
-      <img :src="avatar" class="avatar" />
-    </div>
-    <p class="name">{{ itemName }}</p>
-  </div>
-</template>
-
 <script>
 import defaultAvatar from "@/assets/img/avatars/default-avatar.jpg";
 
@@ -26,7 +17,9 @@ export default {
       return this.item.photoLink ? this.item.photoLink : defaultAvatar;
     },
     itemName() {
-      return this.type === "user" ? this.item.firstName : this.item.name;
+      name = this.type === "user" ? this.item.firstName : this.item.name;
+      name = name.length > 6 ? name.slice(0, 6) + "..." : name;
+      return name;
     },
   },
   methods: {
@@ -40,7 +33,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<template>
+  <div @click="goToItemPage" class="profile-item">
+    <div class="avatar-container">
+      <img :src="avatar" class="avatar" />
+    </div>
+    <p class="name">{{ itemName }}</p>
+  </div>
+</template>
+
+<style scoped lang="scss">
 .profile-item {
   display: flex;
   flex-direction: column;
@@ -72,5 +74,6 @@ export default {
 .name {
   font-size: 0.8rem;
   text-align: center;
+  color: $color-text-primary;
 }
 </style>

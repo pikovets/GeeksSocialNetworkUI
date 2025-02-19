@@ -1,46 +1,3 @@
-<template>
-  <div class="glow-input">
-    <div class="form-field-wrapper">
-      <div class="form-field-container">
-        <div class="form-field" :class="fieldClasses">
-          <input
-            :value="modelValue"
-            @input="updateModelValue"
-            :type="computedInputType"
-            :placeholder="label"
-            class="form-field-input"
-          />
-          <!-- Append Icon for Password Visibility Toggle -->
-          <i
-            v-if="isPasswordField"
-            :class="passwordIconClass"
-            @click="togglePasswordVisibility"
-            class="form-field-icon fa-solid"
-          ></i>
-        </div>
-
-        <!-- Error Messages -->
-        <p
-          v-show="backendErrorMsg !== ''"
-          v-html="backendErrorMsg"
-          class="form-field-error backend-error"
-        ></p>
-        <p
-          v-show="!isEmpty && !isValid && wasSelected"
-          v-html="validationMsg"
-          class="form-field-error validation-error"
-        ></p>
-        <p
-          v-show="isEmpty && wasSelected && required"
-          class="form-field-error empty-field-error"
-        >
-          {{ $t('emptyFieldMsg') }}
-        </p>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 export default {
   props: {
@@ -77,17 +34,17 @@ export default {
     },
     isValidField() {
       return (
-        this.isValid &&
-        this.wasSelected &&
-        !this.isEmpty &&
-        this.backendErrorMsg === ''
+          this.isValid &&
+          this.wasSelected &&
+          !this.isEmpty &&
+          this.backendErrorMsg === ''
       );
     },
     isInvalidField() {
       return (
-        !this.isValid &&
-        this.wasSelected &&
-        ((this.isEmpty && this.required) || !this.isEmpty)
+          !this.isValid &&
+          this.wasSelected &&
+          ((this.isEmpty && this.required) || !this.isEmpty)
       );
     },
     isValid() {
@@ -123,30 +80,90 @@ export default {
 };
 </script>
 
+<template>
+  <div class="glow-input">
+    <div class="form-field-wrapper">
+      <div class="form-field-container">
+        <div class="form-field" :class="fieldClasses">
+          <input
+              :value="modelValue"
+              @input="updateModelValue"
+              :type="computedInputType"
+              :placeholder="label"
+              class="form-field-input"
+          />
+          <!-- Append Icon for Password Visibility Toggle -->
+          <i
+              v-if="isPasswordField"
+              :class="passwordIconClass"
+              @click="togglePasswordVisibility"
+              class="form-field-icon fa-solid"
+          ></i>
+        </div>
+
+        <!-- Error Messages -->
+        <p
+            v-show="backendErrorMsg !== ''"
+            v-html="backendErrorMsg"
+            class="form-field-error backend-error"
+        ></p>
+        <p
+            v-show="!isEmpty && !isValid && wasSelected"
+            v-html="validationMsg"
+            class="form-field-error validation-error"
+        ></p>
+        <p
+            v-show="isEmpty && wasSelected && required"
+            class="form-field-error empty-field-error"
+        >
+          {{ $t('emptyFieldMsg') }}
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped lang="scss">
 .glow-input {
-  .form-field-wrapper { margin-bottom: 15px; }
-  .form-field-container { display: flex; flex-direction: column; }
+  .form-field-container {
+    display: flex;
+    flex-direction: column;
+  }
+
   .form-field {
     display: flex;
     align-items: center;
     padding: 10px 10px 10px 15px;
-    background-color: #3f3f3f;
+    background-color: $color-grey-light;
     border-radius: 5px;
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
   }
-  .valid-field { box-shadow: inset 0 0 15px rgba(0, 128, 0, 0.75); }
-  .invalid-field { box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.65); }
+
+  .valid-field {
+    box-shadow: inset 0 0 15px rgba(0, 128, 0, 0.75);
+  }
+
+  .invalid-field {
+    box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.65);
+  }
+
   .form-field-input {
     background-color: transparent;
     border: none;
     font-weight: bold;
-    color: whitesmoke;
+    color: $color-text-primary;
     font-size: 14px;
     width: 100%;
   }
-  .form-field-input::placeholder { color: #9e9e9e; }
-  .form-field-input:focus { outline: none; }
+
+  .form-field-input::placeholder {
+    color: #9e9e9e;
+  }
+
+  .form-field-input:focus {
+    outline: none;
+  }
+
   .form-field-icon {
     display: inline-block;
     color: #9e9e9e;
@@ -155,7 +172,11 @@ export default {
     font-size: 15px;
     transition: color 0.3s ease;
   }
-  .form-field-icon:hover { color: #bfbfbf; }
+
+  .form-field-icon:hover {
+    color: #bfbfbf;
+  }
+
   .form-field-error {
     font-size: 12px;
     color: rgba(255, 0, 0, 0.65);

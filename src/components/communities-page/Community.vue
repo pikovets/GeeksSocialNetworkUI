@@ -83,7 +83,7 @@ export default {
     },
     openCommunityProfile(id) {
       this.$router.push({
-        name: 'communityProfile',
+        name: 'community-profile',
         params: { id: id },
       });
     },
@@ -108,13 +108,14 @@ export default {
     <div
         @click="switchSubscriptionState"
         class="community-subscription-state-switch-btn"
+        :style="getUserCommunityState === 'Unfollow' ? 'background-color: #cc3300' : ''"
     >
       <p>{{ getUserCommunityState }}</p>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .profile-image {
   width: 75px;
   height: 75px;
@@ -129,6 +130,7 @@ export default {
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
+  color: $color-text-primary;
 }
 .community-name:hover {
   text-decoration: underline;
@@ -141,16 +143,11 @@ export default {
 }
 
 .community-subscription-state-switch-btn {
-  background-color: rgb(205, 205, 205);
+  @include button-mixin($color-primary, black, 100%, 50%);
   padding: 7.5px 0 7.5px 0;
   border-radius: 5px;
   cursor: pointer;
   transition: opacity 0.1s ease-in-out;
-  flex: 1;
-}
-.community-subscription-state-switch-btn:hover {
-  background-color: rgb(175, 175, 175);
-  opacity: 0.9;
 }
 
 .community-subscription-state-switch-btn p {

@@ -1,3 +1,22 @@
+<script>
+export default {
+  props: {
+    authProfile: Object,
+  },
+  computed: {
+    getDate() {
+      const date = new Date(this.authProfile.birthday);
+      return `${date.getDate()} ${date.toLocaleString('default', {
+        month: 'long',
+      })} ${date.getFullYear()}`;
+    },
+  },
+  data() {
+    return {};
+  },
+};
+</script>
+
 <template>
   <div class="overlay">
     <div class="sections-grid">
@@ -41,26 +60,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    authProfile: Object,
-  },
-  computed: {
-    getDate() {
-      const date = new Date(this.authProfile.birthday);
-      return `${date.getDate()} ${date.toLocaleString('default', {
-        month: 'long',
-      })} ${date.getFullYear()}`;
-    },
-  },
-  data() {
-    return {};
-  },
-};
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 .overlay {
   width: 100%;
   height: 100%;
@@ -80,7 +80,7 @@ export default {
 
 .panel {
   width: 560px;
-  background-color: rgb(41, 41, 41);
+  background-color: $color-bg-dark;
   border-radius: 10px;
   margin-right: 15px;
 }
@@ -99,6 +99,7 @@ export default {
 div p {
   font-size: 14px;
   margin-left: 10px;
+  color: $color-text-primary;
 }
 
 .more-info-content {
@@ -128,5 +129,4 @@ div p {
   width: 20px;
   height: 20px;
 }
-
 </style>

@@ -55,5 +55,3 @@ export default {
   },
 };
 </script>
-
-<style scoped src="../assets/styles/pages/Communities.css"></style>

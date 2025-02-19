@@ -1,33 +1,3 @@
-<template>
-  <div class="profile-image-container">
-    <img
-      @click="openUserProfile(this.user.id)"
-      class="profile-image"
-      :src="getAvatar"
-    />
-  </div>
-  <div class="user-data">
-    <p @click="openUserProfile(this.user.id)" class="user-name">
-      {{ fullName }}
-    </p>
-  </div>
-  <div class="interaction">
-    <div @click="switchFriendshipState" class="friendship-switch-btn">
-      <p>{{ getFriendButtonState }}</p>
-    </div>
-    <div
-      v-show="
-        this.userRelationship != null &&
-        this.userRelationship.type === 'AUTH_USER_PENDING'
-      "
-      @click="cancelFriendshipRequest"
-      class="friendship-switch-btn"
-    >
-      <p>{{ $t('cancelRequest') }}</p>
-    </div>
-  </div>
-</template>
-
 <script>
 import {
   getFriendRequest,
@@ -108,7 +78,7 @@ export default {
     },
     openUserProfile(id) {
       this.$router.push({
-        name: 'profile',
+        name: 'user-profile',
         params: { id: id },
       });
     },
@@ -116,7 +86,37 @@ export default {
 };
 </script>
 
-<style scoped>
+<template>
+  <div class="profile-image-container">
+    <img
+      @click="openUserProfile(this.user.id)"
+      class="profile-image"
+      :src="getAvatar"
+    />
+  </div>
+  <div class="user-data">
+    <p @click="openUserProfile(this.user.id)" class="user-name">
+      {{ fullName }}
+    </p>
+  </div>
+  <div class="interaction">
+    <div @click="switchFriendshipState" class="friendship-switch-btn">
+      <p>{{ getFriendButtonState }}</p>
+    </div>
+    <div
+      v-show="
+        this.userRelationship != null &&
+        this.userRelationship.type === 'AUTH_USER_PENDING'
+      "
+      @click="cancelFriendshipRequest"
+      class="friendship-switch-btn"
+    >
+      <p>{{ $t('cancelRequest') }}</p>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
 .profile-image {
   width: 75px;
   height: 75px;
@@ -131,6 +131,7 @@ export default {
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
+  color: $color-text-primary;
 }
 .user-name:hover {
   text-decoration: underline;
@@ -143,7 +144,7 @@ export default {
 }
 
 .friendship-switch-btn {
-  background-color: rgb(205, 205, 205);
+  background-color: $color-primary;
   padding: 7.5px 0 7.5px 0;
   border-radius: 5px;
   cursor: pointer;
@@ -160,5 +161,4 @@ export default {
   font-size: 14px;
   text-align: center;
 }
-
 </style>

@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<style>
+<style scoped lang="scss">
 .overlay {
   position: absolute;
   top: 0;
@@ -32,7 +32,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: #64b657;
+  background-color: $color-secondary;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;

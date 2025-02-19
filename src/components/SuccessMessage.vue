@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .success-message-container {
   background-color: #48883e81;
   border-radius: 5px;
@@ -15,13 +15,13 @@
 }
 
 .message {
-  color: #fff;
+  color: $color-text-primary;
   font-size: 0.75rem;
   padding: 1em;
 }
 
 .message a {
-  color: #64b657;
+  color: $color-secondary;
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;

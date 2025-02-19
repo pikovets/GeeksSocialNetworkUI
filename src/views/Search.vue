@@ -1,25 +1,7 @@
-<template>
-  <div id="animatedBackground">
-    <Header :authUser="authUser" />
-
-    <div class="responsive-container">
-      <MainSidebar class="main-sidebar" />
-
-      <div class="main-content">
-        <Users
-          :users="searchedUsers"
-          :authUser="authUser"
-          :authUserProfile="authUserProfile"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
-import Users from '../components/Users.vue';
+import Users from '../components/friends-page/Users.vue';
 
 import { getUser, getProfile, getUsersByName } from '../services/api.js';
 
@@ -56,7 +38,7 @@ export default {
 
     async fetchSearchedUsersData() {
       const searchedUsersData = await getUsersByName(
-        this.$route.query.searchName
+        this.$route.query.searchQuery
       );
       this.searchedUsers = searchedUsersData.users;
 
@@ -73,4 +55,20 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/pages/Search.css"></style>
+<template>
+  <div id="animatedBackground">
+    <Header :authUser="authUser" />
+
+    <div class="responsive-container">
+      <MainSidebar class="main-sidebar" />
+
+      <div class="main-content">
+        <Users
+          :users="searchedUsers"
+          :authUser="authUser"
+          :authUserProfile="authUserProfile"
+        />
+      </div>
+    </div>
+  </div>
+</template>

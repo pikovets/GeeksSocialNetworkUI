@@ -1,28 +1,10 @@
-<template>
-  <div id="animatedBackground">
-    <Header :authUser="authUser" />
-
-    <div class="responsive-container">
-      <MainSidebar class="main-sidebar" />
-
-      <div class="main-content">
-        <div class="post-feed">
-          <AddPost :authUser="authUser" />
-
-          <Posts :posts="posts" :authUser="authUser" style="width: 850px" />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import Header from '../components/Header.vue';
 import AddPost from '../components/AddPost.vue';
-import Posts from '../components/Posts.vue';
+import Posts from '../components/post/Posts.vue';
 import MainSidebar from '../components/MainSidebar.vue';
 
-import { getUser, getFeed } from '../services/api';
+import {getFeed, getUser} from '../services/api';
 
 export default {
   components: {
@@ -56,4 +38,20 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/pages/Home.css"></style>
+<template>
+  <div id="animatedBackground">
+    <Header :authUser="authUser"/>
+
+    <div class="responsive-container">
+      <MainSidebar class="main-sidebar"/>
+
+      <div class="main-content">
+        <div class="post-feed">
+          <AddPost :authUser="authUser"/>
+
+          <Posts :posts="posts" :authUser="authUser" style="width: 850px"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

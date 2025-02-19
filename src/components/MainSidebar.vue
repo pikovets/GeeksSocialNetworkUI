@@ -1,13 +1,8 @@
-<template>
-  <div class="main-sidebar">
-    <Sidebar :modules="pages" />
-  </div>
-</template>
-
 <script>
 import Sidebar from './Sidebar.vue';
 import ProfileIcon from '../assets/icons/profile.svg';
 import FriendsIcon from '../assets/icons/friends.svg';
+import CommunitiesIcon from '../assets/icons/communities.svg';
 
 export default {
   name: 'MainSidebar',
@@ -20,12 +15,17 @@ export default {
         {
           name: 'Profile',
           icon: ProfileIcon,
-          link: { name: 'profile', params: { id: 'me' } },
+          link: {name: 'user-profile', params: {id: 'me'}},
         },
         {
           name: 'Friends',
           icon: FriendsIcon,
-          link: { name: 'friends', params: { id: 'me' } },
+          link: {name: 'friends', params: {id: 'me'}},
+        },
+        {
+          name: 'Communities',
+          icon: CommunitiesIcon,
+          link: {name: 'communities', params: {id: 'me'}},
         },
       ],
     };
@@ -33,4 +33,8 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/MainSidebar.css"></style>
+<template>
+  <div class="main-sidebar" style="margin-right: 25px;">
+    <Sidebar :modules="pages"/>
+  </div>
+</template>

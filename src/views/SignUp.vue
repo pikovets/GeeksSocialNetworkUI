@@ -1,86 +1,17 @@
-<template>
-  <Header />
-
-  <div id="animatedBackground">
-    <div class="responsive-container">
-      <div class="registration-form">
-        <div class="logo-container">
-          <img class="logo" src="../assets/img/logo.png" />
-        </div>
-
-        <div class="registration-section">
-          <p class="title" v-html="$t('createAccountTitle')"></p>
-          <p class="log-in-offer">
-            {{ $t('alreadyMember') }}
-            <router-link to="/login">{{ $t('logIn') }}</router-link>
-          </p>
-
-          <FormField
-            v-model="userData.fullName"
-            :label="$t('fullNameLabel')"
-            :validationRule="validationRules.name"
-            :validationMsg="$t('nameValidationMsg')"
-            :class="{
-              'apply-shake': shake.fullName,
-            }"
-            class="full-name"
-          ></FormField>
-
-          <FormField
-            v-model="userData.email"
-            :label="$t('emailLabel')"
-            :backendErrorMsg="backendErrors.email"
-            :validationRule="validationRules.email"
-            :validationMsg="$t('emailValidationMsg')"
-            @clearBackendErrors="clearBackendErrors"
-            :class="{
-              'apply-shake': shake.email,
-            }"
-            class="email"
-          ></FormField>
-
-          <PasswordField
-            v-model="userData.password"
-            :label="$t('passwordLabel')"
-            :backendErrorMsg="backendErrors.password"
-            :validationRule="validationRules.password"
-            :validationMsg="$t('passwordValidationMsg')"
-            @clearBackendErrors="clearBackendErrors"
-            :class="{
-              'apply-shake': shake.password,
-            }"
-            class="password"
-          ></PasswordField>
-        </div>
-
-        <SuccessMessage v-show="isRegistered" />
-
-        <button class="create-account-btn" @click="onCreateAccountClick">
-          {{ $t('createAccountBtn') }}
-        </button>
-      </div>
-
-      <LoadingScreen v-if="isLoading" />
-    </div>
-  </div>
-</template>
-
 <script>
+import GlowInput from '../components/elements/GlowInput.vue';
 import Header from '../components/Header.vue';
-import FormField from '../components/fields/FormField.vue';
-import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
 import SuccessMessage from '../components/SuccessMessage.vue';
 
-import { validationRules } from '../config/validationRules';
 import { errorMessages } from '../config/errorMessages';
+import { validationRules } from '../config/validationRules';
 import { signup } from '../services/api';
 
 export default {
   components: {
     Header,
-    FormField,
-    PasswordField,
+    GlowInput,
     LoadingScreen,
     SuccessMessage,
   },
@@ -111,7 +42,10 @@ export default {
       this.$router.push('/');
     }
   },
-  computed: {
+  methods: {
+    isValidField(value, fieldName) {
+      return value !== '' && this.validationRules[fieldName].test(value);
+    },
     isFormValid() {
       return (
         this.isValidField(this.userData.fullName, 'name') &&
@@ -119,18 +53,11 @@ export default {
         this.isValidField(this.userData.password, 'password')
       );
     },
-  },
-  methods: {
-    isValidField(value, fieldName) {
-      return value !== '' && this.validationRules[fieldName].test(value);
-    },
-
     clearBackendErrors() {
       this.backendErrors.email = '';
       this.backendErrors.password = '';
       this.isRegistered = false;
     },
-
     async authenticateUser() {
       try {
         if (!this.isOnline) {
@@ -138,14 +65,9 @@ export default {
           return;
         }
 
-        this.interval = setTimeout(() => {
-          this.isLoading = true;
-        }, 500);
-
+        this.isLoading = true;
         const response = await signup(this.userData);
-
         this.isLoading = false;
-        clearInterval(this.interval);
 
         if (response.ok) {
           this.isRegistered = true;
@@ -157,7 +79,6 @@ export default {
     handleAuthenticationError(error) {
       this.isLoading = false;
       this.isRegistered = false;
-      clearInterval(this.interval);
 
       if (error.message === errorMessages.TIMEOUT) {
         alert(this.$i18n.t('timeoutErrorMsg'));
@@ -167,36 +88,22 @@ export default {
         return;
       }
 
-      let errorSplit = error.message.split(';');
-
-      let fieldNames = [];
-      let fieldErrorMessages = [];
-
-      for (let i = 0; i < errorSplit.length; i++) {
-        let keyValueSplit = errorSplit[i].split(':');
-
-        let fieldName = keyValueSplit[0];
-        let message = keyValueSplit[1];
-
-        fieldNames.push(fieldName);
-        fieldErrorMessages.push(message);
-      }
-
-      for (let i = 0; i < fieldNames.length; i++) {
-        this.backendErrors[fieldNames[i]] = fieldErrorMessages[i];
-        this.shakeField(fieldNames[i]);
-      }
+      let errorDetails = error.message.split(';');
+      errorDetails.forEach((error) => {
+        let [fieldName, message] = error.split(':');
+        this.backendErrors[fieldName] = message;
+        this.shakeField(fieldName);
+      });
     },
     onCreateAccountClick() {
-      if (this.isFormValid) {
+      if (this.isFormValid()) {
         this.authenticateUser();
       } else {
-        const fields = ['fullName', 'email', 'password'];
-        for (const fieldName of fields) {
-          if (!this.isValidField(this.userData[fieldName], fieldName)) {
-            this.shakeField(fieldName);
+        ['fullName', 'email', 'password'].forEach((field) => {
+          if (!this.isValidField(this.userData[field], field)) {
+            this.shakeField(field);
           }
-        }
+        });
       }
     },
     shakeField(fieldName) {
@@ -209,4 +116,125 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/SignUp.css"></style>
+<template>
+  <Header />
+
+  <div id="animatedBackground">
+    <div class="responsive-container">
+      <div class="registration-form">
+        <div class="logo-container">
+          <img class="logo" src="../assets/img/logo.png" />
+        </div>
+
+        <div class="registration-section">
+          <p class="title">{{ $t('createAccountTitle') }}</p>
+          <p class="log-in-offer">
+            {{ $t('alreadyMember') }}
+            <router-link to="/login">{{ $t('logIn') }}</router-link>
+          </p>
+
+          <GlowInput
+            v-model="userData.fullName"
+            :label="$t('fullNameLabel')"
+            :validationRule="validationRules.name"
+            :validationMsg="$t('nameValidationMsg')"
+            :class="{ 'apply-shake': shake.fullName }"
+            class="full-name"
+          />
+
+          <GlowInput
+            v-model="userData.email"
+            :label="$t('emailLabel')"
+            :backendErrorMsg="backendErrors.email"
+            :validationRule="validationRules.email"
+            :validationMsg="$t('emailValidationMsg')"
+            @clearBackendError="clearBackendErrors"
+            :class="{ 'apply-shake': shake.email }"
+            class="email"
+          />
+
+          <GlowInput
+            v-model="userData.password"
+            :label="$t('passwordLabel')"
+            :backendErrorMsg="backendErrors.password"
+            :validationRule="validationRules.password"
+            :validationMsg="$t('passwordValidationMsg')"
+            :type="'password'"
+            @clearBackendError="clearBackendErrors"
+            :class="{ 'apply-shake': shake.password }"
+            class="password"
+          />
+        </div>
+
+        <SuccessMessage v-show="isRegistered" />
+
+        <button class="create-account-btn" @click="onCreateAccountClick">
+          {{ $t('createAccountBtn') }}
+        </button>
+
+        <LoadingScreen v-if="isLoading" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.registration-form {
+  @include form-mixin;
+}
+
+.responsive-container {
+  align-items: center;
+  margin-top: 0px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+
+.title {
+  color: $color-text-primary;
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.log-in-offer {
+  color: $color-text-muted;
+  margin-bottom: 40px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.log-in-offer a {
+  color: $color-secondary;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.log-in-offer a:hover {
+  text-decoration: underline;
+}
+
+.create-account-btn {
+  @include button-mixin($color-primary, $color-text-primary, 100%, 100%, 4% 0%, true);
+}
+
+.full-name, .email, .password {
+  margin-bottom: 15px;
+}
+
+.password {
+  margin-bottom: 20px;
+}
+</style>

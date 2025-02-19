@@ -1,16 +1,3 @@
-<template>
-  <select
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
-    class="select"
-  >
-    <option value="" disabled>{{ placeholder }}</option>
-    <option v-for="option in options" :key="option" :value="option">
-      {{ option }}
-    </option>
-  </select>
-</template>
-
 <script>
 export default {
   props: {
@@ -28,19 +15,27 @@ export default {
 };
 </script>
 
-<style scoped>
-p,
-input {
-  font-family: 'Poppins';
-}
+<template>
+  <select
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+    class="select"
+  >
+    <option value="" disabled>{{ placeholder }}</option>
+    <option v-for="option in options" :key="option" :value="option">
+      {{ option }}
+    </option>
+  </select>
+</template>
 
+<style scoped lang="scss">
 .select {
   padding: 10px 10px 10px 10px;
   background-color: #3f3f3f;
   border-radius: 5px;
   margin-bottom: 5px;
   margin-bottom: 15px;
-  color: whitesmoke;
+  color: $color-text-primary;
   border-style: none;
   width: 100%;
 }

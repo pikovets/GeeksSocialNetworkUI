@@ -1,16 +1,3 @@
-<template>
-  <div class="panel">
-    <SidebarModule
-      v-for="(module, index) in modules"
-      :key="module.id"
-      @click="selectTab(index)"
-      :icon="module.icon"
-      :name="module.name"
-      :class="{ 'active-tab': selectedIndex === index && activeTabChange }"
-    />
-  </div>
-</template>
-
 <script>
 import SidebarModule from './SidebarModule.vue';
 
@@ -41,6 +28,33 @@ export default {
 };
 </script>
 
-<style scoped>
-@import '../assets/styles/Sidebar.css';
+<template>
+  <div class="panel">
+    <SidebarModule
+      v-for="(module, index) in modules"
+      :key="module.id"
+      @click="selectTab(index)"
+      :icon="module.icon"
+      :name="module.name"
+      :class="{ 'active-tab': selectedIndex === index && activeTabChange }"
+    />
+  </div>
+</template>
+
+<style scoped lang="scss">
+.panel {
+  @include transperent-panel-mixin;
+  border: $border;
+  width: 150px;
+  padding: 10px;
+  padding-bottom: 0;
+  border-radius: 15px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.active-tab {
+  background-color: #383838;
+}
 </style>

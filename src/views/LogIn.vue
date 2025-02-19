@@ -1,76 +1,21 @@
-<template>
-  <Header />
-
-  <div id="animatedBackground">
-    <div class="responsive-container">
-      <div class="log-in-form">
-        <div class="logo-container">
-          <img class="logo" src="@/assets/img/logo.png" />
-        </div>
-
-        <div class="log-in-section">
-          <p class="title" v-html="$t('signInTitle')"></p>
-          <p class="sign-up-offer">
-            {{ $t('noAccountText') }}
-            <router-link to="/signup">{{ $t('signUp') }}</router-link>
-          </p>
-
-          <FormField
-            v-model="userData.email"
-            :label="$t('emailLabel')"
-            :backendErrorMsg="backendErrors.email"
-            :validationRule="validationRules.email"
-            :validationMsg="$t('emailValidationMsg')"
-            @clearBackendErrors="clearBackendErrors"
-            :class="{
-              'apply-shake': shake.email,
-            }"
-            class="email"
-          ></FormField>
-
-          <PasswordField
-            v-model="userData.password"
-            :label="$t('passwordLabel')"
-            :validationRule="validationRules.password"
-            :validationMsg="$t('passwordValidationMsg')"
-            @clearBackendErrors="clearBackendErrors"
-            :class="{
-              'apply-shake': shake.password,
-            }"
-            class="password"
-          ></PasswordField>
-        </div>
-
-        <button class="log-in-btn" @click="onLogInClick">
-          {{ $t('logInButton') }}
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <LoadingScreen v-if="isLoading" />
-</template>
-
 <script>
 import Header from '../components/Header.vue';
-import FormField from '../components/fields/FormField.vue';
-import PasswordField from '../components/fields/PasswordField.vue';
 import LoadingScreen from '../components/LoadingScreen.vue';
+import GlowInput from '../components/elements/GlowInput.vue';
 
-import { validationRules } from '../config/validationRules';
-import { errorMessages } from '../config/errorMessages';
-import { login } from '../services/api';
+import {errorMessages} from '@/config/errorMessages';
+import {validationRules} from '@/config/validationRules';
+import {login} from '@/services/api';
 
 export default {
   components: {
     Header,
-    FormField,
-    PasswordField,
     LoadingScreen,
+    GlowInput,
   },
   data() {
     return {
-      isOnline: window.navigator.onLine,
+      isOnline: navigator.onLine,
       isLoading: false,
       userData: {
         email: '',
@@ -84,74 +29,72 @@ export default {
         email: false,
         password: false,
       },
-      validationRules: validationRules,
+      validationRules,
     };
   },
   mounted() {
     if (localStorage.getItem('GeeksJwtToken')) {
       this.$router.push('/');
     }
+    window.addEventListener('online', this.updateOnlineStatus);
+    window.addEventListener('offline', this.updateOnlineStatus);
+  },
+  beforeUnmount() {
+    window.removeEventListener('online', this.updateOnlineStatus);
+    window.removeEventListener('offline', this.updateOnlineStatus);
   },
   computed: {
     isFormValid() {
       return (
-        this.isValidField(this.userData.email, 'email') &&
-        this.isValidField(this.userData.password, 'password')
+          this.isValidField(this.userData.email, 'email') &&
+          this.isValidField(this.userData.password, 'password')
       );
     },
   },
   methods: {
+    updateOnlineStatus() {
+      this.isOnline = navigator.onLine;
+    },
     isValidField(value, fieldName) {
       return (
-        value !== '' &&
-        this.validationRules[fieldName].test(value) &&
-        this.backendErrors[fieldName] === ''
+          value !== '' &&
+          this.validationRules[fieldName]?.test(value) &&
+          !this.backendErrors[fieldName]
       );
     },
-
     clearBackendErrors() {
       this.backendErrors.email = '';
       this.backendErrors.password = '';
     },
-
     async authenticateUser() {
+      if (!this.isOnline) {
+        alert(this.$t('offlineErrorMsg'));
+        return;
+      }
+
+      this.isLoading = true;
       try {
-        if (!this.isOnline) {
-          alert(this.$i18n.t('offlineErrorMsg'));
-          return;
-        }
-
-        this.interval = setTimeout(() => {
-          this.isLoading = true;
-        }, 500);
-
         const response = await login(this.userData);
+        if (!response.ok) throw new Error(await response.text());
+
         const data = await response.json();
-
-        this.isLoading = false;
-        clearInterval(this.interval);
-
-        const jwtToken = data.token;
-        localStorage.setItem('GeeksJwtToken', jwtToken);
-
+        localStorage.setItem('GeeksJwtToken', data.token);
         this.$router.push('/');
       } catch (error) {
         this.handleAuthenticationError(error);
+      } finally {
+        this.isLoading = false;
       }
     },
     handleAuthenticationError(error) {
-      this.isLoading = false;
-      clearInterval(this.interval);
-
       if (error.message === errorMessages.TIMEOUT) {
-        alert(this.$i18n.t('timeoutErrorMsg'));
+        alert(this.$t('timeoutErrorMsg'));
       } else if (error.message === errorMessages.FETCH_FAILED) {
-        alert(this.$i18n.t('serverErrorMsg'));
-      } else if (error.message === 'Incorrect username or password') {
+        alert(this.$t('serverErrorMsg'));
+      } else if (error.message.includes('Incorrect')) {
         this.backendErrors.email = error.message;
-        this.shakeField('email');
-
         this.backendErrors.password = error.message;
+        this.shakeField('email');
         this.shakeField('password');
       }
     },
@@ -159,12 +102,11 @@ export default {
       if (this.isFormValid) {
         this.authenticateUser();
       } else {
-        const fields = ['email', 'password'];
-        for (const fieldName of fields) {
-          if (!this.isValidField(this.userData[fieldName], fieldName)) {
-            this.shakeField(fieldName);
+        ['email', 'password'].forEach((field) => {
+          if (!this.isValidField(this.userData[field], field)) {
+            this.shakeField(field);
           }
-        }
+        });
       }
     },
     shakeField(fieldName) {
@@ -177,4 +119,124 @@ export default {
 };
 </script>
 
-<style scoped src="../assets/styles/LogIn.css"></style>
+<template>
+  <Header/>
+
+  <div id="animatedBackground">
+    <div class="responsive-container">
+      <div class="log-in-form">
+        <div class="logo-container">
+          <img class="logo" src="@/assets/img/logo.png"/>
+        </div>
+
+        <div class="log-in-section">
+          <p class="title" v-html="$t('signInTitle')"></p>
+          <p class="sign-up-offer">
+            {{ $t('noAccountText') }}
+            <router-link to="/signup">{{ $t('signUp') }}</router-link>
+          </p>
+
+          <GlowInput
+              v-model="userData.email"
+              :label="$t('emailLabel')"
+              :backendErrorMsg="backendErrors.email"
+              :validationRule="validationRules.email"
+              :validationMsg="$t('emailValidationMsg')"
+              @clearBackendErrors="clearBackendErrors"
+              :class="{
+              'apply-shake': shake.email,
+            }"
+              class="email"
+          ></GlowInput>
+
+          <GlowInput
+              v-model="userData.password"
+              :label="$t('passwordLabel')"
+              :validationRule="validationRules.password"
+              :validationMsg="$t('passwordValidationMsg')"
+              @clearBackendErrors="clearBackendErrors"
+              :type="'password'"
+              :class="{
+              'apply-shake': shake.password,
+            }"
+              class="password"
+          ></GlowInput>
+        </div>
+
+        <button class="log-in-btn" @click="onLogInClick">
+          {{ $t('logInButton') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <LoadingScreen v-if="isLoading"/>
+</template>
+
+<style scoped lang="scss">
+.log-in-form {
+  @include form-mixin;
+}
+
+.responsive-container {
+  align-items: center;
+  margin-top: 0;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+
+.title {
+  color: $color-text-primary;
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.sign-up-offer {
+  color: $color-text-muted;
+  margin-bottom: 40px;
+  align-self: center;
+  font-size: 14px;
+  text-align: center;
+}
+
+.sign-up-offer a {
+  color: $color-secondary;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sign-up-offer a:hover {
+  text-decoration: underline;
+}
+
+.email {
+  margin-bottom: 15px;
+}
+
+.email,
+.password {
+  width: 100%;
+}
+
+.password {
+  margin-bottom: 65px;
+}
+
+.log-in-btn {
+  @include button-mixin($color-primary, $color-text-primary, 100%, 100%, 4% 0%, true);
+}
+</style>

@@ -100,16 +100,13 @@ export const getPosts = async (userId = 'me') => {
 };
 
 export const getPost = async (postId) => {
-  const response = await fetch(
-    createApiUrl(API_ENDPOINTS.GET_POST(postId)),
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
-      },
-    }
-  );
+  const response = await fetch(createApiUrl(API_ENDPOINTS.GET_POST(postId)), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+  });
 
   await handleResponse(response);
 
@@ -131,8 +128,8 @@ export const updateUser = async (user, profile) => {
   return response;
 };
 
-export const uploadPost = async (post) => {
-  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLOAD_POST), {
+export const uploadUserPost = async (post) => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.UPLOAD_USER_POST), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -140,6 +137,24 @@ export const uploadPost = async (post) => {
     },
     body: JSON.stringify(post),
   });
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const uploadCommunityPost = async (post, communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.UPLOAD_COMMUNITY_POST(communityId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+      body: JSON.stringify(post),
+    }
+  );
 
   await handleResponse(response);
 
@@ -358,4 +373,102 @@ export const deleteComment = async (commentId) => {
   );
 
   return response;
+};
+
+export const getCommunities = async (userId = 'me') => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_COMMUNITIES(userId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const joinCommunity = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.JOIN_COMMUNITY(communityId)),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  return response;
+};
+
+export const leaveCommunity = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.LEAVE_COMMUNITY(communityId)),
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const fetchUserCommunityState = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_USER_COMMUNITY(communityId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
+};
+
+export const createCommunity = async (community) => {
+  const response = await fetch(createApiUrl(API_ENDPOINTS.CREATE_COMMUNITY), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+    },
+    body: JSON.stringify(community),
+  });
+
+  await handleResponse(response);
+
+  return response;
+};
+
+export const getCommunityProfile = async (communityId) => {
+  const response = await fetch(
+    createApiUrl(API_ENDPOINTS.GET_COMMUNITY_PROFILE(communityId)),
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('GeeksJwtToken')}`,
+      },
+    }
+  );
+
+  await handleResponse(response);
+
+  return await response.json();
 };

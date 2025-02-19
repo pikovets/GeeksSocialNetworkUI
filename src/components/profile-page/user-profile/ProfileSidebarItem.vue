@@ -1,5 +1,6 @@
 <script>
-import defaultAvatar from "@/assets/img/avatars/default-avatar.jpg";
+import defaultAvatarUser from "@/assets/img/avatars/default-avatar.jpg";
+import defaultAvatarCommunity from "@/assets/img/avatars/default-community-avatar.jpg";
 
 export default {
   props: {
@@ -14,6 +15,7 @@ export default {
   },
   computed: {
     avatar() {
+      let defaultAvatar = this.item.type === "user" ? defaultAvatarUser : defaultAvatarCommunity;
       return this.item.photoLink ? this.item.photoLink : defaultAvatar;
     },
     itemName() {

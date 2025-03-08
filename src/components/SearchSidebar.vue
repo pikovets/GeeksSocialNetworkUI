@@ -2,27 +2,27 @@
 import SidebarModule from './SidebarModule.vue';
 
 export default {
-  props: {
-    modules: Array,
-    activeTabChange: {
-      type: Boolean,
-      default: false,
-    },
-    selectedIndex: {
-      type: Number,
-      default: 0,
-    },
-  },
   components: {
     SidebarModule,
   },
+  data() {
+    return {
+      modules: [
+        {
+          name: 'All',
+        },
+        {
+          name: 'People',
+        },
+        {
+          name: 'Communities'
+        }
+      ]
+    }
+  },
   methods: {
-    selectTab(index) {
-      this.$router.push({
-        name: this.modules[index].link.name,
-        query: this.modules[index].link.query || {},
-        params: this.modules[index].link.params || {},
-      });
+    filterSearch(module) {
+      this.$emit('filterSearch', module.name);
     },
   },
 };
@@ -31,12 +31,11 @@ export default {
 <template>
   <div class="panel">
     <SidebarModule
-        v-for="(module, index) in modules"
+        v-for="module in modules"
         :key="module.id"
-        @click="selectTab(index)"
+        @click="filterSearch(module)"
         :icon="module.icon"
         :name="module.name"
-        :class="{ 'active-tab': selectedIndex === index && activeTabChange }"
     />
   </div>
 </template>

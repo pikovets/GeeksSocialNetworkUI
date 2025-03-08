@@ -130,13 +130,15 @@ export default {
 </template>
 
 <style scoped>
+
 .sections-grid {
   display: grid;
-  grid-template-columns: 560px 280px;
-  gap: 15px;
+  grid-template-columns: 550px 345px;
+  gap: 16px;
 }
 
 .sidebar div {
   margin-bottom: 15px;
 }
+
 </style>

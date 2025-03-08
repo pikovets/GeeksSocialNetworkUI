@@ -28,8 +28,8 @@ export default {
       {{ title }} <span class="amount">{{ items.length }}</span>
     </p>
     <div class="items-grid">
-      <div v-for="item in items" :key="item.id">
-        <ProfileSidebarItem :item="item" type="itemType"/>
+      <div v-for="item in items.slice(0, 8)" :key="item.id">
+        <ProfileSidebarItem :item="item" :type="itemType"/>
       </div>
     </div>
   </div>
@@ -39,11 +39,9 @@ export default {
 .panel {
   @include transperent-panel-mixin;
 
-  box-shadow: 0 4px 30px $box-shadow;
-
   border: $border;
   border-radius: 10px;
-  height: 225px;
+  height: 258px;
   padding: 20px;
 
   .title {

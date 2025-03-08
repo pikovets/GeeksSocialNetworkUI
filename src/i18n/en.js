@@ -66,4 +66,13 @@ export default {
   selectSubjectSubtitle:
     "Your choice won't impact the community's opportunities. You can update the community topic anytime.",
   communityCategorySection: '',
+  showAll: 'Show all',
+  peopleTitle: 'People',
+  communitiesTitle: 'Communities',
+  categoryHint: 'Category:',
+  communityTypeHint: 'Community type:',
+  publishPermissionHint: 'Publish permissions:',
+  createdDateHint: 'Created date:',
+  nameHint: 'Name:',
+  descriptionHint: 'Description:',
 };

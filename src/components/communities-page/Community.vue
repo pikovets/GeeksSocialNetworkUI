@@ -33,7 +33,7 @@ export default {
     return {
       isOnline: window.navigator.onLine,
       isLoading: false,
-      userCommunityState: {},
+      userCommunityState: null,
     };
   },
   async mounted() {
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     async switchSubscriptionState() {
-      if (this.userCommunityState === null) {
+      if (!this.userCommunityState) {
         await joinCommunity(this.community.id);
       } else {
         await leaveCommunity(this.community.id);

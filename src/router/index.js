@@ -49,10 +49,15 @@ const router = createRouter({
       component: () => import('../views/CommunityProfile.vue'),
     },
     {
-      path: '/followers',
+      path: '/community/:id/followers',
       name: 'followers',
       component: () => import('../views/Followers.vue'),
     },
+    {
+      path: '/community/:id/manage',
+      name: 'community-profile-manage',
+      component: () => import('../views/EditCommunityProfile.vue'),
+    }
   ],
 });
 

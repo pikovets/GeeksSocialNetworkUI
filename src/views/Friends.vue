@@ -1,30 +1,3 @@
-<template>
-  <div id="animatedBackground">
-    <Header :authUser="authUser" />
-
-    <div class="responsive-container">
-      <MainSidebar class="main-sidebar" />
-
-      <div class="main-content">
-        <Users
-          v-if="acceptFriends.length !== 0"
-          :users="acceptFriends"
-          :authUser="authUser"
-          :authUserProfile="authUserProfile"
-          title="Friend requests:"
-          class="accept-friends-panel"
-        />
-
-        <Users
-          :users="friends"
-          :authUser="authUser"
-          :authUserProfile="authUserProfile"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import Header from '../components/Header.vue';
 import MainSidebar from '../components/MainSidebar.vue';
@@ -73,7 +46,7 @@ export default {
       this.friends = friendsData.users;
 
       const acceptFriendsData = await getAcceptFriendRequests(
-        this.$route.params.id
+          this.$route.params.id
       );
       this.acceptFriends = acceptFriendsData.users;
     },
@@ -81,7 +54,45 @@ export default {
 };
 </script>
 
-<style scoped>
+<template>
+  <div id="animatedBackground">
+    <Header :authUser="authUser" />
+
+    <div class="responsive-container">
+      <MainSidebar class="main-sidebar" />
+
+      <div class="main-content">
+        <Users
+          v-if="acceptFriends.length !== 0"
+          :users="acceptFriends"
+          :authUser="authUser"
+          :authUserProfile="authUserProfile"
+          title="Friend requests:"
+          class="accept-friends-panel"
+        />
+
+        <Users
+          :users="friends"
+          :authUser="authUser"
+          :authUserProfile="authUserProfile"
+          :show-nothing-found-message="true"
+          class="users"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.users {
+  @include transperent-panel-mixin;
+  width: 550px;
+  border-radius: 12px;
+  border: $border;
+  padding: 15px 20px;
+  margin-bottom: 100px;
+}
+
 .accept-friends-panel {
   margin-bottom: 25px;
 }

@@ -7,6 +7,7 @@ export default {
     authUserProfile: Object,
     communities: Array,
     title: String,
+    limit: Number,
   },
   components: {
     Community,
@@ -18,7 +19,7 @@ export default {
 <template>
   <div class="communities">
     <p v-if="title" class="communities-title">{{ title }}</p>
-    <div :key="community.id" v-for="community in communities" class="community">
+    <div :key="community.id" v-for="community in limit ? communities.slice(0, 5) : communities" class="community">
       <Community
         :community="community"
         :authUser="authUser"
@@ -34,15 +35,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.communities {
-  @include transperent-panel-mixin;
-  width: 550px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  border: 1px solid #8383833f;
-  padding: 15px 20px;
-  position: relative;
-}
 .communities .community:last-child {
   margin-bottom: 0;
 }

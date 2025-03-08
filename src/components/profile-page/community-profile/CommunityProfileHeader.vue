@@ -35,25 +35,8 @@ export default {
 
     <div class="profile-info">
         <p class="profile-name">{{ community.name }}</p>
-        <p class="description">sdfsdfsdf</p>
+        <p class="description">{{ community.description }}</p>
       </div>
-
-      <div v-show="isUserAllowedToChangeCommunity" class="interaction-buttons">
-        <button @click="goToEditCommunityProfilePage" class="interaction-btn">
-          <i class="fas fa-user-edit"></i>
-        </button>
-      </div>
-    </div>
-    <div
-      v-show="showAdditionalInfoButton"
-      @click="$emit('onMoreInfoClick')"
-      class="more-info-btn"
-    >
-      <i
-        class="fa-solid fa-circle-info"
-        style="color: #8c8e8f; margin-right: 5px"
-      ></i>
-      <p class="extra-info-text">Learn more info</p>
     </div>
 </template>
 

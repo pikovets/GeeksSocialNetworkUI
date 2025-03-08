@@ -34,7 +34,7 @@ export default {
 </script>
 
 <template>
-  <div class="main-sidebar" style="margin-right: 25px;">
+  <div class="main-sidebar" style="margin-right: 14px;">
     <Sidebar :modules="pages"/>
   </div>
 </template>

@@ -5,4 +5,5 @@ export const validationRules = {
   password: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
   photoLink: /(https?:\/\/)?[-\w.]+(?=\.(?:jpg|png|jpeg|gif|bmp))/,
   communityName: /^.{0,48}$/,
+  communityDescription: /^.{0,150}$/,
 };

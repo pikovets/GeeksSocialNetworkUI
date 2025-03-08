@@ -7,6 +7,8 @@ export default {
     authUserProfile: Object,
     users: Array,
     title: String,
+    limit: Number,
+    showNothingFoundMessage: Boolean,
   },
   components: {
     User,
@@ -17,7 +19,7 @@ export default {
 <template>
   <div class="users">
     <p v-if="title" class="users-title">{{ title }}</p>
-    <div :key="user.id" v-for="user in users" class="user">
+    <div :key="user.id" v-for="user in limit ? users.slice(0, limit) : users" class="user">
       <User
         :user="user"
         :authUser="authUser"
@@ -25,7 +27,7 @@ export default {
       />
     </div>
 
-    <div v-if="this.users.length === 0" class="nothing-found">
+    <div v-if="this.users.length === 0 && showNothingFoundMessage" class="nothing-found">
       <img src="../../assets/icons/nothing-found.svg" />
       <p>{{ $t('noUsersFound') }}</p>
     </div>
@@ -33,14 +35,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.users {
-  @include transperent-panel-mixin;
-  width: 550px;
-  border-radius: 12px;
-  border: $border;
-  padding: 15px 20px;
-  position: relative;
-}
 .users .user:last-child {
   margin-bottom: 0;
 }

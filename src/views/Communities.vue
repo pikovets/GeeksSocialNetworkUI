@@ -68,6 +68,7 @@ export default {
             :communities="communities"
             :authUser="authUser"
             :authUserProfile="authUserProfile"
+            class="communities"
         />
       </div>
     </div>
@@ -81,6 +82,15 @@ export default {
 </template>
 
 <style scoped lang="scss">
+.communities {
+  @include transperent-panel-mixin;
+  width: 550px;
+  border-radius: 12px;
+  border: $border;
+  padding: 15px 20px;
+  margin-bottom: 100px;
+}
+
 .communities-header-buttons {
   @include transperent-panel-mixin;
   width: 550px;

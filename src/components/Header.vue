@@ -87,8 +87,9 @@ export default {
   display: flex;
   align-items: center;
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 1106px;
   width: 100%;
+  padding: 0 15px;
 }
 
 .logo-wrapper {

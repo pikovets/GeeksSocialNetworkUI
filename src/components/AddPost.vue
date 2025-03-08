@@ -45,7 +45,7 @@ export default {
   methods: {
     async sendPost() {
       if (this.isPostValid) {
-        if (this.community !== null) {
+        if (this.community) {
           await uploadCommunityPost(
               {
                 text: this.postText,
@@ -108,18 +108,18 @@ export default {
         v-if="(!isPhotoUrlValid && !isPhotoUrlEmpty) || !isPostTextValid"
         class="validation-container"
     >
-      <div v-if="!isPostTextValid" class="post-text-validation-container">
-        <div class="error-icon-background">
-          <img
-              src="../assets/icons/warning.svg"
-              class="warning-icon filter-green"
-          />
-        </div>
-        <p>
-          <span style="color: #ffc600; font-weight: bold">Warning:</span>
-          {{ $t('postTextValidationMsg') }}
-        </p>
-      </div>
+<!--      <div v-if="!isPostTextValid" class="post-text-validation-container">-->
+<!--        <div class="error-icon-background">-->
+<!--          <img-->
+<!--              src="../assets/icons/warning.svg"-->
+<!--              class="warning-icon filter-green"-->
+<!--          />-->
+<!--        </div>-->
+<!--        <p>-->
+<!--          <span style="color: #ffc600; font-weight: bold">Warning:</span>-->
+<!--          {{ $t('postTextValidationMsg') }}-->
+<!--        </p>-->
+<!--      </div>-->
       <div
           v-if="!isPhotoUrlValid && !isPhotoUrlEmpty"
           class="post-image-url-validation-container"
@@ -201,10 +201,6 @@ p {
 }
 
 .separator {
-  background-color: #8383833f;
-  height: 1px;
-  border-style: none;
-  width: 100%;
   margin: 2.5% 0 3% 0;
 }
 

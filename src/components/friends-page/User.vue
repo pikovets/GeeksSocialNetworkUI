@@ -100,7 +100,7 @@ export default {
     </p>
   </div>
   <div class="interaction">
-    <div @click="switchFriendshipState" class="friendship-switch-btn">
+    <div v-if="this.authUser.id !== this.user.id" @click="switchFriendshipState" class="friendship-switch-btn">
       <p>{{ getFriendButtonState }}</p>
     </div>
     <div

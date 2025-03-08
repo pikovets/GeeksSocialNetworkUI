@@ -33,13 +33,14 @@ export default {
   padding: 10px 10px 10px 10px;
   background-color: #3f3f3f;
   border-radius: 5px;
-  margin-bottom: 5px;
   margin-bottom: 15px;
   color: $color-text-primary;
   border-style: none;
   width: 100%;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
 }
-.select:placeholder {
-  color: #9e9e9e;
-}
+
 </style>

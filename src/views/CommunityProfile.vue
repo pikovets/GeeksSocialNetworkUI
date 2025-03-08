@@ -6,16 +6,28 @@ import MainSidebar from '../components/MainSidebar.vue';
 import Posts from '../components/post/Posts.vue';
 import ProfileSidebarSection from '../components/profile-page/ProfileSidebarSection.vue';
 
-import { deletePost, getCommunityProfile, getUser, fetchUserCommunityState} from '../services/api';
+import {deletePost, fetchUserCommunityState, getCommunityProfile, getUser} from '../services/api';
+import CommunityManageSidebar from "@/components/profile-page/community-profile/CommunityManageSidebar.vue";
+import ClosedCommunityIcon from "@/assets/icons/private-community.svg"
+import InfoIcon from "@/assets/icons/info.svg"
+import CommunityProfileMoreInfo from "@/components/profile-page/community-profile/CommunityProfileMoreInfo.vue";
+import community from "../components/communities-page/Community.vue";
 
 export default {
+  computed: {
+    community() {
+      return community
+    }
+  },
   components: {
+    CommunityProfileMoreInfo,
     Header,
-    CommunityProfile: CommunityProfileHeader,
+    CommunityProfileHeader,
     AddPost,
     Posts,
     MainSidebar,
     ProfileSidebarSection,
+    CommunityManageSidebar
   },
   data() {
     return {
@@ -25,6 +37,8 @@ export default {
         followers: [],
       },
       userCommunityState: {},
+      closedCommunityIcon: ClosedCommunityIcon,
+      infoIcon: InfoIcon,
     };
   },
   async mounted() {
@@ -46,7 +60,7 @@ export default {
       this.community = await getCommunityProfile(this.$route.params.id);
 
       this.userCommunityState = await fetchUserCommunityState(
-        this.community.id
+          this.community.id
       );
     },
     async deletePost(postId) {
@@ -54,21 +68,21 @@ export default {
 
       if (response.ok) {
         this.community.posts = this.community.posts.filter(
-          (post) => post.id !== postId
+            (post) => post.id !== postId
         );
       }
     },
     isUserAllowedToPost() {
       if (this.community.publishPermission === 'ADMIN') {
         return (
-          this.userCommunityState !== null &&
-          this.userCommunityState === 'ADMIN'
+            this.userCommunityState !== null &&
+            this.userCommunityState === 'ADMIN'
         );
       } else if (this.community.publishPermission === 'ADMIN_AND_MODERATORS') {
         return (
-          this.userCommunityState !== null &&
-          (this.userCommunityState === 'ADMIN' ||
-            this.userCommunityState === 'MODERATOR')
+            this.userCommunityState !== null &&
+            (this.userCommunityState === 'ADMIN' ||
+                this.userCommunityState === 'MODERATOR')
         );
       } else {
         return true;
@@ -80,13 +94,13 @@ export default {
 
 <template>
   <div id="animatedBackground">
-    <Header :authUser="authUser" />
+    <Header :authUser="authUser"/>
 
     <div class="responsive-container">
-      <MainSidebar class="main-sidebar" />
+      <MainSidebar class="main-sidebar"/>
 
       <div class="main-content">
-        <CommunityProfile
+        <CommunityProfileHeader
             @onMoreInfoClick="showAdditionalInfo = true"
             :authUser="authUser"
             :community="community"
@@ -108,10 +122,25 @@ export default {
           </div>
 
           <div class="sidebar">
+            <CommunityManageSidebar v-if="userCommunityState === 'ADMIN'"/>
+            <div class="community-access-info-container">
+              <div class="icon-container">
+                <img class="icon filter-green" :src="closedCommunityIcon"/>
+              </div>
+
+              <p class="access-info">{{community.joinType && community.joinType.charAt(0) + community.joinType.substring(1).toLowerCase()}} community</p>
+            </div>
+            <div class="community-info-container">
+              <div class="icon-container">
+                <img class="icon filter-green" :src="infoIcon"/>
+              </div>
+
+              <p @click="showAdditionalInfo = true" class="additional-info">Additional info</p>
+            </div>
             <ProfileSidebarSection
                 title="Followers"
                 itemType="user"
-                routeName="friends"
+                routeName="followers"
                 :items="community.followers"
             />
           </div>
@@ -120,17 +149,21 @@ export default {
     </div>
   </div>
 
-  <!-- <MoreInfoCommunity
-    @onCloseMoreInfo="showAdditionalInfo = false"
-    v-show="showAdditionalInfo"
-    :authProfile="community"
-  /> -->
+  <CommunityProfileMoreInfo
+      @onCloseMoreInfo="showAdditionalInfo = false"
+      v-show="showAdditionalInfo"
+      :communityProfile="community"
+  />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.responsive-container {
+  overflow-y: auto;
+}
+
 .sections-grid {
   display: grid;
-  grid-template-columns: 560px 280px;
+  grid-template-columns: 550px 345px;
   gap: 15px;
 }
 
@@ -140,5 +173,64 @@ export default {
 
 .sidebar div {
   margin-bottom: 15px;
+}
+
+.community-access-info-container {
+  @include transperent-panel-mixin;
+  border: $border;
+  padding-left: 15px;
+  padding-bottom: 0;
+  border-radius: 10px;
+  height: 50px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+
+  .icon-container {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+
+  .access-info {
+    font-size: 13px;
+    color: $color-text-primary;
+  }
+}
+
+.community-info-container {
+  @include transperent-panel-mixin;
+  border: $border;
+  padding-left: 15px;
+  padding-bottom: 0;
+  border-radius: 10px;
+  height: 50px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+
+  .icon-container {
+    margin-right: 10px;
+    margin-bottom: 0;
+    height: 20px;
+  }
+
+  .additional-info {
+    font-size: 13px;
+    color: $color-primary;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+
+    }
+  }
+}
+
+.post-feed {
+  margin-bottom: 100px;
 }
 </style>

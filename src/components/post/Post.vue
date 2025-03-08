@@ -18,10 +18,15 @@ export default {
     fullName() {
       return `${this.post.author.firstName} ${this.post.author.lastName}`;
     },
-    getAvatar() {
+    getPostAuthorAvatar() {
       return this.post.author.photoLink
         ? this.post.author.photoLink
         : defaultAvatar;
+    },
+    getCurrentUserAvatar() {
+      return this.authUser.photoLink
+          ? this.authUser.photoLink
+          : defaultAvatar;
     },
     getPostDate() {
       const date = new Date(this.post.date);
@@ -135,7 +140,7 @@ export default {
   <div class="post">
     <div class="header">
       <div class="profile-image-container">
-        <img @click="goToAuthorPage" class="profile-image" :src="getAvatar" />
+        <img @click="goToAuthorPage" class="profile-image" :src="getPostAuthorAvatar" />
       </div>
       <div class="metadata-container">
         <p @click="goToAuthorPage" class="author-name">{{ fullName }}</p>
@@ -175,7 +180,7 @@ export default {
     <div class="my-comment">
       <div class="comment-author-image-container">
         <img
-            :src="getAvatar"
+            :src="getCurrentUserAvatar"
             class="comment-author-image"
         />
       </div>
@@ -188,7 +193,7 @@ export default {
         />
         <img
             @click="sendComment"
-            src="../../assets/icons/activeSend.svg"
+            src="@/assets/icons/activeSend.svg"
             class="send-comment-icon"
         />
       </div>

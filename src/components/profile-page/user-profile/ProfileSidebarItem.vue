@@ -67,8 +67,8 @@ export default {
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
   border-radius: 50%;
 }
